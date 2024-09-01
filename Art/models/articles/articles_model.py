@@ -1,0 +1,24 @@
+from typing import List, Optional, TYPE_CHECKING
+from sqlalchemy import Integer, String, DateTime, ForeignKey, func, Boolean
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+
+from models.base_model import BaseModel
+
+from models.users.user_model import UserModel
+
+
+class ArticleModel(BaseModel):
+
+    __tablename__ = 'article'
+
+    name: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    # content: Mapped[str] = mapped_column(String, nullable=False)
+    slug: Mapped[str] = mapped_column(String, unique=True)
+    intro_text: Mapped[str] = mapped_column(String)
+    bid_approved: Mapped[bool] = mapped_column(Boolean, default=False)
+    count_views: Mapped[int] = mapped_column(Integer, default=0)
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+
+    user: Mapped["UserModel"] = relationship(back_populates="articles")
+    comments: Mapped[List["CommentModel"]] = relationship(back_populates="article")

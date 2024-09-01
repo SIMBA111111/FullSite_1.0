@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  backend:
+    build: Art/
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    # environment:
+      # DATABASE_URL: "postgresql://myuser:mypassword@db:5432/mydatabase"
+
+  frontend:
+    build: MySiteFront/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:16.3-alpine3.20
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: admin
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
