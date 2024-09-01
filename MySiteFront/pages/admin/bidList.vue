@@ -43,9 +43,10 @@
     });
   } catch (error) {
       console.error("Error fetching bid list:", error);
-      if (error.response.status == 403)
-      {
+      if (error.response && error.response.status == 403) {
         NotIsAdminUser.value = true;
+      } else {
+        console.error("Unexpected error:", error.message);
       }
   }
   console.log("response.value - ", response);
@@ -70,7 +71,6 @@
             responseType: 'blob'
         });
          
-        
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
         link.href = url;
@@ -80,9 +80,10 @@
         document.body.removeChild(link);
     } catch (error) {
         console.error("Error downloading file:", error);
-        if (error.response.status == 403)
-        {
+        if (error.response && error.response.status == 403) {
           NotIsAdminUser.value = true;
+        } else {
+          console.error("Unexpected error:", error.message);
         }
     }
 };
@@ -100,9 +101,10 @@ const approveBid = async (filename) => {
         });
     } catch (error) {
         console.error("Error approve bid:", error);
-        if (error.response.status == 403)
-        {
+        if (error.response && error.response.status == 403) {
           NotIsAdminUser.value = true;
+        } else {
+          console.error("Unexpected error:", error.message);
         }
     }
 };
@@ -121,11 +123,12 @@ const cancelBid = async (filename) => {
         });
     } catch (error) {
         console.error("Error approve bid:", error);
-        if (error.response.status == 403)
-        {
-          NotIsAdminUser.value = true;
+        if (error.response && error.response.status == 403) {
+        NotIsAdminUser.value = true;
+        } else {
+        console.error("Unexpected error:", error.message);
         }
-      }
+    }
 };
 
 </script>
