@@ -17,7 +17,7 @@ class ArticleModel(BaseModel):
     intro_text: Mapped[str] = mapped_column(String)
     bid_approved: Mapped[bool] = mapped_column(Boolean, default=False)
     count_views: Mapped[int] = mapped_column(Integer, default=0)
-
+    title: Mapped[str] = mapped_column(String, nullable=False, index=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
     user: Mapped["UserModel"] = relationship(back_populates="articles")

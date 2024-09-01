@@ -8,8 +8,9 @@
         :avatar="article.avatar"
         :date="article.date"
         :name="article.name"
+        :title="article.title"
         :text="article.text"
-        :main_text="article.main_text"
+        :intro_text="article.intro_text"
         :slug="article.slug"
         :count_views="article.count_views"
       />
@@ -56,8 +57,6 @@ console.log("articles", - articles);
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #d8cef1;
-  padding: 20px;
 }
 
 

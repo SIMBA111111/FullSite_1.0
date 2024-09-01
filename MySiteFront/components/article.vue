@@ -1,13 +1,20 @@
 <template>
+    <div class="outer-article-card">
     <div class="article-card">
       <div class="author-info">
         <!-- <img :src="avatar" alt="Avatar" class="avatar" /> -->
         <div class="author-name">{{ user.first_name }} {{ user.last_name }}</div>
       </div>
       <div class="date">{{ date }}</div>
-      <div class="count_views">{{ count_views }}</div>
-      <div><NuxtLink :to="`/articles/${slug}`" class="title ">{{ name }}</NuxtLink></div>
-      <div><NuxtLink to="/" class="content content_">{{ main_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
+      <div class="count_views">
+        <div>
+        <span class="eye">👁</span>
+        {{ count_views }}
+        </div>
+      </div>
+      <div class="title"><NuxtLink :to="`/articles/${slug}`" class="title-link">{{ title }}</NuxtLink></div>
+      <div><NuxtLink :to="`/articles/${slug}`" class="content content_">{{ intro_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
+    </div>
     </div>
   </template>
 
@@ -25,25 +32,31 @@ const props = defineProps<{
   date: string;
   name: string;
   text: string;
-  main_text: string;
+  intro_text: string;
   slug: string;
   count_views: number;
+  title: string;
 }>();
 
 </script>
 
 <style scoped>
-.articles-list {
+.outer-article-card {
+  height: 100%;
+  background-color: #d8cef1;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
 }
 
 .article-card {
+  margin: 20px; 
+  /* height: 100%; */
+  
   background-color: rgba(240, 240, 240, 0.5);
   border-radius: 10px;
   padding: 16px;
-  width: 300px;
+  margin: 20px;
+  width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -77,12 +90,26 @@ const props = defineProps<{
   margin-bottom: 8px;
 }
 
+.count_views {
+  font-size: 30px;
+}
+
+.eye {
+  display: inline-block;
+   font-size: 42px;
+}
+
 .title {
+  padding-bottom: 10px; 
+}
+
+.title-link {
   color: black;
   text-decoration: none;
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 8px;
+  /* gap: 100px; */
 }
 
 .content {
@@ -103,5 +130,11 @@ const props = defineProps<{
   text-decoration: underline;
   cursor: pointer;
 }
+
+
+.read-more:hover {
+  font-size: 19px;
+}
+
 
 </style>

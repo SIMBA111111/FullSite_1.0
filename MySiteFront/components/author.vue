@@ -1,5 +1,6 @@
 <template>
-    <div class="article-card">
+  <div class="outer-author-card">
+    <div class="author-card">
       <div class="author-info">
         <!-- <img :src="avatar" alt="Avatar" class="avatar" /> -->
         <div class="author-name">{{ first_name }} {{ last_name }}</div>
@@ -8,7 +9,8 @@
       <div><NuxtLink :to="`/authors/${username}`" class="title ">{{ username }}</NuxtLink></div>
       <!-- <div><NuxtLink to="/" class="content content_">{{ main_text }}...<NuxtLink to="/" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div> -->
     </div>
-  </template>
+  </div>
+</template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
@@ -30,21 +32,27 @@ const props = defineProps<{
 </script>
 
 <style scoped>
-.articles-list {
+
+.outer-author-card {
+  height: 100%;
+  background-color: #d8cef1;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
 }
 
-.article-card {
+.author-card {
+  margin: 20px; 
+  /* height: 100%; */
+  
   background-color: rgba(240, 240, 240, 0.5);
   border-radius: 10px;
   padding: 16px;
-  width: 300px;
+  margin: 20px;
+  width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.article-card:hover {
+.author-card:hover {
   box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.2);
   transform: translateZ(10px);
   transition: box-shadow 0.5s ease, color 0.9s ease, transform 0.9s ease; /* Указываем свойства, для которых применяем переход */

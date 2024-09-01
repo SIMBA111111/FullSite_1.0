@@ -8,7 +8,7 @@
                         <input id="file" name="file" type="file" @change="handleFileChange" />
                     </div>
                     <div>
-                        <input v-model="name" name="name" type="text" placeholder="Названи статьи" />
+                        <input v-model="title" name="title" type="text" placeholder="Название статьи" />
                     </div>
                     <div>
                         <input v-model="introText" name="introText" type="text" placeholder="Завлекающий текст"/>
@@ -26,7 +26,7 @@ import axios from 'axios';
 import { url } from '../../MyConstants.vue';
 
 const file = ref(null);
-const name = ref('');
+const title = ref('');
 const introText = ref('');
 
 const handleFileChange = (event) => {
@@ -41,7 +41,7 @@ const handleSubmit = async () => {
 
     const formData = new FormData();
     formData.append('file', file.value);
-    formData.append('name', name.value);
+    formData.append('title', title.value);
     formData.append('intro_text', introText.value);
 
     try {

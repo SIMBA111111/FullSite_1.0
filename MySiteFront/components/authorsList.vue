@@ -46,13 +46,10 @@ console.log("authors", - authors);
 
 
 .author-list-container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background-color: #d8cef1;
-    padding: 20px;
-
-  } 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+} 
 
 .authors-list {
   display: grid;

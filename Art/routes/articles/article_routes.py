@@ -22,7 +22,7 @@ router = APIRouter()
 @router.post("/create", summary="Create new article")
 def create_article(
                     file: UploadFile = File(),
-                    name: str = Body(),
+                    title: str = Body(),
                     intro_text: str = Body(),
                     db: Session = Depends(get_db),
                     current_user: UserModel = Depends(get_current_user),
@@ -34,7 +34,7 @@ def create_article(
     filename = articles_services.translate_ru_in_en(file)
     new_article_name = articles_services.create_new_article_name(article_last, filename)
     articles_services.write_file(new_article_name, file)
-    articles_crud.create_article(db, new_article_name, intro_text, current_user)
+    articles_crud.create_article(db, new_article_name, intro_text, current_user, title)
 
     response = JSONResponse(status_code=201, content={"Success": "Article created"})
     logger.info(f" - {current_user.username} - SUCCESS create_article")

@@ -11,4 +11,5 @@ class SArticleListWithAuthors(BaseModel):
     intro_text: str
     slug: str
     count_views: int
+    title: str
     user: SAuthorsList

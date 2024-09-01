@@ -32,8 +32,8 @@ def get_articles(db: Session, skip: int = 0, limit: int = 20):
     return db.query(ArticleModel).offset(skip).limit(limit).all()
 
 
-def create_article(db: Session, name: str, intro_text: str, author_id: int):
-    db_item = ArticleModel(name=name, intro_text=intro_text, user=author_id)
+def create_article(db: Session, name: str, intro_text: str, author_id: int, title: str):
+    db_item = ArticleModel(title=title, name=name, intro_text=intro_text, user=author_id)
     rand = random.randint(a=10000000, b=99999999)
     db_item.slug = f"{db_item.name}-{rand}"
     db.add(db_item)
