@@ -1,17 +1,22 @@
 <template>
   <div class="admin-container">
-    <AdminHeader></AdminHeader>
-    <h1 class="heading">Заявки</h1>
-    <div v-for="bid in bidList" :key="bid.id" class="bid-card">
-      <div class="bid-info">
-        <!-- <div class="bid-title">{{ bid.title }}</div> -->
-        <div class="bid-name">{{ bid.name }}</div>
-        <div class="bid-intro">{{ bid.intro_text }}</div>
-      </div>
-      <div class="bid-buttons">
-        <button class="action-button" @click="downloadBid(bid.name)">скачать</button>
-        <button class="action-button" @click="approveBid(bid.name)">Одобрить</button>
-        <button class="action-button" @click="cancelBid(bid.name)">Отказать</button>
+    <div v-if="NotIsAdminUser">
+      <nonadmin></nonadmin> 
+    </div>
+    <div v-else>
+      <AdminHeader></AdminHeader>
+      <h1 class="heading">Заявки</h1>
+      <div v-for="bid in bidList" :key="bid.id" class="bid-card">
+        <div class="bid-info">
+          <!-- <div class="bid-title">{{ bid.title }}</div> -->
+          <div class="bid-name">{{ bid.name }}</div>
+          <div class="bid-intro">{{ bid.intro_text }}</div>
+        </div>
+        <div class="bid-buttons">
+          <button class="action-button" @click="downloadBid(bid.name)">скачать</button>
+          <button class="action-button" @click="approveBid(bid.name)">Одобрить</button>
+          <button class="action-button" @click="cancelBid(bid.name)">Отказать</button>
+        </div>
       </div>
     </div>
   </div>
@@ -20,23 +25,31 @@
 <script setup>
   import axios from 'axios';
   import { url } from '../../MyConstants.vue';
+  import nonadmin from '~/components/nonadmin.vue';
 
   const bid_url = `${url}/admin/bid-list`;
   const download_url = `${url}/admin/download-file`;
   const approve_url = `${url}/admin/approve-bid`;
   const cancel_url = `${url}/admin/cancel-bid`;
   const response = ref("")
+  const NotIsAdminUser = ref(false);
   const access_token = useCookie('access_token').value;
+
   try {
     response.value = await axios.get(bid_url, {
         headers: {
             "Authorization": access_token
         }
     });
-    // bidList = response.data;
   } catch (error) {
       console.error("Error fetching bid list:", error);
+      if (error.response.status == 403)
+      {
+        NotIsAdminUser.value = true;
+      }
   }
+  console.log("response.value - ", response);
+  
   const bidList = ref(response.value.data)
  
  // скачать статью
@@ -56,7 +69,7 @@
             },
             responseType: 'blob'
         });
-        
+         
         
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
@@ -67,6 +80,10 @@
         document.body.removeChild(link);
     } catch (error) {
         console.error("Error downloading file:", error);
+        if (error.response.status == 403)
+        {
+          NotIsAdminUser.value = true;
+        }
     }
 };
 
@@ -83,6 +100,10 @@ const approveBid = async (filename) => {
         });
     } catch (error) {
         console.error("Error approve bid:", error);
+        if (error.response.status == 403)
+        {
+          NotIsAdminUser.value = true;
+        }
     }
 };
 
@@ -100,7 +121,11 @@ const cancelBid = async (filename) => {
         });
     } catch (error) {
         console.error("Error approve bid:", error);
-    }
+        if (error.response.status == 403)
+        {
+          NotIsAdminUser.value = true;
+        }
+      }
 };
 
 </script>
