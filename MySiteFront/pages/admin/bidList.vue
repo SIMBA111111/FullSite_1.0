@@ -27,18 +27,22 @@
   import { url } from '../../MyConstants.vue';
   import nonadmin from '~/components/nonadmin.vue';
 
+  definePageMeta({
+    middleware: 'auth'
+  });
+
   const bid_url = `${url}/admin/bid-list`;
   const download_url = `${url}/admin/download-file`;
   const approve_url = `${url}/admin/approve-bid`;
   const cancel_url = `${url}/admin/cancel-bid`;
   const response = ref("")
   const NotIsAdminUser = ref(false);
-  const access_token = useCookie('access_token').value;
+  // const access_token = useCookie('access_token').value;
 
   try {
     response.value = await axios.get(bid_url, {
         headers: {
-            "Authorization": access_token
+            "Authorization": useCookie('access_token').value
         }
     });
   } catch (error) {
@@ -66,7 +70,7 @@
         }, {
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": access_token
+                "Authorization": useCookie('access_token').value
             },
             responseType: 'blob'
         });
@@ -96,7 +100,7 @@ const approveBid = async (filename) => {
         }, {
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": access_token 
+                "Authorization": useCookie('access_token').value 
             }
         });
     } catch (error) {
@@ -118,7 +122,7 @@ const cancelBid = async (filename) => {
         }, {
             headers: {
                 'Content-Type': 'application/json',
-                "Authorization": access_token
+                "Authorization": useCookie('access_token').value
             }
         });
     } catch (error) {

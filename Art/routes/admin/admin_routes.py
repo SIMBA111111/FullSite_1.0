@@ -25,7 +25,8 @@ def get_bid_list(
     current_user: UserModel = Depends(get_current_user),
     user_agent: str = Header(),
 ):
-    admin_services.check_admin_user(current_user)
+    print(current_user)
+    admin_services.check_is_admin_user(current_user)
     logger.info(f" - {current_user.username} - START get_bid_list - {user_agent}")
 
     bid_list_response = admin_services.get_bid_list(db)
@@ -40,7 +41,7 @@ def download_file(filename: FileDownloadRequest = Body(),
                   current_user: UserModel = Depends(get_current_user),
                   user_agent: str = Header(),
                   ):
-    admin_services.check_admin_user(current_user)
+    admin_services.check_is_admin_user(current_user)
     logger.info(f" - {current_user.username} - START download_file - {user_agent}")
 
     path = admin_services.path_to_file(filename)
@@ -56,7 +57,7 @@ def approve_bid(filename: FileDownloadRequest = Body(),
                 current_user: UserModel = Depends(get_current_user),
                 user_agent: str = Header(),
                 ):
-    admin_services.check_admin_user(current_user)
+    admin_services.check_is_admin_user(current_user)
     logger.info(f" - {current_user.username} - START approve_bid - {user_agent}")
 
     html_file_name = admin_services.create_html_file(filename)
@@ -75,12 +76,13 @@ def cancel_bid(filename: FileDownloadRequest = Body(),
                current_user: UserModel | AnonymousUser = Depends(get_current_user),
                user_agent: str = Header(),
                ):
-    admin_services.check_admin_user(current_user)
+    print("current_user - ", current_user)
+    admin_services.check_is_admin_user(current_user)
     logger.info(f" - {current_user.username} - START cancel bid - {user_agent}")
 
-    admin_services.cancel_bid(db, filename)
+    # admin_services.cancel_bid(db, filename)
 
-    response = Response(status_code=200, content={"Success": "Статья отменена"})
+    response = JSONResponse(status_code=200, content={"Success": "Статья отменена"})
     logger.info(f" - {current_user.username} - SUCCESS cancel bid - {user_agent}")
     return response
 

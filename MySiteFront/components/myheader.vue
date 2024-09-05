@@ -4,13 +4,14 @@
       <NuxtLink to="/" exact-active-class="active">Название</NuxtLink>
     </div>
     <div class="links">
+      <div v-if="userStore.user.is_admin"><NuxtLink to="/admin/bidList" target="_blank" exact-active-class="active" class="el write">В админку</NuxtLink></div>
       <div v-if="authed"><NuxtLink to="/articles/create" exact-active-class="active" class="el write">Написать</NuxtLink></div>
       <div><NuxtLink to="/articles" exact-active-class="active" class="el">Статьи</NuxtLink></div>
       <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
       <div><NuxtLink to="/authors" exact-active-class="active" class="el">Авторы</NuxtLink></div>
       <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div>
       <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Войти</NuxtLink></div>
-      <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти</NuxtLink></div>
+      <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти ({{ userStore.user.username }})</NuxtLink></div>
     </div>
   </div>
   <hr>
@@ -21,11 +22,13 @@ import axios from 'axios';
 import { ref, watch } from 'vue';
 import { useCookie, useRouter } from '#app';
 import { url } from "../MyConstants.vue";
+import { useUserStore } from '~/store/user';
 
-// Реактивное состояние для аутентификации
 const authed = ref(false);
+const userStore = useUserStore()
+console.log("userStore.user.is_admin - ", );
 
-// Функция для проверки аутентификации
+
 const checkAuth = () => {
   const token = useCookie('access_token').value;
   authed.value = !!token; // Преобразование в boolean
@@ -34,15 +37,12 @@ const checkAuth = () => {
 const logout_url = `${url}/auth/logout`;
 const logout = async () => {
   try {
-    // Получение токена из куки
     const access_token = useCookie('access_token').value;
 
-    // Выполнение DELETE запроса на сервер
     const response = await axios.delete(logout_url, {
       headers: {
         'access-token': access_token,
-        'Authorization': access_token // Используйте правильное название заголовка
-         // Используйте правильное название заголовка
+        'Authorization': access_token 
       }
     });
 
@@ -68,6 +68,7 @@ checkAuth();
 
 // Отслеживание изменений в состоянии аутентификации
 watch(authed, (newValue) => {});
+// watch(is_admin, (newValue) => {});
 </script>
 
 <style scoped>

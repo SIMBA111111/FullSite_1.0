@@ -138,7 +138,7 @@ def path_to_file(filename: FileDownloadRequest):
     return path
 
 
-def check_admin_user(current_user: UserModel | AnonymousUser):
+def check_is_admin_user(current_user: UserModel | AnonymousUser):
     if current_user is None:
         raise HTTPException(status_code=403, detail={"Error": "You need to login"})
     if isinstance(current_user, AnonymousUser):

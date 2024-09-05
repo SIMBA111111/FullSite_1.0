@@ -6,6 +6,7 @@ from config.log_config import logger
 from crud.auth import auth_crud
 from crud.users import users_crud
 from models.users import UserModel
+from models.users.user_model import AnonymousUser
 from schemas.users.users_schemas import SUserBase, SAuthorsList, SUsername
 from services.auth import auth_services
 
@@ -58,3 +59,18 @@ def get_author(db: Session, username: SUsername):
     author_response = jsonable_encoder(author)
 
     return author_response
+
+
+def user_or_anonym(current_user: UserModel | AnonymousUser):
+    if isinstance(current_user, AnonymousUser):
+        data = {
+            "username": current_user.username,
+            "is_admin": False,
+        }
+    if isinstance(current_user, UserModel):
+        data = {
+            "username": current_user.username,
+            "is_admin": current_user.is_admin_user
+        }
+
+    return data

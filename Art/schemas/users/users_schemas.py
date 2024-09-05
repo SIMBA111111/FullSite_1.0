@@ -17,5 +17,5 @@ class SUsername(BaseModel):
 class SAuthorsList(BaseModel):
     first_name: str
     last_name: str
-    email: str
+    email: str | None = None
     username: str

@@ -20,7 +20,6 @@ import article from './article.vue';
 import {url} from "../MyConstants.vue";
 import axios from 'axios';
 
-
 const authors = ref();
 
 const get_authors_url = `${url}/users/get-all-authors`

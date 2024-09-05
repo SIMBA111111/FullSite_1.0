@@ -6,5 +6,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   vite: {
     plugins: [ckeditor5({ theme: require.resolve( '@ckeditor/ckeditor5-theme-lark' ) })]
-  }
+  },
+  modules: [
+    '@pinia/nuxt',
+  ],
 })

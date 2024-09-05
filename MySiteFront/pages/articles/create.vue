@@ -25,6 +25,10 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { url } from '../../MyConstants.vue';
 
+definePageMeta({
+  middleware: 'auth'
+});
+
 const file = ref(null);
 const title = ref('');
 const introText = ref('');
@@ -55,7 +59,11 @@ const handleSubmit = async () => {
         alert('Файл успешно отправлен.');
     } catch (error) {
         console.error('Ошибка при отправке файла:', error);
-        alert('Произошла ошибка при отправке файла.');
+        // if (error.response && error.response.status == 403) {
+        // NotIsAdminUser.value = true;
+        // } else {
+        // console.error("Unexpected error:", error.message);
+        // }
     }
 };
 </script>

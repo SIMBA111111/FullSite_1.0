@@ -1,4 +1,5 @@
 from fastapi import UploadFile, HTTPException
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from transliterate import translit
@@ -7,9 +8,11 @@ from config.log_config import logger
 
 import os
 
-from schemas.articles.articles_schemas import SSlug
+from models.articles.articles_model import ArticleModel
+from schemas.articles.articles_schemas import SSlug, SArticleListWithAuthors
 
 from crud.articles import articles_crud
+from schemas.users.users_schemas import SAuthorsList
 
 
 def translate_ru_in_en(file: UploadFile) -> str:
@@ -96,13 +99,30 @@ def get_article(db: Session, slug: SSlug):
     return file_content
 
 
-def get_all_articles(db: Session):
+def get_all_articles(db: Session, page: int):
     try:
-        all_articles = articles_crud.get_all_articles(db)
+        all_articles = articles_crud.get_all_articles(db, page)
     except Exception as e:
         logger.error(f"Couldn't get all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get all the articles. Error: {e}"})
-    return all_articles
+
+    articles = []
+    for article, first_name, last_name, username in all_articles:
+        article_with_author = SArticleListWithAuthors(
+            name=article.name,
+            intro_text=article.intro_text,
+            slug=article.slug,
+            count_views=article.count_views,
+            title=article.title,
+            user=SAuthorsList(
+                first_name=first_name,
+                last_name=last_name,
+                username=username,
+            )
+        )
+        articles.append(article_with_author)
+
+    return articles
 
 
 def get_last_article(db: Session):
@@ -112,3 +132,16 @@ def get_last_article(db: Session):
         logger.error(f"Couldn't get the latest article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the latest article. Error: {e}"})
     return last_article
+
+
+def get_titles_articles(db: Session, query: str):
+    data = []
+    try:
+        articles = articles_crud.get_titles_articles(db)
+    except Exception as e:
+        logger.error(f"Couldn't get the title article. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the title article. Error: {e}"})
+    for article in articles:
+        if query.lower() in article.lower():
+            data.append(article)
+    return data

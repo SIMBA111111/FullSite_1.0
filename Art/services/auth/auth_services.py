@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from config.log_config import logger
 from models.auth.token_model import TokenModel
+from models.users import UserModel
 from models.users.user_model import AnonymousUser
 
 from crud.users.users_crud import pwd_context
@@ -53,7 +54,6 @@ def get_user_by_username(db: Session, username: str):
     return current_user
 
 
-# Декодирование токена и проверка пользователя
 def get_current_user(Authorization: str = Header(default=None),
                      db: Session = Depends(get_db)
                      ):
@@ -88,3 +88,8 @@ def delete_token(db: Session, access_token: str):
         logger.error(f"The token could not be deleted. Error: {e}")
         raise HTTPException(status_code=400, detail={"message": f"The token could not be deleted. Error: {e}"})
     return 200
+
+
+def is_authed(current_user: UserModel | AnonymousUser):
+    if isinstance(current_user, AnonymousUser):
+        raise HTTPException(status_code=403, detail={"Error": "You need to login"})

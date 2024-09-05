@@ -42,14 +42,22 @@ def create_article(db: Session, name: str, intro_text: str, author_id: int, titl
     return db_item
 
 
-def get_all_articles(db: Session):
-    return (db.scalars((select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
+def get_all_articles(db: Session, page: int):
+    return (db.execute(
+            select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
             .join(ArticleModel.user)
             .options(joinedload(ArticleModel.user))
-            .where(ArticleModel.bid_approved == True)))
-            .all()
-            )
+            .where(ArticleModel.bid_approved == True)
+            .offset((page - 1) * 2)  # Смещение, основанное на номере страницы
+            .limit(2)          # Ограничение количества записей на страницу
+        )
+        .all()
+    )
 
 
 def get_last_article(db: Session):
     return db.query(ArticleModel).order_by(ArticleModel.id.desc()).first()
+
+
+def get_titles_articles(db: Session):
+    return db.scalars(select(ArticleModel.title)).all()

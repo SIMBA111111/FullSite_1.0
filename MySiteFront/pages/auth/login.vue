@@ -15,6 +15,10 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { url } from "../../MyConstants.vue";
 
+definePageMeta({
+    middleware: 'auth'
+});
+
 const userData = ref({
   username: '',
   password: ''
