@@ -20,43 +20,50 @@
     <div class="pagination-controls">
       <button @click="prevPage" :disabled="currentPage === 1">Предыдущая</button>
       <span>Страница {{ currentPage }}</span>
-      <button @click="nextPage">Следующая</button>
+      <button @click="nextPage" :disabled="!hasMorePages">Следующая</button>
     </div>
-
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import article from './article.vue';
-import {url} from "../MyConstants.vue";
+import { url } from "../MyConstants.vue";
 import axios from 'axios';
 
 const currentPage = ref(1);
 const articles = ref([]);
+const hasMorePages = ref(true); // Флаг для проверки наличия следующих страниц
 
 const get_articles_with_authors_url = (page) => `${url}/articles/get-all-articles?page=${page}`;
 
-const get_articles_with_authors = (page) => {
-  axios.get(get_articles_with_authors_url(page), 
-  {
-    headers: {
-      "Authorization": useCookie("access_token").value
-    }
-  })
-    .then(response => {
-      console.log('Response data:', response.data);
-      articles.value = response.data;
-    })
-    .catch(error => {
-      console.error('Error:', error);
+const get_articles_with_authors = async (page) => {
+  try {
+    const response = await axios.get(get_articles_with_authors_url(page), {
+      headers: {
+        "Authorization": useCookie("access_token").value
+      }
     });
+
+    console.log('Response data:', response.data);
+
+    if (response.data.length === 0) {
+      hasMorePages.value = false; // Если данных нет, это последняя страница
+    } else {
+      hasMorePages.value = true;
+      articles.value = response.data;
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
 };
 
 // Переход на следующую страницу
 const nextPage = () => {
-  currentPage.value += 1;
-  get_articles_with_authors(currentPage.value);
+  if (hasMorePages.value) {
+    currentPage.value += 1;
+    get_articles_with_authors(currentPage.value);
+  }
 };
 
 // Переход на предыдущую страницу
@@ -71,15 +78,12 @@ const prevPage = () => {
 get_articles_with_authors(currentPage.value);
 </script>
 
-
 <style scoped>
-
 .articles-list-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
-
 
 .articles-list {
   display: grid;
@@ -113,5 +117,4 @@ get_articles_with_authors(currentPage.value);
 .pagination-controls button:hover:not(:disabled) {
   background-color: #3a1a6b;
 }
-
 </style>

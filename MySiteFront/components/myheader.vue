@@ -26,12 +26,10 @@ import { useUserStore } from '~/store/user';
 
 const authed = ref(false);
 const userStore = useUserStore()
-console.log("userStore.user.is_admin - ", );
-
 
 const checkAuth = () => {
   const token = useCookie('access_token').value;
-  authed.value = !!token; // Преобразование в boolean
+  authed.value = !!token;
 };
 
 const logout_url = `${url}/auth/logout`;
@@ -46,29 +44,22 @@ const logout = async () => {
       }
     });
 
-    // Удаление токена
     useCookie('access_token').value = null;
 
-    // Обновление состояния аутентификации
     checkAuth();
 
-    // Переход на другую страницу
     const router = useRouter();
-    await router.push('/'); // Переход на главную страницу или другую по вашему выбору
+    await router.push('/');
     location.reload();
 
   } catch (error) {
-    // Обработка ошибок
     console.error('Error:', error);
   }
 };
 
-// Инициализация аутентификации при загрузке компонента
 checkAuth();
 
-// Отслеживание изменений в состоянии аутентификации
 watch(authed, (newValue) => {});
-// watch(is_admin, (newValue) => {});
 </script>
 
 <style scoped>

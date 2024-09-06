@@ -4,12 +4,16 @@
         <div class="main-container">
             <div class="search-container">
                 <div class="input-wrapper">
-                    <input type="text" id="search" v-model="searchQuery" @input="onInput" placeholder="Поиск статей..." autocomplete="off" ref="searchInput">
+                    <input type="text" id="search" v-model="searchQuery" @input="onInput" @focus="showSuggestions" @blur="handleBlur" placeholder="Поиск статей..." autocomplete="off" ref="searchInput">
                     <button type="button" class="cancel-btn" @click="handleCancel">Отменить</button>
                 </div>
                 <button type="button" class="search-btn" @click="handleSearch">Найти</button>
-                <div id="suggestions">
-                    <div v-for="suggestion in suggestions" :key="suggestion" class="suggestion-item" @click="selectSuggestion(suggestion)">
+                <div id="suggestions" :class="{ 'visible': suggestions.length > 0 }" @mousedown="handleSuggestionClick" ref="suggestions">
+                    <div v-for="(suggestion, index) in suggestions" 
+                         :key="suggestion" 
+                         class="suggestion-item" 
+                         :class="{ 'active': index === selectedIndex }" 
+                         @click="selectSuggestion(suggestion)">
                         {{ suggestion }}
                     </div>
                 </div>
@@ -19,7 +23,7 @@
 </template>
 
 <script>
-import {url} from "../MyConstants.vue"
+import { url } from "../MyConstants.vue"
 
 definePageMeta({
   middleware: 'auth'
@@ -29,15 +33,19 @@ export default {
     data() {
         return {
             searchQuery: '',
-            suggestions: []
+            suggestions: [],
+            selectedIndex: -1,
+            shouldShowSuggestions: false
         };
     },
     methods: {
         onInput() {
             if (this.searchQuery.length > 2) {
                 this.fetchSuggestions(this.searchQuery);
+                this.shouldShowSuggestions = true;
             } else {
                 this.suggestions = [];
+                this.shouldShowSuggestions = false;
             }
         },
         fetchSuggestions(query) {
@@ -46,6 +54,8 @@ export default {
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     this.suggestions = JSON.parse(xhr.responseText);
+                    this.selectedIndex = -1;
+                    this.shouldShowSuggestions = this.suggestions.length > 0;
                 }
             };
             xhr.send();
@@ -60,14 +70,49 @@ export default {
         handleCancel() {
             this.searchQuery = '';
             this.suggestions = [];
+            this.shouldShowSuggestions = false;
         },
         selectSuggestion(suggestion) {
             this.searchQuery = suggestion;
             this.suggestions = [];
+            this.shouldShowSuggestions = false;
+        },
+        handleKeyDown(event) {
+            if (this.shouldShowSuggestions && this.suggestions.length > 0) {
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    this.selectedIndex = (this.selectedIndex + 1) % this.suggestions.length;
+                } else if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    this.selectedIndex = (this.selectedIndex - 1 + this.suggestions.length) % this.suggestions.length;
+                } else if (event.key === 'Enter') {
+                    event.preventDefault();
+                    if (this.selectedIndex >= 0) {
+                        this.selectSuggestion(this.suggestions[this.selectedIndex]);
+                    }
+                }
+            }
+        },
+        showSuggestions() {
+            if (this.shouldShowSuggestions) {
+                this.$refs.suggestions.style.display = 'block';
+            }
+        },
+        handleBlur() {
+            setTimeout(() => {
+                this.$refs.suggestions.style.display = 'none';
+            }, 100);
+        },
+        handleSuggestionClick() {
+            this.$refs.searchInput.focus();
         }
     },
     mounted() {
-        this.$refs.searchInput.focus(); // Устанавливаем фокус на поле ввода при монтировании компонента
+        this.$refs.searchInput.focus();
+        window.addEventListener('keydown', this.handleKeyDown);
+    },
+    beforeDestroy() {
+        window.removeEventListener('keydown', this.handleKeyDown);
     }
 }
 </script>
@@ -77,10 +122,10 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Прижимаем к верху */
+    justify-content: flex-start;
     height: 81vh;
     background-color: #d8cef1;
-    padding-top: 20px; /* Добавляем отступ сверху для пространства */
+    padding-top: 20px;
 }
 
 .search-container {
@@ -98,12 +143,12 @@ export default {
 
 #search {
     width: 100%;
-    padding: 15px 40px 15px 15px; /* Увеличенный padding для высоты инпута */
+    padding: 15px 40px 15px 15px;
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #fff;
-    font-size: 1.1rem; /* Увеличенный размер шрифта */
+    font-size: 1.1rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -118,7 +163,7 @@ export default {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    padding: 10px 15px; /* Увеличенный padding для высоты кнопки */
+    padding: 10px 15px;
     background: #c5b02b;
     border: none;
     border-radius: 4px;
@@ -133,7 +178,7 @@ export default {
 }
 
 .search-btn {
-    padding: 15px 25px; /* Увеличенный padding для высоты кнопки */
+    padding: 15px 25px;
     margin-left: 10px;
     background-color: #462887;
     color: white;
@@ -148,6 +193,7 @@ export default {
 }
 
 #suggestions {
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -160,6 +206,10 @@ export default {
     z-index: 1000;
     box-sizing: border-box;
     transition: box-shadow 0.3s ease;
+}
+
+#suggestions.visible {
+    display: block;
 }
 
 .suggestion-item {
@@ -179,5 +229,10 @@ export default {
 .suggestion-item:active {
     background-color: #b0a4d8;
     box-shadow: inset 0 0 5px rgba(70, 40, 135, 0.5);
+}
+
+.suggestion-item.active {
+    background-color: #b0a4d8;
+    color: #462887;
 }
 </style>
