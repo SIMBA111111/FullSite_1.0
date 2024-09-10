@@ -140,7 +140,6 @@ async def get_last_article(db: AsyncSession):
 
 
 async def get_titles_articles(db: AsyncSession, query: str):
-    # data = []
     try:
         articles = await articles_crud.get_titles_articles(db, query)
     except Exception as e:

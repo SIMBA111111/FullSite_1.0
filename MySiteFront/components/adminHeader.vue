@@ -5,6 +5,8 @@
       </div>
       <div class="links">
         <div><NuxtLink to="/admin/bidList" exact-active-class="active" class="el write">Заявки</NuxtLink></div>
+        <div><NuxtLink to="/admin/adminArticles" exact-active-class="active" class="el write">Статьи</NuxtLink></div>
+        <div><NuxtLink to="/admin/adminUsers" exact-active-class="active" class="el write">Юзеры</NuxtLink></div>
         <!-- <div v-else @click="logout" class="el">Выйти</div> -->
       </div>
     </div>
