@@ -16,6 +16,9 @@ from models.users.user_model import AnonymousUser
 from schemas.admin.admin_schemas import FileDownloadRequest, BidListResponseModel
 
 from crud.admin import admin_crud
+from crud.articles import articles_crud
+from schemas.articles.articles_schemas import SSlug, SArticleListWithAuthors
+from schemas.users.users_schemas import SAuthorsList
 
 
 async def get_bid_list(db: AsyncSession):
@@ -123,7 +126,7 @@ async def path_to_file(filename: FileDownloadRequest):
         decoded_filename = urllib.parse.unquote(filename.filename)
         path = os.path.join(os.getcwd(), "articles_list", decoded_filename)
     except Exception as e:
-        logger.error(f"Error in getting the article path. Ошибка: {e}")
+        logger.error(f"Error in getting the article path. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Error in getting the article path: {str(e)}"})
     return path
 
@@ -136,3 +139,43 @@ async def check_is_admin_user(current_user: UserModel | AnonymousUser):
     if current_user.is_admin_user is not True:
         raise HTTPException(status_code=403, detail={"Error": "Login with an administrator account"})
     return 200
+
+
+async def disable_article(db: AsyncSession, disable: bool, slug: SSlug):
+    try:
+        article = await articles_crud.get_article_by_slug(db, slug)
+        await admin_crud.disable_article(db, article, disable)
+    except Exception as e:
+        logger.error(f"Error : Ошибка: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Error : {str(e)}"})
+    return article
+
+
+async def get_all_articles(db: AsyncSession, page: int):
+    try:
+        all_articles = await admin_crud.get_all_articles(db, page)
+    except Exception as e:
+        logger.error(f"Error : Ошибка: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Error : {str(e)}"})
+
+    try:
+        articles = []
+        for article, first_name, last_name, username in all_articles:
+            article_with_author = SArticleListWithAuthors(
+                name=article.name,
+                intro_text=article.intro_text,
+                slug=article.slug,
+                count_views=article.count_views,
+                title=article.title,
+                user=SAuthorsList(
+                    first_name=first_name,
+                    last_name=last_name,
+                    username=username,
+                )
+            )
+            articles.append(article_with_author)
+    except Exception as e:
+        logger.error(f"Couldn't serialize all the articles. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't serialize all the articles. Error: {e}"})
+
+    return articles

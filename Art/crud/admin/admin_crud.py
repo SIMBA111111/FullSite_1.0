@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from models.articles.articles_model import ArticleModel
+from models.users import UserModel
 from schemas.admin.admin_schemas import FileDownloadRequest
 
 
@@ -34,3 +35,21 @@ async def delete_bid(db: AsyncSession, filename: FileDownloadRequest):
     article = result.scalars().first()
     await db.delete(article)
     await db.commit()
+
+
+async def disable_article(db: AsyncSession, article: ArticleModel, disable: bool):
+    article.disable = disable
+    await db.commit()
+
+
+async def get_all_articles(db: AsyncSession, page: int):
+    result = await db.execute(
+        select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
+        .join(ArticleModel.user)
+        .filter(
+                ArticleModel.bid_approved == True,
+        )
+        .offset((page - 1) * 2)
+        .limit(2)
+    )
+    return result.all()

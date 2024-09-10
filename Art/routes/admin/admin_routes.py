@@ -10,6 +10,7 @@ from config.log_config import logger
 from models.users.user_model import UserModel, AnonymousUser
 
 from schemas.admin.admin_schemas import BidListResponseModel, FileDownloadRequest
+from schemas.articles.articles_schemas import SSlug
 
 from services.auth.auth_services import get_current_user
 from services.admin import admin_services
@@ -83,3 +84,34 @@ async def cancel_bid(filename: FileDownloadRequest = Body(),
     return response
 
 
+@router.post("/disable-article")
+async def disable_article(db: AsyncSession = Depends(get_db),
+                          current_user: UserModel | AnonymousUser = Depends(get_current_user),
+                          disable: bool = Body(),
+                          slug: SSlug = Body(),
+                          ):
+
+    await admin_services.check_is_admin_user(current_user)
+    logger.info(f" - {current_user.username} - START disable article")
+
+    await admin_services.disable_article(db, disable, slug)
+
+    response = JSONResponse(status_code=200, content={"Success": "ййй"})
+    logger.info(f" - {current_user.username} - SUCCESS disable article")
+    return response
+
+
+@router.get("/get-all-articles")
+async def get_all_articles(db: AsyncSession = Depends(get_db),
+                           current_user: UserModel | AnonymousUser = Depends(get_current_user),
+                           page: int = 1
+                           ):
+    await admin_services.check_is_admin_user(current_user)
+    logger.info(f" - {current_user.username} - START get all articles admin")
+
+    articles = await admin_services.get_all_articles(db, page)
+
+    # response = JSONResponse(status_code=200, content=articles)
+    logger.info(f" - {current_user.username} - SUCCESS get all articles admin")
+    # return response
+    return articles

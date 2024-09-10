@@ -2,7 +2,7 @@ import random
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import select, update, func
+from sqlalchemy import select, update, func, and_
 
 from models.users.user_model import UserModel
 from models.articles.articles_model import ArticleModel
@@ -48,7 +48,12 @@ async def get_all_articles(db: AsyncSession, page: int):
     result = await db.execute(
         select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
         .join(ArticleModel.user)
-        .filter(ArticleModel.bid_approved == True)
+        .filter(
+            and_(
+                ArticleModel.bid_approved == True,
+                ArticleModel.disable == False
+            )
+        )
         .offset((page - 1) * 2)
         .limit(2)
     )
@@ -64,7 +69,10 @@ async def get_last_article(db: AsyncSession):
 async def get_titles_articles(db: AsyncSession, article_title: str):
     result = await db.execute(select(ArticleModel.title)
         .filter(
-            ArticleModel.title.like(f"%{article_title.lower()}%")
+            and_(
+                ArticleModel.title.like(f"%{article_title.lower()}%"),
+                ArticleModel.disable == False
+            )
         )
     )
     return result.scalars().all()
@@ -75,8 +83,11 @@ async def get_articles_by_title(article_title: str, db: AsyncSession, page: int)
         select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
         .join(ArticleModel.user)
         .filter(
-            ArticleModel.title.like(f"%{article_title.lower()}%"),
-            ArticleModel.bid_approved == True
+            and_(
+                ArticleModel.title.ilike(f"%{article_title}%"),
+                ArticleModel.bid_approved == True,
+                ArticleModel.disable == False
+            )
         )
         .offset((page - 1) * 2)
         .limit(2)

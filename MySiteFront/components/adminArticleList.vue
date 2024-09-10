@@ -1,32 +1,29 @@
 <template>
-  <div class="articles-list-container">
-    <div class="articles-list">
-      <Article
-        v-for="article in articles"
-        :key="article.id"
-        :user="article.user"
-        :avatar="article.avatar"
-        :date="article.date"
-        :name="article.name"
-        :title="article.title"
-        :text="article.text"
-        :intro_text="article.intro_text"
-        :slug="article.slug"
-        :count_views="article.count_views"
-      />
+    <div class="articles-list-container">
+      <div class="articles-list">
+        <adminArticle
+          v-for="article in articles"
+          :key="article.id"
+          :user="article.user"
+          :date="article.date"
+          :name="article.name"
+          :title="article.title"
+          :slug="article.slug"
+          :count_views="article.count_views"
+        />
+      </div>
+  
+      <div class="pagination-controls">
+        <button @click="prevPage" :disabled="currentPage === 1">Предыдущая</button>
+        <span>Страница {{ currentPage }}</span>
+        <button @click="nextPage" :disabled="!hasMorePages">Следующая</button>
+      </div>
     </div>
-
-    <div class="pagination-controls">
-      <button @click="prevPage" :disabled="currentPage === 1">Предыдущая</button>
-      <span>Страница {{ currentPage }}</span>
-      <button @click="nextPage" :disabled="!hasMorePages">Следующая</button>
-    </div>
-  </div>
-</template>
+  </template>
 
 <script setup>
 import { ref } from 'vue';
-import article from './article.vue';
+import article from './adminArticle.vue';
 import { url } from "../MyConstants.vue";
 import axios from 'axios';
 
@@ -34,7 +31,7 @@ const currentPage = ref(1);
 const articles = ref([]);
 const hasMorePages = ref(true);
 
-const get_articles_with_authors_url = (page) => `${url}/articles/get-all-articles?page=${page}`;
+const get_articles_with_authors_url = (page) => `${url}/admin/get-all-articles?page=${page}`;
 
 const get_articles_with_authors = async (page) => {
   try {
