@@ -271,7 +271,7 @@ COPY public."Token" (hash, expiration, id, created_at, updated_at) FROM stdin;
 --
 
 COPY public.article (name, slug, intro_text, bid_approved, count_views, title, user_id, id, created_at, updated_at) FROM stdin;
-1_asinhronnost'_ch1.docx	1_asinhronnost'_ch1.docx-65005506	тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст	t	0	Асинхронность Часть 1	1	1	2024-09-01 14:01:16.019613+00	2024-09-01 14:01:22.868841+00
+1_asinhronnost'_ch1.docx	1_asinhronnost'_ch1.docx-65005506	тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст	t	0	асинхронность часть 1	1	1	2024-09-01 14:01:16.019613+00	2024-09-01 14:01:22.868841+00
 \.
 
 
