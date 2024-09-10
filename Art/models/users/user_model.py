@@ -1,6 +1,5 @@
-import datetime
-from typing import List, Optional, Type, TYPE_CHECKING
-from sqlalchemy import Integer, String, DateTime, ForeignKey, func, Boolean
+from typing import List, Optional
+from sqlalchemy import String, Boolean
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from models.base_model import BaseModel

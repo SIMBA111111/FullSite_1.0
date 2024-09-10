@@ -1,5 +1,6 @@
 from fastapi import UploadFile, HTTPException
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from transliterate import translit
@@ -7,15 +8,15 @@ from transliterate import translit
 from config.log_config import logger
 
 import os
+import aiofiles
 
-from models.articles.articles_model import ArticleModel
 from schemas.articles.articles_schemas import SSlug, SArticleListWithAuthors
 
 from crud.articles import articles_crud
 from schemas.users.users_schemas import SAuthorsList
 
 
-def translate_ru_in_en(file: UploadFile) -> str:
+async def translate_ru_in_en(file: UploadFile) -> str:
     try:
         england_filename = translit(file.filename, language_code='ru', reversed=True)
         filename = ""
@@ -37,7 +38,7 @@ def translate_ru_in_en(file: UploadFile) -> str:
     return filename
 
 
-def create_new_article_name(article_last, filename: str) -> str:
+async def create_new_article_name(article_last, filename: str) -> str:
     try:
         if article_last is None:
             new_article_name = f"1_{filename}"
@@ -49,23 +50,23 @@ def create_new_article_name(article_last, filename: str) -> str:
     return new_article_name
 
 
-def write_file(new_article_name: str, file: UploadFile):
+async def write_file(new_article_name: str, file: UploadFile):
     try:
         file_path = os.path.join(os.getcwd(), "articles_list", new_article_name)
 
-        with open(file_path, 'wb') as f:
-            while contents := file.file.read(1024 * 1024):
-                f.write(contents)
+        async with aiofiles.open(file_path, 'wb') as f:
+            while contents := await file.read(1024 * 1024):
+                await f.write(contents)
     except Exception as e:
         logger.error(f"The file could not be written. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"There was an error uploading the file. Error: {e}"})
     finally:
-        file.file.close()
+        await file.close()
 
 
-def get_article(db: Session, slug: SSlug):
+async def get_article(db: AsyncSession, slug: SSlug):
     try:
-        filename = articles_crud.get_article_by_slug(db, slug)
+        filename = await articles_crud.get_article_by_slug(db, slug)
     except Exception as e:
         logger.error(f"The article could not be retrieved by slug. Error: {e}")
         raise HTTPException(
@@ -77,8 +78,8 @@ def get_article(db: Session, slug: SSlug):
     file_path = os.path.join(os.getcwd(), "static", "articles", filename.name[:-5], file_)
 
     try:
-        with open(file_path, "r", encoding='utf-8') as file:
-            file_content = file.read()
+        async with aiofiles.open(file_path, "r", encoding='utf-8') as file:
+            file_content = await file.read()
     except Exception as e:
         logger.error(f"The file could not be opened: {file_}. Error: {e}")
         raise HTTPException(
@@ -88,7 +89,7 @@ def get_article(db: Session, slug: SSlug):
 
     new_count_views = filename.count_views + 1
     try:
-        articles_crud.update_count_views_by_article(db, new_count_views, slug)
+        await articles_crud.update_count_views_by_article(db, new_count_views, slug)
     except Exception as e:
         logger.error(f"The number of article views could not be updated. Error: {e}")
         raise HTTPException(
@@ -99,9 +100,9 @@ def get_article(db: Session, slug: SSlug):
     return file_content
 
 
-def get_all_articles(db: Session, page: int):
+async def get_all_articles(db: AsyncSession, page: int):
     try:
-        all_articles = articles_crud.get_all_articles(db, page)
+        all_articles = await articles_crud.get_all_articles(db, page)
     except Exception as e:
         logger.error(f"Couldn't get all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get all the articles. Error: {e}"})
@@ -125,23 +126,38 @@ def get_all_articles(db: Session, page: int):
     return articles
 
 
-def get_last_article(db: Session):
+async def get_last_article(db: AsyncSession):
     try:
-        last_article = articles_crud.get_last_article(db)
+        last_article = await articles_crud.get_last_article(db)
     except Exception as e:
         logger.error(f"Couldn't get the latest article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the latest article. Error: {e}"})
     return last_article
 
 
-def get_titles_articles(db: Session, query: str):
-    data = []
+async def get_titles_articles(db: AsyncSession, query: str):
+    # data = []
     try:
-        articles = articles_crud.get_titles_articles(db)
+        articles = await articles_crud.get_titles_articles(db, query)
     except Exception as e:
         logger.error(f"Couldn't get the title article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the title article. Error: {e}"})
-    for article in articles:
-        if query.lower() in article.lower():
-            data.append(article)
-    return data
+    # for article in articles:
+    #     if query.lower() in article.lower():
+    #         data.append(article)
+
+    return articles
+
+
+async def get_articles_by_title(article_title: str,
+                                db: AsyncSession,
+                                page: int,
+                                ):
+    try:
+        articles = await articles_crud.get_articles_by_title(article_title, db, page)
+        print(articles)
+    except Exception as e:
+        logger.error(f"Couldn't get the articles by title. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the articles by title. Error: {e}"})
+
+    return articles

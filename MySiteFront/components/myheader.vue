@@ -11,7 +11,7 @@
       <div><NuxtLink to="/authors" exact-active-class="active" class="el">Авторы</NuxtLink></div>
       <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div>
       <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Войти</NuxtLink></div>
-      <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти ({{ userStore.user.username }})</NuxtLink></div>
+      <div v-else @click="logout"><NuxtLink to="#" exact-active-class="active" class="el">Выйти ({{ userStore.user.username }})</NuxtLink></div>
     </div>
   </div>
   <hr>

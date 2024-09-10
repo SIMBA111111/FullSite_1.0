@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
 from config.log_config import logger
@@ -11,24 +12,24 @@ from schemas.users.users_schemas import SUserBase, SAuthorsList, SUsername
 from services.auth import auth_services
 
 
-def create_user(db: Session, item: SUserBase):
-    hashed_password = users_crud.hash_password(item["password"])
+async def create_user(db: AsyncSession, item: SUserBase):
+    hashed_password = await users_crud.hash_password(item["password"])
     item["password"] = hashed_password
     if isinstance(item, SUserBase):
         new_user = UserModel(**item.dict())
     else:
         new_user = UserModel(**item)
     try:
-        auth_crud.create_user(db, new_user)
+        await auth_crud.create_user(db, new_user)
     except Exception as e:
         logger.error(f"Failed to create a new user. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Failed to create a new user. Error: {e}"})
     return new_user
 
 
-def get_all_authors(db: Session):
+async def get_all_authors(db: AsyncSession):
     try:
-        users_ordered_by_article_count = users_crud.get_all_authors(db)
+        users_ordered_by_article_count = await users_crud.get_all_authors(db)
     except Exception as e:
         logger.error(f"Couldn't get all the authors. Error: {e}")
         raise HTTPException(status_code=400, detail={"message": f"Couldn't get all the authors. Error: {e}"})
@@ -47,8 +48,8 @@ def get_all_authors(db: Session):
     return users_ordered_by_article_count_response
 
 
-def get_author(db: Session, username: SUsername):
-    author = auth_services.get_user_by_username(db, username.username)
+async def get_author(db: AsyncSession, username: SUsername):
+    author = await auth_services.get_user_by_username(db, username.username)
     author = SAuthorsList(
         id=author.id,
         first_name=author.first_name,
@@ -61,7 +62,7 @@ def get_author(db: Session, username: SUsername):
     return author_response
 
 
-def user_or_anonym(current_user: UserModel | AnonymousUser):
+async def user_or_anonym(current_user: UserModel | AnonymousUser):
     if isinstance(current_user, AnonymousUser):
         data = {
             "username": current_user.username,

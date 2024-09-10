@@ -8,4 +8,6 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY . /code
 
-CMD ["fastapi", "run", "main.py", "--port", "80"]
+CMD ["gunicorn", "-w", "2", "-k", "uvicorn.workers.UvicornWorker", "main:app", "--bind", "0.0.0.0:80"]
+
+#CMD ["fastapi", "run", "main.py", "--port", "80"]

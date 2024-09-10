@@ -1,12 +1,12 @@
 import urllib
-from time import sleep
 
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi import HTTPException
 
 import os
 import subprocess
+import aiofiles
 
 from config.log_config import logger
 
@@ -18,16 +18,16 @@ from schemas.admin.admin_schemas import FileDownloadRequest, BidListResponseMode
 from crud.admin import admin_crud
 
 
-def get_bid_list(db: Session):
+async def get_bid_list(db: AsyncSession):
     try:
-        bid_list = admin_crud.get_bid_list(db)
+        bid_list = await admin_crud.get_bid_list(db)
     except Exception as e:
         logger.error(f"Couldn't get a list of articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get a list of articles: {str(e)}"})
 
     bid_list_response = [
         BidListResponseModel(
-            id=item[0],
+            id=item.id,
             name=item[1],
             bid_approved=item[2],
             intro_text=item[3],
@@ -38,7 +38,7 @@ def get_bid_list(db: Session):
     return bid_list_response
 
 
-def create_html_file(filename: FileDownloadRequest) -> str:
+async def create_html_file(filename: FileDownloadRequest) -> str:
     try:
         dir_path = f"static/articles/{filename.filename[:-5]}"
         os.makedirs(dir_path, exist_ok=True)
@@ -61,60 +61,50 @@ def create_html_file(filename: FileDownloadRequest) -> str:
     return html_file_name
 
 
-def create_paths_in_src_in_html_files(filename: FileDownloadRequest, html_file_name: str):
-    try:
-        file_path = os.path.join(os.getcwd(), "static", "articles", filename.filename[:-5], html_file_name)
+async def create_paths_in_src_in_html_files(filename: FileDownloadRequest, html_file_name: str):
+    file_path = os.path.join(os.getcwd(), "static", "articles", filename.filename[:-5], html_file_name)
 
-        with open(file_path, "r", encoding="utf-8") as file:
-            file_content = file.read()
+    try:
+        async with aiofiles.open(file_path, "r", encoding="utf-8") as file:
+            file_content = await file.read()
     except Exception as e:
         logger.error(f"The file could not be opened {html_file_name}. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Error in approving the article: {str(e)}"})
+        raise HTTPException(status_code=400, detail={"Error": f"Error opening the file: {str(e)}"})
 
-    updated_content = ''
-    pos = 0
-
-    while True:
-        start_pos = file_content.find('<img src="', pos)
-        if start_pos == -1:
-            updated_content += file_content[pos:]
-            break
-
-        new_img_path = f'http://127.0.0.1:80/static/articles/{filename.filename[:-5]}/'
-        updated_content += file_content[pos:start_pos + 10] + new_img_path
-        pos = start_pos + 10
+    new_img_path = f'http://127.0.0.1:80/static/articles/{filename.filename[:-5]}/'
+    updated_content = file_content.replace('<img src="', f'<img src="{new_img_path}')
 
     try:
-        with open(file_path, "w", encoding="utf-8") as file:
-            file.write(updated_content)
+        async with aiofiles.open(file_path, "w", encoding="utf-8") as file:
+            await file.write(updated_content)
     except Exception as e:
         logger.error(f"Error when rewriting the file {html_file_name}. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Error in approving the article: {str(e)}"})
+        raise HTTPException(status_code=400, detail={"Error": f"Error rewriting the file: {str(e)}"})
 
 
-def approve_article_bid_approved(filename: FileDownloadRequest, db: Session):
+async def approve_article_bid_approved(filename: FileDownloadRequest, db: AsyncSession):
     try:
-        admin_crud.approve_bid(db, filename)
+        await admin_crud.approve_bid(db, filename)
     except Exception as e:
         logger.error(f"Error in approving the article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Error in approving the article: {str(e)}"})
 
 
-def cancel_bid(db: Session, filename: FileDownloadRequest):
+async def cancel_bid(db: AsyncSession, filename: FileDownloadRequest):
     try:
-        admin_crud.approve_bid(db, filename)
+        await admin_crud.delete_bid(db, filename)
         os.remove(f"articles_list/{filename.filename}")
     except Exception as e:
         logger.error(f"Error when canceling an article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Error when canceling an article: {str(e)}"})
 
 
-def process_html_file(html_file_name, output_file):
+async def process_html_file(html_file_name, output_file):
     input_file_path = os.path.join(os.getcwd(), "static", "articles", html_file_name[:-5], html_file_name)
     output_file_path = os.path.join(os.getcwd(), "static", "articles", output_file[:-5], output_file)
 
-    with open(input_file_path, 'r', encoding='utf-8') as file:
-        html_content = file.read()
+    async with aiofiles.open(input_file_path, 'r', encoding='utf-8') as file:
+        html_content = await file.read()
 
     new_html_content = ""
 
@@ -124,11 +114,11 @@ def process_html_file(html_file_name, output_file):
 
         html_content = new_html_content.replace('<p>!@#$</p>', '</div>', 1)
 
-    with open(output_file_path, 'w', encoding='utf-8') as file:
-        file.write(new_html_content)
+    async with aiofiles.open(output_file_path, 'w', encoding='utf-8') as file:
+        await file.write(new_html_content)
 
 
-def path_to_file(filename: FileDownloadRequest):
+async def path_to_file(filename: FileDownloadRequest):
     try:
         decoded_filename = urllib.parse.unquote(filename.filename)
         path = os.path.join(os.getcwd(), "articles_list", decoded_filename)
@@ -138,7 +128,7 @@ def path_to_file(filename: FileDownloadRequest):
     return path
 
 
-def check_is_admin_user(current_user: UserModel | AnonymousUser):
+async def check_is_admin_user(current_user: UserModel | AnonymousUser):
     if current_user is None:
         raise HTTPException(status_code=403, detail={"Error": "You need to login"})
     if isinstance(current_user, AnonymousUser):

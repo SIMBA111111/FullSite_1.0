@@ -1,17 +1,11 @@
-from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 
-from config.database import SessionLocal
-
-from models.users.user_model import UserModel
+from config.database import async_session
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_db():
+    async with async_session() as session:
+        yield session
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")

@@ -1,8 +1,13 @@
 from datetime import timedelta, datetime, timezone
 
 import jwt
+import os
+
 from jwt.exceptions import PyJWTError
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
+from starlette.concurrency import run_in_threadpool
 
 from config.log_config import logger
 from models.auth.token_model import TokenModel
@@ -17,12 +22,12 @@ from dependencies import get_db
 from fastapi import status, Depends, HTTPException, Body, Header
 
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
-def create_access_token(db: Session, data: dict, expires_delta: timedelta | None = None):
+async def create_access_token(db: AsyncSession, data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now() + expires_delta
@@ -32,20 +37,20 @@ def create_access_token(db: Session, data: dict, expires_delta: timedelta | None
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     new_token = TokenModel(hash=encoded_jwt, expiration=expire)
     try:
-        auth_crud.create_token(db, new_token)
+        await auth_crud.create_token(db, new_token)
     except Exception as e:
         logger.error(f"Failed to create a new token. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Failed to create a new token. Error: {e}"})
     return encoded_jwt
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+async def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return await run_in_threadpool(lambda: pwd_context.verify(plain_password, hashed_password))
 
 
-def get_user_by_username(db: Session, username: str):
+async def get_user_by_username(db: AsyncSession, username: str):
     try:
-        current_user = auth_crud.get_user_by_username(db, username)
+        current_user = await auth_crud.get_user_by_username(db, username)
     except Exception as e:
         logger.error(f"Couldn't get a user by username. Error: {e}")
         raise HTTPException(status_code=400,
@@ -54,11 +59,12 @@ def get_user_by_username(db: Session, username: str):
     return current_user
 
 
-def get_current_user(Authorization: str = Header(default=None),
-                     db: Session = Depends(get_db)
-                     ):
+async def get_current_user(Authorization: str = Header(default=None),
+                           db: AsyncSession = Depends(get_db),
+                           ):
     if Authorization is None:
-        return db.query(AnonymousUser).filter(AnonymousUser.username == "AnonymousUser").first()
+        result = await db.execute(select(AnonymousUser).filter(AnonymousUser.username == "AnonymousUser"))
+        return result.scalars().first()
 
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -75,21 +81,21 @@ def get_current_user(Authorization: str = Header(default=None),
     #     token_data = TokenData(username=username)
     except PyJWTError:
         raise credentials_exception
-    user = get_user_by_username(db, username=username)
+    user = await get_user_by_username(db, username=username)
     if user is None:
         raise credentials_exception
     return user
 
 
-def delete_token(db: Session, access_token: str):
+async def delete_token(db: AsyncSession, access_token: str):
     try:
-        auth_crud.delete_token(db, access_token)
+        await auth_crud.delete_token(db, access_token)
     except Exception as e:
         logger.error(f"The token could not be deleted. Error: {e}")
         raise HTTPException(status_code=400, detail={"message": f"The token could not be deleted. Error: {e}"})
     return 200
 
 
-def is_authed(current_user: UserModel | AnonymousUser):
+async def is_authed(current_user: UserModel | AnonymousUser):
     if isinstance(current_user, AnonymousUser):
         raise HTTPException(status_code=403, detail={"Error": "You need to login"})

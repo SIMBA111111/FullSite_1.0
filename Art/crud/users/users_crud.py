@@ -1,5 +1,9 @@
 from fastapi import Depends, HTTPException, status
-from sqlalchemy import func
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from starlette.concurrency import run_in_threadpool
+
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from passlib.context import CryptContext
@@ -16,16 +20,16 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+async def hash_password(password: str) -> str:
+    return await run_in_threadpool(pwd_context.hash, password)
 
 
-def get_all_authors(db: Session):
-    users_ordered_by_article_count = (
-        db.query(UserModel, func.count(ArticleModel.id).label('article_count'))
+async def get_all_authors(db: AsyncSession):
+    result = await db.execute(select(UserModel, func.count(ArticleModel.id).label('article_count'))
         .join(ArticleModel, UserModel.id == ArticleModel.user_id)
         .group_by(UserModel.id)
         .order_by(func.count(ArticleModel.id).desc())
-        .all()
     )
+
+    users_ordered_by_article_count = result.fetchall()
     return users_ordered_by_article_count

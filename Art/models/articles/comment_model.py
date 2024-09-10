@@ -1,13 +1,7 @@
-import datetime
-from typing import List, Optional, TYPE_CHECKING
-from sqlalchemy import Integer, String, DateTime, ForeignKey, func
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from models.base_model import BaseModel
-
-# if TYPE_CHECKING:
-# from models.articles.articles_model import ArticleModel
-# from models.users.user_model import UserModel
 
 
 class CommentModel(BaseModel):

@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-# from starlette.middleware.cors import CORSMiddleware
 
 from config.database import engine, Base
 
@@ -13,9 +12,18 @@ from routes.admin import admin_routes
 from models.articles.comment_model import CommentModel
 
 
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
+
+
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+
+@app.on_event("startup")
+async def on_startup():
+    await init_db()
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

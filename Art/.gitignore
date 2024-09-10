@@ -125,4 +125,6 @@ dmypy.json
 .pyre/
 
 MySiteDB.db
+AsyncMySiteDB.db
+
 log.txt
