@@ -92,10 +92,10 @@ async def request_articles(article_title: str,
                            page: int = 0,
                            db: AsyncSession = Depends(get_db)
                            ):
-    logger.info(f" - START request_articles")
+    logger.info(f" - START request articles")
 
     articles = await articles_services.get_articles_by_title(article_title, db, page)
 
-    logger.info(f" - SUCCESS request_articles")
+    logger.info(f" - SUCCESS request articles")
     return articles
 
