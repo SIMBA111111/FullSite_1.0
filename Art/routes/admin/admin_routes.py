@@ -22,30 +22,28 @@ router = APIRouter()
 @router.get("/bid-list", response_model=list[BidListResponseModel])
 async def get_bid_list(db: AsyncSession = Depends(get_db),
                        current_user: UserModel = Depends(get_current_user),
-                       user_agent: str = Header(),
                        ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START get_bid_list - {user_agent}")
+    logger.info(f" - {current_user.username} - START get bid list")
 
     bid_list_response = await admin_services.get_bid_list(db)
 
     response = JSONResponse(status_code=200, content=[item.dict() for item in bid_list_response])
-    logger.info(f" - {current_user.username} - SUCCESS get_bid_list - {user_agent}")
+    logger.info(f" - {current_user.username} - SUCCESS get bid list")
     return response
 
 
 @router.post("/download-file")
 async def download_file(filename: FileDownloadRequest = Body(),
                         current_user: UserModel = Depends(get_current_user),
-                        user_agent: str = Header(),
                         ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START download_file - {user_agent}")
+    logger.info(f" - {current_user.username} - START download file")
 
     path = await admin_services.path_to_file(filename)
 
     response = FileResponse(path, filename=filename.filename, status_code=200)
-    logger.info(f" - {current_user.username} - SUCCESS download_file - {user_agent}")
+    logger.info(f" - {current_user.username} - SUCCESS download file")
     return response
 
 
@@ -53,18 +51,17 @@ async def download_file(filename: FileDownloadRequest = Body(),
 async def approve_bid(filename: FileDownloadRequest = Body(),
                       db: AsyncSession = Depends(get_db),
                       current_user: UserModel = Depends(get_current_user),
-                      user_agent: str = Header(),
                       ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START approve_bid - {user_agent}")
+    logger.info(f" - {current_user.username} - START approve bid")
 
     html_file_name = await admin_services.create_html_file(filename)
     await admin_services.create_paths_in_src_in_html_files(filename, html_file_name)
     await admin_services.process_html_file(html_file_name, html_file_name)
     await admin_services.approve_article_bid_approved(filename, db)
 
-    response = JSONResponse(status_code=200, content={"Success": "Статья одобрена"})
-    logger.info(f" - {current_user.username} - SUCCESS approve_bid - {user_agent}")
+    response = JSONResponse(status_code=200, content={"Success": "The article has been approved"})
+    logger.info(f" - {current_user.username} - SUCCESS approve bid")
     return response
 
 
@@ -72,15 +69,14 @@ async def approve_bid(filename: FileDownloadRequest = Body(),
 async def cancel_bid(filename: FileDownloadRequest = Body(),
                      db: AsyncSession = Depends(get_db),
                      current_user: UserModel | AnonymousUser = Depends(get_current_user),
-                     user_agent: str = Header(),
                      ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START cancel bid - {user_agent}")
+    logger.info(f" - {current_user.username} - START cancel bid")
 
     await admin_services.cancel_bid(db, filename)
 
-    response = JSONResponse(status_code=200, content={"Success": "Статья отменена"})
-    logger.info(f" - {current_user.username} - SUCCESS cancel bid - {user_agent}")
+    response = JSONResponse(status_code=200, content={"Success": "The article has been canceled"})
+    logger.info(f" - {current_user.username} - SUCCESS cancel bid")
     return response
 
 
@@ -96,7 +92,7 @@ async def disable_article(db: AsyncSession = Depends(get_db),
 
     await admin_services.disable_article(db, disable, slug)
 
-    response = JSONResponse(status_code=200, content={"Success": "ййй"})
+    response = JSONResponse(status_code=200, content={"Success": "The article has been disabled"})
     logger.info(f" - {current_user.username} - SUCCESS disable article")
     return response
 

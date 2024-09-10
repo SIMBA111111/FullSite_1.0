@@ -146,8 +146,8 @@ async def disable_article(db: AsyncSession, disable: bool, slug: SSlug):
         article = await articles_crud.get_article_by_slug(db, slug)
         await admin_crud.disable_article(db, article, disable)
     except Exception as e:
-        logger.error(f"Error : Ошибка: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Error : {str(e)}"})
+        logger.error(f"Error hiding the article: Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Error hiding the article: {str(e)}"})
     return article
 
 
@@ -155,8 +155,8 @@ async def get_all_articles(db: AsyncSession, page: int):
     try:
         all_articles = await admin_crud.get_all_articles(db, page)
     except Exception as e:
-        logger.error(f"Error : Ошибка: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Error : {str(e)}"})
+        logger.error(f"Error get all articles in admin panel: Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Error get all articles in admin panel: {str(e)}"})
 
     try:
         articles = []
@@ -175,7 +175,7 @@ async def get_all_articles(db: AsyncSession, page: int):
             )
             articles.append(article_with_author)
     except Exception as e:
-        logger.error(f"Couldn't serialize all the articles. Error: {e}")
+        logger.error(f"Couldn't serialize all the articles in admin panel. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't serialize all the articles. Error: {e}"})
 
     return articles
