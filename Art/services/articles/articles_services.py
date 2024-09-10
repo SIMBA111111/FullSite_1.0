@@ -155,7 +155,6 @@ async def get_articles_by_title(article_title: str,
                                 page: int):
     try:
         articles = await articles_crud.get_articles_by_title(article_title, db, page)
-        print("articles - ", articles)
     except Exception as e:
         logger.error(f"Couldn't get the articles by title. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the articles by title. Error: {e}"})
