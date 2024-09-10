@@ -107,21 +107,25 @@ async def get_all_articles(db: AsyncSession, page: int):
         logger.error(f"Couldn't get all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get all the articles. Error: {e}"})
 
-    articles = []
-    for article, first_name, last_name, username in all_articles:
-        article_with_author = SArticleListWithAuthors(
-            name=article.name,
-            intro_text=article.intro_text,
-            slug=article.slug,
-            count_views=article.count_views,
-            title=article.title,
-            user=SAuthorsList(
-                first_name=first_name,
-                last_name=last_name,
-                username=username,
+    try:
+        articles = []
+        for article, first_name, last_name, username in all_articles:
+            article_with_author = SArticleListWithAuthors(
+                name=article.name,
+                intro_text=article.intro_text,
+                slug=article.slug,
+                count_views=article.count_views,
+                title=article.title,
+                user=SAuthorsList(
+                    first_name=first_name,
+                    last_name=last_name,
+                    username=username,
+                )
             )
-        )
-        articles.append(article_with_author)
+            articles.append(article_with_author)
+    except Exception as e:
+        logger.error(f"Couldn't serialize all the articles. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't serialize all the articles. Error: {e}"})
 
     return articles
 
@@ -142,22 +146,38 @@ async def get_titles_articles(db: AsyncSession, query: str):
     except Exception as e:
         logger.error(f"Couldn't get the title article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the title article. Error: {e}"})
-    # for article in articles:
-    #     if query.lower() in article.lower():
-    #         data.append(article)
 
     return articles
 
 
 async def get_articles_by_title(article_title: str,
                                 db: AsyncSession,
-                                page: int,
-                                ):
+                                page: int):
     try:
         articles = await articles_crud.get_articles_by_title(article_title, db, page)
-        print(articles)
+        print("articles - ", articles)
     except Exception as e:
         logger.error(f"Couldn't get the articles by title. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the articles by title. Error: {e}"})
 
-    return articles
+    try:
+        articles_response = []
+        for article, first_name, last_name, username in articles:
+            _article = SArticleListWithAuthors(
+                name=article.name,
+                intro_text=article.intro_text,
+                slug=article.slug,
+                count_views=article.count_views,
+                title=article.title,
+                user=SAuthorsList(
+                    first_name=first_name,
+                    last_name=last_name,
+                    username=username,
+                )
+            )
+            articles_response.append(_article)
+    except Exception as e:
+        logger.error(f"Couldn't serialize the articles by title. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't serialize the articles by title. Error: {e}"})
+
+    return articles_response

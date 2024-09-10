@@ -48,12 +48,11 @@ async def get_all_articles(db: AsyncSession, page: int):
     result = await db.execute(
         select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
         .join(ArticleModel.user)
-        .options(joinedload(ArticleModel.user))
-        .where(ArticleModel.bid_approved == True)
+        .filter(ArticleModel.bid_approved == True)
         .offset((page - 1) * 2)
         .limit(2)
     )
-    return result.fetchall()
+    return result.all()
     # return result.scalars().all()
 
 
@@ -72,11 +71,9 @@ async def get_titles_articles(db: AsyncSession, article_title: str):
 
 
 async def get_articles_by_title(article_title: str, db: AsyncSession, page: int):
-
     result = await db.execute(
         select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
         .join(ArticleModel.user)
-        .options(joinedload(ArticleModel.user))
         .filter(
             ArticleModel.title.like(f"%{article_title.lower()}%"),
             ArticleModel.bid_approved == True
@@ -84,5 +81,6 @@ async def get_articles_by_title(article_title: str, db: AsyncSession, page: int)
         .offset((page - 1) * 2)
         .limit(2)
     )
-    return result.scalars().all()
+
+    return result.all()
 
