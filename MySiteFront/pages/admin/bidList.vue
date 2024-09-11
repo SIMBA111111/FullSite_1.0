@@ -5,19 +5,22 @@
     </div>
     <div v-else>
       <AdminHeader></AdminHeader>
+      <notificationDiv v-if="notificationFlag != null" :notificationFlag="notificationFlag" ></notificationDiv>
       <h1 class="heading">Заявки</h1>
-      <div v-for="bid in bidList" :key="bid.id" class="bid-card">
-        <div class="bid-info">
-          <!-- <div class="bid-title">{{ bid.title }}</div> -->
-          <div class="bid-name">{{ bid.name }}</div>
-          <div class="bid-intro">{{ bid.intro_text }}</div>
+      <template v-if="bidList[0].length">
+        <div v-for="bid in bidList[0]" :key="bid.id" class="bid-card">
+          <div class="bid-info">
+            <!-- <div class="bid-title">{{ bid.title }}</div> -->
+            <div class="bid-name">{{ bid.name }}</div>
+            <div class="bid-intro">{{ bid.intro_text }}</div>
+          </div>
+          <div class="bid-buttons">
+            <button class="action-button" @click="downloadBid(bid)">скачать</button>
+            <button class="action-button" @click="approveBid(bid)">Одобрить</button>
+            <button class="action-button" @click="cancelBid(bid)">Отказать</button>
+          </div>
         </div>
-        <div class="bid-buttons">
-          <button class="action-button" @click="downloadBid(bid.name)">скачать</button>
-          <button class="action-button" @click="approveBid(bid.name)">Одобрить</button>
-          <button class="action-button" @click="cancelBid(bid.name)">Отказать</button>
-        </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -26,6 +29,7 @@
   import axios from 'axios';
   import { url } from '../../MyConstants.vue';
   import nonadmin from '~/components/nonadmin.vue';
+  import notificationDiv from './notificationDiv.vue'
 
   definePageMeta({
     middleware: 'auth'
@@ -37,6 +41,8 @@
   const cancel_url = `${url}/admin/cancel-bid`;
   const response = ref("")
   const NotIsAdminUser = ref(false);
+  const bidList = reactive([]);
+  const notificationFlag = ref(null);
   // const access_token = useCookie('access_token').value;
 
   try {
@@ -45,6 +51,8 @@
             "Authorization": useCookie('access_token').value
         }
     });
+    bidList.push(response.value.data)
+    
   } catch (error) {
       console.error("Error fetching bid list:", error);
       if (error.response && error.response.status == 403) {
@@ -53,9 +61,10 @@
         console.error("Unexpected error:", error.message);
       }
   }
-  console.log("response.value - ", response);
-  
-  const bidList = ref(response.value.data)
+  // console.log(notificationFlag.value);
+  // console.log("response.value - ", response);
+  // const bidList = response.value.data;
+  // console.log(bidList[0], 'bidList');
  
  // скачать статью
   const downloadBid = async (filename) => {
@@ -66,7 +75,7 @@
 
     try {
         const res = await axios.post(download_url, {
-            filename: filename
+            filename: filename.name
         }, {
             headers: {
                 'Content-Type': 'application/json',
@@ -96,13 +105,18 @@
 const approveBid = async (filename) => {
   try {
         const res = await axios.post(approve_url, {
-            filename: filename
+            filename: filename.name
         }, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": useCookie('access_token').value 
             }
         });
+        bidList[0] = bidList[0].filter( bid => bid != filename);
+        notificationFlag.value = true;
+        setTimeout(() => {
+          notificationFlag.value = null
+        }, 2000);
     } catch (error) {
         console.error("Error approve bid:", error);
         if (error.response && error.response.status == 403) {
@@ -118,14 +132,19 @@ const approveBid = async (filename) => {
 const cancelBid = async (filename) => {
   try { 
         const res = await axios.post(cancel_url, {
-            filename: filename
+            filename: filename.name
         }, {
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": useCookie('access_token').value
             }
-        });
-    } catch (error) {
+        })
+        bidList[0] = bidList[0].filter( bid => bid != filename);
+        notificationFlag.value = false;
+        setTimeout(() => {
+          notificationFlag.value = null
+        }, 2000);
+      } catch (error) {
         console.error("Error approve bid:", error);
         if (error.response && error.response.status == 403) {
         NotIsAdminUser.value = true;
