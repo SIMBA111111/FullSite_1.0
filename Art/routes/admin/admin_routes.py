@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dependencies import get_db
-from config.log_config import logger
+from config.log_config import info_logger
 
 from models.users.user_model import UserModel, AnonymousUser
 
@@ -24,12 +24,12 @@ async def get_bid_list(db: AsyncSession = Depends(get_db),
                        current_user: UserModel = Depends(get_current_user),
                        ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START get bid list")
+    info_logger.info(f" - {current_user.username} - START get bid list")
 
     bid_list_response = await admin_services.get_bid_list(db)
 
     response = JSONResponse(status_code=200, content=[item.dict() for item in bid_list_response])
-    logger.info(f" - {current_user.username} - SUCCESS get bid list")
+    info_logger.info(f" - {current_user.username} - SUCCESS get bid list")
     return response
 
 
@@ -38,12 +38,12 @@ async def download_file(filename: FileDownloadRequest = Body(),
                         current_user: UserModel = Depends(get_current_user),
                         ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START download file")
+    info_logger.info(f" - {current_user.username} - START download file")
 
     path = await admin_services.path_to_file(filename)
 
     response = FileResponse(path, filename=filename.filename, status_code=200)
-    logger.info(f" - {current_user.username} - SUCCESS download file")
+    info_logger.info(f" - {current_user.username} - SUCCESS download file")
     return response
 
 
@@ -53,7 +53,7 @@ async def approve_bid(filename: FileDownloadRequest = Body(),
                       current_user: UserModel = Depends(get_current_user),
                       ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START approve bid")
+    info_logger.info(f" - {current_user.username} - START approve bid")
 
     html_file_name = await admin_services.create_html_file(filename)
     await admin_services.create_paths_in_src_in_html_files(filename, html_file_name)
@@ -61,7 +61,7 @@ async def approve_bid(filename: FileDownloadRequest = Body(),
     await admin_services.approve_article_bid_approved(filename, db)
 
     response = JSONResponse(status_code=200, content={"Success": "The article has been approved"})
-    logger.info(f" - {current_user.username} - SUCCESS approve bid")
+    info_logger.info(f" - {current_user.username} - SUCCESS approve bid")
     return response
 
 
@@ -71,12 +71,12 @@ async def cancel_bid(filename: FileDownloadRequest = Body(),
                      current_user: UserModel | AnonymousUser = Depends(get_current_user),
                      ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START cancel bid")
+    info_logger.info(f" - {current_user.username} - START cancel bid")
 
     await admin_services.cancel_bid(db, filename)
 
     response = JSONResponse(status_code=200, content={"Success": "The article has been canceled"})
-    logger.info(f" - {current_user.username} - SUCCESS cancel bid")
+    info_logger.info(f" - {current_user.username} - SUCCESS cancel bid")
     return response
 
 
@@ -88,12 +88,12 @@ async def disable_article(db: AsyncSession = Depends(get_db),
                           ):
 
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START disable article")
+    info_logger.info(f" - {current_user.username} - START disable article")
 
     await admin_services.disable_article(db, disable, slug)
 
     response = JSONResponse(status_code=200, content={"Success": "The article has been disabled"})
-    logger.info(f" - {current_user.username} - SUCCESS disable article")
+    info_logger.info(f" - {current_user.username} - SUCCESS disable article")
     return response
 
 
@@ -103,11 +103,11 @@ async def get_all_articles(db: AsyncSession = Depends(get_db),
                            page: int = 1
                            ):
     await admin_services.check_is_admin_user(current_user)
-    logger.info(f" - {current_user.username} - START get all articles admin")
+    info_logger.info(f" - {current_user.username} - START get all articles admin")
 
     articles = await admin_services.get_all_articles(db, page)
 
     # response = JSONResponse(status_code=200, content=articles)
-    logger.info(f" - {current_user.username} - SUCCESS get all articles admin")
+    info_logger.info(f" - {current_user.username} - SUCCESS get all articles admin")
     # return response
     return articles

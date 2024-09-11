@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse, Response
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from config.log_config import logger
+from config.log_config import info_logger
 from dependencies import get_db
 
 from models.users.user_model import UserModel
@@ -22,11 +22,11 @@ router = APIRouter()
 async def register(user_data=Body(SUserBase),
                    db: AsyncSession = Depends(get_db),
                    ):
-    logger.info(f" - START register")
+    info_logger.info(f" - START register")
 
     user = await users_services.create_user(db, user_data)
 
-    logger.info(f" - {user.username} - SUCCESS register")
+    info_logger.info(f" - {user.username} - SUCCESS register")
     return user
 
 
@@ -35,7 +35,7 @@ async def login(username: str = Body(),
                 password: str = Body(),
                 db: AsyncSession = Depends(get_db),
                 ):
-    logger.info(f" - START login")
+    info_logger.info(f" - {username} - START login")
 
     user = await auth_services.get_user_by_username(db, username)
     if await auth_services.verify_password(password, user.password):
@@ -44,7 +44,7 @@ async def login(username: str = Body(),
         return JSONResponse({"Error": "Invalid username or password"}, status_code=401)
 
     response = JSONResponse({"access_token": token}, status_code=200)
-    logger.info(f" - {username} - SUCCESS login")
+    info_logger.info(f" - {username} - SUCCESS login")
     return response
 
 
@@ -53,9 +53,9 @@ async def logout(db: AsyncSession = Depends(get_db),
                  current_user: UserModel = Depends(get_current_user),
                  access_token: str = Header(...),
                  ):
-    logger.info(f" - {current_user.username} - START logout")
+    info_logger.info(f" - {current_user.username} - START logout")
 
     await auth_services.delete_token(db, access_token)
 
-    logger.info(f" - {current_user.username} - SUCCESS logout")
+    info_logger.info(f" - {current_user.username} - SUCCESS logout")
     return Response(status_code=200)
