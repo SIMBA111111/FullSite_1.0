@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dependencies import get_db
-from config.log_config import logger
+from config.log_config import info_logger
 
 from models.users import UserModel
 
@@ -26,7 +26,7 @@ async def create_article(file: UploadFile = File(),
                          db: AsyncSession = Depends(get_db),
                          current_user: UserModel = Depends(get_current_user),
                          ):
-    logger.info(f" - {current_user.username} - START create_article")
+    info_logger.info(f" - {current_user.username} - START create_article")
     await auth_services.is_authed(current_user)
 
     article_last = await articles_services.get_last_article(db)
@@ -37,7 +37,7 @@ async def create_article(file: UploadFile = File(),
     await articles_crud.create_article(db, new_article_name, intro_text, current_user, title)
 
     response = JSONResponse(status_code=201, content={"Success": "Article created"})
-    logger.info(f" - {current_user.username} - SUCCESS create_article")
+    info_logger.info(f" - {current_user.username} - SUCCESS create_article")
     return response
 
 
@@ -49,12 +49,12 @@ async def get_all_articles(page: int = 0,
                            db: AsyncSession = Depends(get_db),
                            current_user: UserModel = Depends(get_current_user),
                            ):
-    logger.info(f" - {current_user.username} - START get-all-articles")
+    info_logger.info(f" - {current_user.username} - START get-all-articles")
 
     all_articles = await articles_services.get_all_articles(db, page)
 
     # response = JSONResponse(content={"items": all_articles})
-    logger.info(f" - {current_user.username} - SUCCESS get-all-articles")
+    info_logger.info(f" - {current_user.username} - SUCCESS get-all-articles")
     # return response
     return all_articles
 
@@ -64,13 +64,13 @@ async def get_article(slug: SSlug = Body(),
                       db: AsyncSession = Depends(get_db),
                       current_user: UserModel = Depends(get_current_user),
                       ):
-    logger.info(f" - {current_user.username} - START get_article")
+    info_logger.info(f" - {current_user.username} - START get_article")
 
     file_content = await articles_services.get_article(db, slug)
 
     response = JSONResponse(content={"file_content": file_content}, headers=
                             {"Content-Type": "application/json; charset=utf-8"})
-    logger.info(f" - {current_user.username} - SUCCESS get_article")
+    info_logger.info(f" - {current_user.username} - SUCCESS get_article")
     return response
 
 
@@ -78,12 +78,12 @@ async def get_article(slug: SSlug = Body(),
 async def search_article(query: str,
                          db: AsyncSession = Depends(get_db)
                          ):
-    logger.info(f" - START search_article")
+    info_logger.info(f" - START search_article")
 
     data = await articles_services.get_titles_articles(db, query)
 
     response = JSONResponse(status_code=200, content=data)
-    logger.info(f" - SUCCESS search_article")
+    info_logger.info(f" - SUCCESS search_article")
     return response
 
 
@@ -92,10 +92,10 @@ async def request_articles(article_title: str,
                            page: int = 0,
                            db: AsyncSession = Depends(get_db)
                            ):
-    logger.info(f" - START request articles")
+    info_logger.info(f" - START request articles")
 
     articles = await articles_services.get_articles_by_title(article_title, db, page)
 
-    logger.info(f" - SUCCESS request articles")
+    info_logger.info(f" - SUCCESS request articles")
     return articles
 

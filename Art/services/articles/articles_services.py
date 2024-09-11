@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from transliterate import translit
 
-from config.log_config import logger
+from config.log_config import error_logger
 
 import os
 import aiofiles
@@ -31,7 +31,7 @@ async def translate_ru_in_en(file: UploadFile) -> str:
         else:
             filename = england_filename
     except Exception as e:
-        logger.error(f"The title of the article could not be translated. Error: {e}")
+        error_logger.error(f"The title of the article could not be translated. Error: {e}")
         raise HTTPException(status_code=400,
                             detail={"Error": f"The title of the article could not be translated. Error: {e}"}
                             )
@@ -45,7 +45,7 @@ async def create_new_article_name(article_last, filename: str) -> str:
         else:
             new_article_name = f"{article_last.id + 1}_{filename}"
     except Exception as e:
-        logger.error(f"Failed to create a new article title. Error: {e}")
+        error_logger.error(f"Failed to create a new article title. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Failed to create a new article title. Error: {e}"})
     return new_article_name
 
@@ -58,7 +58,7 @@ async def write_file(new_article_name: str, file: UploadFile):
             while contents := await file.read(1024 * 1024):
                 await f.write(contents)
     except Exception as e:
-        logger.error(f"The file could not be written. Error: {e}")
+        error_logger.error(f"The file could not be written. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"There was an error uploading the file. Error: {e}"})
     finally:
         await file.close()
@@ -68,7 +68,7 @@ async def get_article(db: AsyncSession, slug: SSlug):
     try:
         filename = await articles_crud.get_article_by_slug(db, slug)
     except Exception as e:
-        logger.error(f"The article could not be retrieved by slug. Error: {e}")
+        error_logger.error(f"The article could not be retrieved by slug. Error: {e}")
         raise HTTPException(
             status_code=400,
             detail={"Error": f"The article could not be retrieved by slug. Error: {str(e)}"}
@@ -81,7 +81,7 @@ async def get_article(db: AsyncSession, slug: SSlug):
         async with aiofiles.open(file_path, "r", encoding='utf-8') as file:
             file_content = await file.read()
     except Exception as e:
-        logger.error(f"The file could not be opened: {file_}. Error: {e}")
+        error_logger.error(f"The file could not be opened: {file_}. Error: {e}")
         raise HTTPException(
             status_code=400,
             detail={"Error": f"The file could not be opened: {str(e)}"}
@@ -91,7 +91,7 @@ async def get_article(db: AsyncSession, slug: SSlug):
     try:
         await articles_crud.update_count_views_by_article(db, new_count_views, slug)
     except Exception as e:
-        logger.error(f"The number of article views could not be updated. Error: {e}")
+        error_logger.error(f"The number of article views could not be updated. Error: {e}")
         raise HTTPException(
             status_code=400,
             detail={"Error": f"The number of article views could not be updated: {str(e)}"}
@@ -124,7 +124,7 @@ async def get_all_articles(db: AsyncSession, page: int):
             )
             articles.append(article_with_author)
     except Exception as e:
-        logger.error(f"Couldn't serialize all the articles. Error: {e}")
+        error_logger.error(f"Couldn't serialize all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't serialize all the articles. Error: {e}"})
 
     return articles
@@ -134,7 +134,7 @@ async def get_last_article(db: AsyncSession):
     try:
         last_article = await articles_crud.get_last_article(db)
     except Exception as e:
-        logger.error(f"Couldn't get the latest article. Error: {e}")
+        error_logger.error(f"Couldn't get the latest article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the latest article. Error: {e}"})
     return last_article
 
@@ -143,7 +143,7 @@ async def get_titles_articles(db: AsyncSession, query: str):
     try:
         articles = await articles_crud.get_titles_articles(db, query)
     except Exception as e:
-        logger.error(f"Couldn't get the title article. Error: {e}")
+        error_logger.error(f"Couldn't get the title article. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the title article. Error: {e}"})
 
     return articles
@@ -155,7 +155,7 @@ async def get_articles_by_title(article_title: str,
     try:
         articles = await articles_crud.get_articles_by_title(article_title, db, page)
     except Exception as e:
-        logger.error(f"Couldn't get the articles by title. Error: {e}")
+        error_logger.error(f"Couldn't get the articles by title. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get the articles by title. Error: {e}"})
 
     try:
@@ -175,7 +175,7 @@ async def get_articles_by_title(article_title: str,
             )
             articles_response.append(_article)
     except Exception as e:
-        logger.error(f"Couldn't serialize the articles by title. Error: {e}")
+        error_logger.error(f"Couldn't serialize the articles by title. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't serialize the articles by title. Error: {e}"})
 
     return articles_response

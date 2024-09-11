@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 
-from config.log_config import logger
+from config.log_config import error_logger
 from models.auth.token_model import TokenModel
 from models.users import UserModel
 from models.users.user_model import AnonymousUser
@@ -22,7 +22,8 @@ from dependencies import get_db
 from fastapi import status, Depends, HTTPException, Body, Header
 
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+# SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -39,7 +40,7 @@ async def create_access_token(db: AsyncSession, data: dict, expires_delta: timed
     try:
         await auth_crud.create_token(db, new_token)
     except Exception as e:
-        logger.error(f"Failed to create a new token. Error: {e}")
+        error_logger.error(f"Failed to create a new token. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Failed to create a new token. Error: {e}"})
     return encoded_jwt
 
@@ -52,7 +53,7 @@ async def get_user_by_username(db: AsyncSession, username: str):
     try:
         current_user = await auth_crud.get_user_by_username(db, username)
     except Exception as e:
-        logger.error(f"Couldn't get a user by username. Error: {e}")
+        error_logger.error(f"Couldn't get a user by username. Error: {e}")
         raise HTTPException(status_code=400,
                             detail={"Error": f"Couldn't get a user by username. Error: {e}"}
                             )
@@ -91,7 +92,7 @@ async def delete_token(db: AsyncSession, access_token: str):
     try:
         await auth_crud.delete_token(db, access_token)
     except Exception as e:
-        logger.error(f"The token could not be deleted. Error: {e}")
+        error_logger.error(f"The token could not be deleted. Error: {e}")
         raise HTTPException(status_code=400, detail={"message": f"The token could not be deleted. Error: {e}"})
     return 200
 

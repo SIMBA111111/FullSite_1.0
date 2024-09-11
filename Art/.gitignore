@@ -127,4 +127,5 @@ dmypy.json
 MySiteDB.db
 AsyncMySiteDB.db
 
-log.txt
+logs/error.log
+logs/info.log

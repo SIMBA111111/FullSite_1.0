@@ -3,7 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 
-from config.log_config import logger
+from config.log_config import error_logger
 from crud.auth import auth_crud
 from crud.users import users_crud
 from models.users import UserModel
@@ -22,7 +22,7 @@ async def create_user(db: AsyncSession, item: SUserBase):
     try:
         await auth_crud.create_user(db, new_user)
     except Exception as e:
-        logger.error(f"Failed to create a new user. Error: {e}")
+        error_logger.error(f"Failed to create a new user. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Failed to create a new user. Error: {e}"})
     return new_user
 
@@ -31,7 +31,7 @@ async def get_all_authors(db: AsyncSession):
     try:
         users_ordered_by_article_count = await users_crud.get_all_authors(db)
     except Exception as e:
-        logger.error(f"Couldn't get all the authors. Error: {e}")
+        error_logger.error(f"Couldn't get all the authors. Error: {e}")
         raise HTTPException(status_code=400, detail={"message": f"Couldn't get all the authors. Error: {e}"})
 
     users_ordered_by_article_count_response = [
@@ -49,15 +49,19 @@ async def get_all_authors(db: AsyncSession):
 
 
 async def get_author(db: AsyncSession, username: SUsername):
-    author = await auth_services.get_user_by_username(db, username.username)
-    author = SAuthorsList(
-        id=author.id,
-        first_name=author.first_name,
-        last_name=author.last_name,
-        email=author.email,
-        username=author.username
-    )
-    author_response = jsonable_encoder(author)
+    try:
+        author = await auth_services.get_user_by_username(db, username.username)
+        author = SAuthorsList(
+            id=author.id,
+            first_name=author.first_name,
+            last_name=author.last_name,
+            email=author.email,
+            username=author.username
+        )
+        author_response = jsonable_encoder(author)
+    except Exception as e:
+        error_logger.error(f"Couldn't get the author. Error: {e}")
+        raise HTTPException(status_code=400, detail={"message": f"Couldn't get the author. Error: {e}"})
 
     return author_response
 
@@ -73,5 +77,4 @@ async def user_or_anonym(current_user: UserModel | AnonymousUser):
             "username": current_user.username,
             "is_admin": current_user.is_admin_user
         }
-
     return data
