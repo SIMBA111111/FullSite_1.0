@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, status, Depends
+from fastapi import APIRouter, Body, status, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -25,29 +25,47 @@ async def feedback(email: str = Body(),
 
 
 @router.post("/reset-password")
-async def reset_password(username: str = Body(),
-                         email: str = Body(),
+async def reset_password(email: str = Body(),
                          db: AsyncSession = Depends(get_db)):
-    # await options_services.send_reset_code(db, username, email)
-    if await options_services.user_is_email(db, username, email):
-        await options_services.send_reset_code(db, username, email)
+    info_logger.info(f" - START reset password")
+
+    if await options_services.user_exist(db, email):
+        await options_services.send_reset_code(db, email)
+    else:
+        raise HTTPException(status_code=400, detail={"Error": f"There is no user with such an email"})
+    response = JSONResponse(status_code=status.HTTP_200_OK,
+                            content={"Success": "The code has been sent to the email"}
+                            )
+    return response
 
 
 @router.post("/check-code")
-async def reset_password(username: str = Body(),
-                         email: str = Body(),
-                         code: str = Body(),
-                         db: AsyncSession = Depends(get_db)):
-    print(username)
-    print(email)
-    print(code)
-    x = await options_services.check_code(db, email, username, code)
-    return x
+async def check_code(email: str = Body(),
+                     code: str = Body(),
+                     db: AsyncSession = Depends(get_db)):
+    info_logger.info(f" - START check code")
+
+    if await options_services.check_code(db, email, code):
+        return JSONResponse(status_code=status.HTTP_200_OK,
+                            content={"Success": "Code accepted"}
+                            )
+    else:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,
+                            content={"Error": "Code cancelled"}
+                            )
 
 
 @router.post("/new-password")
-async def reset_password(new_password: str = Body(),
-                         email: str = Body(),
-                         db: AsyncSession = Depends(get_db)):
-    x = await options_services.new_password(db, new_password, email)
-    return x
+async def new_password(new_password: str = Body(),
+                       email: str = Body(),
+                       db: AsyncSession = Depends(get_db)):
+    info_logger.info(f" - START new password")
+
+    if await options_services.new_password(db, new_password, email):
+        return JSONResponse(status_code=status.HTTP_200_OK,
+                            content={"Success": "Password changed"}
+                            )
+    else:
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST,
+                            content={"Error": "Password not changed"}
+                            )

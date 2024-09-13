@@ -1,3 +1,4 @@
+import asyncio
 import os
 
 from smtplib import SMTP
@@ -8,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.log_config import error_logger
 from crud.options import options_crud
+from models.options.code_model import CodeModel
 from services.auth import auth_services
 
 
@@ -38,22 +40,31 @@ async def send_feedback(sender: str, message: str):
         raise HTTPException(status_code=400, detail={"Error": f"Could was not possible to send feedback. Error: {e}"})
 
 
-async def user_is_email(db: AsyncSession, username: str, email: str):
+async def delete_code(db: AsyncSession, code: CodeModel):
+    await asyncio.sleep(60 * 5)
     try:
-        await options_crud.user_is_email(db, username, email)
+        await options_crud.delete_code(db, code)
     except Exception as e:
-        error_logger.error(f"Could сопоставить юзера и почту. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Could сопоставить юзера и почту. Error: {e}"})
+        error_logger.error(f"Couldn't delete the code. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't delete the code. Error: {e}"})
+
+
+async def user_exist(db: AsyncSession, email: str):
+    try:
+        await options_crud.user_exist(db, email)
+    except Exception as e:
+        error_logger.error(f"There is no user with such an email. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"ЕThere is no user with such an email. Error: {e}"})
     return True
 
 
-async def send_reset_code(db: AsyncSession, username: str, email: str):
+async def send_reset_code(db: AsyncSession, email: str):
     try:
-        code_obj = await options_crud.create_code(db, username, email)
+        code_obj = await options_crud.create_code(db, email)
     except Exception as e:
-        error_logger.error(f"Could создать код. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Could создать код. Error: {e}"})
-    #
+        error_logger.error(f"Couldn't create the code. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't create the code. Error: {e}"})
+
     try:
         EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
         EMAIL_PORT = os.getenv("EMAIL_PORT", "587")
@@ -76,31 +87,32 @@ async def send_reset_code(db: AsyncSession, username: str, email: str):
 
         server.sendmail(email, EMAIL_RECIPIENT, msg.as_string())
     except Exception as e:
-        error_logger.error(f"Could отправить почту. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Could отправить почту. Error: {e}"})
+        error_logger.error(f"Couldn't send code to the email. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't send code to the email. Error: {e}"})
 
     try:
-        await options_tasks.task_delete_code(db, code_obj)
+        await delete_code(db, code_obj)
     except Exception as e:
-        error_logger.error(f"Could запустить таймер и удаление сода. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Could  запустить таймер и удаление сода. Error: {e}"})
+        error_logger.error(f"Couldn't start the timer and delete the code. Error: {e}")
+        raise HTTPException(status_code=400,
+                            detail={"Error": f"Couldn't start the timer and delete the code. Error: {e}"}
+                            )
 
 
-async def check_code(db: AsyncSession, username: str, email: str, code: str):
+async def check_code(db: AsyncSession, email: str, code: str):
     try:
-        code_exist = await options_crud.check_code_exists(db, username, email, code)
-        print(code_exist)
+        code_exist = await options_crud.check_code_exists(db, email, code)
     except Exception as e:
-        error_logger.error(f"Could проверить код. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Could  проверить код. Error: {e}"})
+        error_logger.error(f"Couldn't check password. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't check password. Error: {e}"})
     return code_exist
 
 
 async def new_password(db: AsyncSession, new_password: str, email: str):
     try:
         new_hashed_password = await auth_services.is_hashed_password(new_password)
-        x = await options_crud.change_password(db, new_hashed_password, email)
+        await options_crud.change_password(db, new_hashed_password, email)
     except Exception as e:
-        error_logger.error(f"Could. Error: {e}")
-        raise HTTPException(status_code=400, detail={"Error": f"Could поменять пароль. Error: {e}"})
-    # return code_exist
+        error_logger.error(f"Couldn't change your password. Error: {e}")
+        raise HTTPException(status_code=400, detail={"Error": f"Couldn't change password. Error: {e}"})
+    return True

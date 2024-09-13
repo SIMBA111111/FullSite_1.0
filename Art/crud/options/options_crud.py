@@ -7,21 +7,18 @@ from models.options.code_model import CodeModel
 from models.users import UserModel
 
 
-async def user_is_email(db: AsyncSession, username: str, email: str):
+async def user_exist(db: AsyncSession, email: str):
     result = await db.execute(
         select(UserModel)
         .filter(
-            and_(
-                UserModel.username == username,
                 UserModel.email == email,
-            )
-        )
+        ).exists().select()
     )
-    return result.scalars().first()
+    return result.scalar()
 
 
-async def create_code(db: AsyncSession, username: str, email: str):
-    code_obj = CodeModel(code=random.randint(1, 99999999), username=username, email=email)
+async def create_code(db: AsyncSession, email: str):
+    code_obj = CodeModel(code=random.randint(1, 99999999), email=email)
     db.add(code_obj)
     await db.commit()
     await db.refresh(code_obj)
@@ -33,31 +30,15 @@ async def delete_code(db: AsyncSession, code_obj: CodeModel):
     await db.commit()
 
 
-async def check_code_exists(db: AsyncSession, username: str, email: str, code: str):
-    stmt = select(CodeModel).filter(
-        and_(
+async def check_code_exists(db: AsyncSession, email: str, code: str):
+    result = await db.execute(
+        select(CodeModel)
+        .filter(
             CodeModel.code == code,
-            # CodeModel.email == email,
-            # CodeModel.username == username
-        )
-    ).exists().select()
-
-    result = await db.execute(stmt)
+            CodeModel.email == email
+        ).exists().select()
+    )
     return result.scalar()
-    # print(username)
-    # print(email)
-    # print(code)
-    # result = await db.execute(
-    #     select(CodeModel)
-    #     .filter(
-    #         and_(
-    #             CodeModel.code == code,
-    #             # CodeModel.email == email,
-    #             # CodeModel.username == username,
-    #         )
-    #     )
-    # )
-    # return result.scalars().all()
 
 
 async def change_password(db: AsyncSession, new_hashed_password: str, email: str):
