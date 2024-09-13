@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Body, Depends
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dependencies import get_db
@@ -45,16 +45,17 @@ async def create_article(file: UploadFile = File(),
             response_model=list[SArticleListWithAuthors],
             summary="Get all articles"
             )
-async def get_all_articles(page: int = 0,
+async def get_all_articles(response: Response,
+                           page: int = 0,
                            db: AsyncSession = Depends(get_db),
                            current_user: UserModel = Depends(get_current_user),
                            ):
-    info_logger.info(f" - {current_user.username} - START get-all-articles")
+    info_logger.info(f" - {current_user.username} - START get all articles")
 
     all_articles = await articles_services.get_all_articles(db, page)
 
     # response = JSONResponse(content={"items": all_articles})
-    info_logger.info(f" - {current_user.username} - SUCCESS get-all-articles")
+    info_logger.info(f" - {current_user.username} - SUCCESS get all articles")
     # return response
     return all_articles
 
@@ -64,13 +65,13 @@ async def get_article(slug: SSlug = Body(),
                       db: AsyncSession = Depends(get_db),
                       current_user: UserModel = Depends(get_current_user),
                       ):
-    info_logger.info(f" - {current_user.username} - START get_article")
+    info_logger.info(f" - {current_user.username} - START get article")
 
     file_content = await articles_services.get_article(db, slug)
 
     response = JSONResponse(content={"file_content": file_content}, headers=
                             {"Content-Type": "application/json; charset=utf-8"})
-    info_logger.info(f" - {current_user.username} - SUCCESS get_article")
+    info_logger.info(f" - {current_user.username} - SUCCESS get article")
     return response
 
 
@@ -78,24 +79,25 @@ async def get_article(slug: SSlug = Body(),
 async def search_article(query: str,
                          db: AsyncSession = Depends(get_db)
                          ):
-    info_logger.info(f" - START search_article")
+    info_logger.info(f" - START search article")
 
     data = await articles_services.get_titles_articles(db, query)
 
     response = JSONResponse(status_code=200, content=data)
-    info_logger.info(f" - SUCCESS search_article")
+    info_logger.info(f" - SUCCESS search article")
     return response
 
 
 @router.get("/request-articles")
-async def request_articles(article_title: str,
+async def request_articles(response: Response,
+                           article_title: str,
                            page: int = 0,
                            db: AsyncSession = Depends(get_db)
                            ):
     info_logger.info(f" - START request articles")
 
     articles = await articles_services.get_articles_by_title(article_title, db, page)
-
+    response.set_cookie(key="qqq", value="qqq")
     info_logger.info(f" - SUCCESS request articles")
     return articles
 

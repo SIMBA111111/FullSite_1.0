@@ -12,7 +12,7 @@ class BaseModel(Base):
     updated_at: Mapped[str] = mapped_column(
         TIMESTAMP(timezone=True),
         default=func.now(),
-        onupdate=func.now()
+        onupdate=func.now(),
     )
 
     # @declared_attr.directive
