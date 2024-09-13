@@ -29,7 +29,7 @@
   import axios from 'axios';
   import { url } from '../../MyConstants.vue';
   import nonadmin from '~/components/nonadmin.vue';
-  import notificationDiv from './notificationDiv.vue'
+  import notificationDiv from './infoNotification.vue'
 
   definePageMeta({
     middleware: 'auth'

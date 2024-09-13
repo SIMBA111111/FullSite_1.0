@@ -11,10 +11,9 @@
       <div><NuxtLink to="/authors" exact-active-class="active" class="el">Авторы</NuxtLink></div>
       <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div>
       <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Войти</NuxtLink></div>
-      <div v-else @click="logout"><NuxtLink to="#" exact-active-class="active" class="el">Выйти ({{ userStore.user.username }})</NuxtLink></div>
+      <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти ({{ userStore.user.username }})</NuxtLink></div>
     </div>
   </div>
-  <hr>
 </template>
 
 <script setup>
@@ -76,7 +75,7 @@ watch(authed, (newValue) => {});
   justify-content: space-between;
   align-items: center;
   padding: 0px 70px;
-  background-color: #462887;
+  background-color: #191919;
   overflow: hidden;
 }
 
@@ -105,6 +104,7 @@ watch(authed, (newValue) => {});
 .links div {
   /* margin: 0 10px; */
   height: 70px;
+  border-radius: 50%;
 }
 
 .links div:hover {
@@ -130,7 +130,7 @@ watch(authed, (newValue) => {});
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  /* background: rgba(0, 0, 0, 0.5); */
   z-index: -1;
   transition: transform 0.3s, filter 0.3s;
   transform: scale(1);
@@ -145,14 +145,16 @@ watch(authed, (newValue) => {});
   color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: translateZ(10px);
-  border-bottom: 4px solid #c5b02b
+  border-radius: 50%;
+  background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
 }
 
 .links a:active {
   color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transform: translateZ(5px);
-  border-bottom: 4px solid #c5b02b
+  border-radius: 50%;
+  background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
 }
 
 /* Стиль для активной ссылки */
@@ -160,6 +162,7 @@ watch(authed, (newValue) => {});
   color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: translateZ(10px);
-  border-bottom: 4px solid #c5b02b
+  border-radius: 50%;
+background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
 }
 </style>

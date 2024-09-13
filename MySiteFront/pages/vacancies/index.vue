@@ -1,7 +1,10 @@
 <template>
     <div>
-        <myheader></myheader>    
-        VACAC
+        <myheader></myheader>   
+        <div class="vac">
+          <div class="hr"></div>
+          <p>SOON</p>
+        </div>
     </div>
 </template>
   
@@ -11,5 +14,27 @@ definePageMeta({
 });
 </script>
 
-<style>
+<style scoped>
+  .vac {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    background-color: #191919;
+    padding-top: 20px;
+  }
+
+  .hr {
+    width: 90%;
+    height: 5px;
+    border-radius: 0%;
+    background-color: #fff;
+    margin-bottom: 40px;
+    clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
+  }
+  p{
+    color: #fff;
+    font-size: 100px;
+  }
 </style>
