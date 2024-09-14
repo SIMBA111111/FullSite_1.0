@@ -211,7 +211,7 @@ export default {
   border: 0px;
   border-radius: 50px;
   background-color: #9b9b9b;
-  font-size: 1.1rem;
+  font-size: 24px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 

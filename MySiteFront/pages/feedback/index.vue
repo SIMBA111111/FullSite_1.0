@@ -3,7 +3,7 @@
         <myheader></myheader>   
         <div class="vac">
           <div class="hr"></div>
-          <p>Вакансии</p>
+          <p>Обратная связь</p>
           <p>SOON</p>
         </div>
     </div>

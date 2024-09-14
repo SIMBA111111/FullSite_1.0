@@ -5,15 +5,12 @@
       <div class="hr"></div>
       <form @submit.prevent class="login-form" action="">
         <username-field v-model="user.username"/>
-        <firstname-field v-model="user.firstname"/>
-        <lastname-field v-model="user.lastname"/>
-        <email-field v-model="user.email"/>
         <password-field v-model="user.password"/>
         <div class="btn-wrapper">
-          <button :disabled="isSignupButtonDisabled" @click="signUpButtonPressed" type="submit" class="btn">ВХОД</button>
-          <button class="btn" @click="login">ЗАБЫЛ ПАРОЛЬ</button>
+          <button :disabled="isSignupButtonDisabled" @click="logUpButtonPressed" type="submit" class="btn">ВХОД</button>
+          <button class="btn"><NuxtLink class="btn-rec" to="/recoverPassword">ЗАБЫЛ ПАРОЛЬ</NuxtLink></button>
         </div>
-        <button class="btn-logout" @click="login">Зарегистрироваться</button>
+        <div class="btn-sign-up" @click="login"><NuxtLink to="/auth/register">Зарегистрироваться</NuxtLink></div>
       </form>
       <div style="color: red;font-size: 30px;">{{ error }}</div>
     </div>
@@ -40,9 +37,6 @@ definePageMeta({
 
 const user = reactive({
   username: '',
-  email: '',
-  firstname: '',
-  lastname: '',
   password: ''
 });
 
@@ -56,10 +50,11 @@ const login_url = `${url}/auth/login`;
 //   console.log(user);
 // }
 
-const signUpButtonPressed = async () => {
+const logUpButtonPressed = async () => {
   try {
     error.value = '';
     const response = await axios.post(login_url, user);
+    console.log(response.data);
     const access_token = useCookie('access_token');
     access_token.value = response.data.access_token;
     const router = useRouter();
@@ -162,19 +157,29 @@ const signUpButtonPressed = async () => {
   border: none;
 }
 
+.btn-rec {
+  text-decoration: none;
+  color: #fff;
+}
+
 .btn:hover {
   background-color: #191919;
   border: 3px solid yellow;
 }
 
-.btn-logout {
-  color: #fff;
+.btn-sign-up {
   background-color: transparent;
   border: none;
   font-size: 33px;
+  cursor: pointer;
+}
+.btn-sign-up a {
+  text-decoration: none;
+  color: #fff;
 }
 
-.btn-logout:hover {
+
+.btn-sign-up a:hover {
   color: #747474;
 }
 

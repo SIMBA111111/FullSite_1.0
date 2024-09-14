@@ -11,7 +11,7 @@
                 @blur="validateInput"
                 @input="$emit('update:modelValue', $event.target.value)"
             />
-            <div v-if="errors.lastname" class="error">{{ errors.lastname }}</div>
+            <div v-if="errors.last_name" class="error">{{ errors.last_name }}</div>
         </div>
     </div>
 </template>
@@ -22,7 +22,7 @@
     const input = ref('');
     const { validateNameField, errors} = useFormValidation();
     const validateInput = () => {
-        validateNameField('lastname', input.value);
+        validateNameField('last_name', input.value);
     }
 </script>
 

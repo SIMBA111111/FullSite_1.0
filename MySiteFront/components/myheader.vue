@@ -6,11 +6,27 @@
     <div class="links">
       <div v-if="userStore.user.is_admin"><NuxtLink to="/admin/bidList" target="_blank" exact-active-class="active" class="el write">В админку</NuxtLink></div>
       <div v-if="authed"><NuxtLink to="/articles/create" exact-active-class="active" class="el write">Написать</NuxtLink></div>
+      <div><NuxtLink to="/search" exact-active-class="active" class="el">Поиск</NuxtLink></div>
       <div><NuxtLink to="/articles" exact-active-class="active" class="el">Статьи</NuxtLink></div>
-      <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
       <div><NuxtLink to="/authors" exact-active-class="active" class="el">Авторы</NuxtLink></div>
-      <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div>
-      <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Войти</NuxtLink></div>
+      <!-- <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Услуги</NuxtLink></div> -->
+      <div><NuxtLink @mouseover="f" @mouseout="f1" exact-active-class="active" class="el">Услуги</NuxtLink></div>
+      <div @mouseover="f" @mouseout="f1" class="option">
+        <div @mouseover="f" @mouseout="f1"><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
+        <div><NuxtLink to="/feedback" exact-active-class="active" class="el">Обратная связь</NuxtLink></div>
+        <div><NuxtLink to="/mentoring" exact-active-class="active" class="el">Менторство</NuxtLink></div>
+      </div>
+      
+      <!-- <div>
+        <select class="select el" name="vac" id="">
+          <option class="option" selected value=""><NuxtLink>serves</NuxtLink></option>
+          <option class="option" value=""><NuxtLink>vac</NuxtLink></option>
+          <option class="option" value=""><NuxtLink>back</NuxtLink></option>
+          <option class="option" value=""><NuxtLink>ment</NuxtLink></option>
+        </select>
+      </div> -->
+      <!-- <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div> -->
+      <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Вход</NuxtLink></div>
       <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти ({{ userStore.user.username }})</NuxtLink></div>
     </div>
   </div>
@@ -22,6 +38,14 @@ import { ref, watch } from 'vue';
 import { useCookie, useRouter } from '#app';
 import { url } from "../MyConstants.vue";
 import { useUserStore } from '~/store/user';
+
+const f = () => {
+  document.querySelector('.option').style = 'opacity: 1;'
+}
+
+const f1 = () => {
+  document.querySelector('.option').style = 'opacity: 0;'
+}
 
 const authed = ref(false);
 const userStore = useUserStore()
@@ -66,9 +90,64 @@ watch(authed, (newValue) => {});
   box-sizing: border-box;
 }
 
+.option{
+  opacity: 0;
+}
+
+.select {
+  width: 100px;
+  height: 70px;
+  text-decoration: none;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 18px;
+  padding: 20px 20px;
+  /* border: 1px solid transparent; */
+  position: relative;
+  display: inline-block;
+  background-color: transparent;
+  transition: color 0.3s, transform 0.3s, filter 0.3s, box-shadow 0.3s;
+  /* -webkit-appearance: none */
+}
+
+.select:hover {
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateZ(10px);
+  border-radius: 50%;
+  background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
+}
+
 .el {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+.option {
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  position: absolute;
+  top: 100%;
+  right: 9%;
+}
+
+/* .option {
+  width: 100px;
+  height: 70px;
+  text-decoration: none;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  font-size: 18px;
+  padding: 20px 20px;
+  position: relative;
+  display: inline-block;
+  background-color: transparent;
+  transition: color 0.3s, transform 0.3s, filter 0.3s, box-shadow 0.3s;
+} */
 
 .header {
   display: flex;
@@ -76,7 +155,7 @@ watch(authed, (newValue) => {});
   align-items: center;
   padding: 0px 70px;
   background-color: #191919;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .first {
@@ -99,6 +178,7 @@ watch(authed, (newValue) => {});
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  position: relative;
 }
 
 .links div {
