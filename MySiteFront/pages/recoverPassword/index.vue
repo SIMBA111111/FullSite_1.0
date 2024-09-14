@@ -6,7 +6,7 @@
         <form @submit.prevent class="login-form" action="">
           <username-field v-model="user.email"/>
           <div class="btn-wrapper">
-            <button :disabled="isSignupButtonDisabled" @click="logUpButtonPressed" type="submit" class="btn">Отправить</button>
+            <button :disabled="isSignupButtonDisabled" @click="recoverButtonPressed" type="submit" class="btn">Отправить</button>
           </div>
         </form>
         <div style="color: red;font-size: 30px;">{{ error }}</div>
@@ -33,22 +33,20 @@
   });
   
   const user = reactive({
-    username: '',
-    password: ''
+    email: ''
   });
   
+  const userEmail = '';
+
   const { errors } = useFormValidation();
   const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
   
   let error = ref('');
   const login_url = `${url}/auth/login`;
   
-  // const signUpButtonPressed = () => {
-  //   console.log(user);
-  // }
-  
-  const logUpButtonPressed = async () => {
+  const recoverButtonPressed = async () => {
     try {
+      userEmail = user.email;
       error.value = '';
       const response = await axios.post(login_url, user);
       console.log(response.data);
