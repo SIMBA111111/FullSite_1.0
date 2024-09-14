@@ -14,6 +14,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       }
     });
 
+    console.log(result);
     const me = result.data;
     
     if (!userStore.user) {

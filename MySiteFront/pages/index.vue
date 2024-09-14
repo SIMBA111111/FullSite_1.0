@@ -71,10 +71,6 @@
 <script>
 import { url } from "../MyConstants.vue";
 
-definePageMeta({
-  middleware: "auth",
-});
-
 export default {
   data() {
     return {
