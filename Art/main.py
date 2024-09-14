@@ -8,6 +8,7 @@ from routes.articles import article_routes
 from routes.users import users_routes
 from routes.auth import auth_routes
 from routes.admin import admin_routes
+from routes.options import options_routes
 
 from models.articles.comment_model import CommentModel
 
@@ -27,13 +28,13 @@ async def on_startup():
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# origins = [
-#     "http://frontend:3000",
-#     "http://localhost:3000",
-# ]
+origins = [
+    "http://localhost:3000",
+]
 
 app.add_middleware(
     CORSMiddleware,
+    # allow_origins=origins,  # You can specify domains here, e.g., ["http://localhost:3000"]
     allow_origins=["*"],  # You can specify domains here, e.g., ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods, e.g., GET, POST, etc.
@@ -59,4 +60,9 @@ app.include_router(auth_routes.router,
 app.include_router(admin_routes.router,
                    prefix="/api/v1/admin",
                    tags=["admin"],
+                   )
+
+app.include_router(options_routes.router,
+                   prefix="/api/v1/options",
+                   tags=["options"],
                    )

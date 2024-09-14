@@ -13,7 +13,7 @@ from services.auth import auth_services
 
 
 async def create_user(db: AsyncSession, item: SUserBase):
-    hashed_password = await users_crud.hash_password(item["password"])
+    hashed_password = await auth_services.is_hashed_password(item["password"])
     item["password"] = hashed_password
     if isinstance(item, SUserBase):
         new_user = UserModel(**item.dict())
