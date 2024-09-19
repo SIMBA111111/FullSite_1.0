@@ -68,7 +68,7 @@
  
  // скачать статью
   const downloadBid = async (filename) => {
-    if (typeof filename !== 'string') {
+    if (typeof filename.name !== 'string') {
         console.error("filename должен быть строкой");
         return;
     }
@@ -87,7 +87,7 @@
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', filename); 
+        link.setAttribute('download', filename.name); 
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
