@@ -1,44 +1,60 @@
 <template>
   <div>
-  <myheader></myheader>
-    <div class="register-container">
-      <div class="register-form">
-        <input v-model="userData.username" type="text" placeholder="Username" />
-        <input v-model="userData.password" type="password" placeholder="Password" />
-        <input v-model="userData.first_name" type="text" placeholder="First Name" />
-        <input v-model="userData.last_name" type="text" placeholder="Last Name" />
-        <input v-model="userData.email" type="email" placeholder="Email" />
-        <button @click="register">Зарегистрироваться</button>
-        <p v-if="error" class="error">{{ error }}</p>
-      </div>
+    <myheader></myheader>
+    <div class="login-container">
+      <div class="hr"></div>
+      <form @submit.prevent class="login-form" action="">
+        <username-field v-model="user.username"/>
+        <firstname-field v-model="user.first_name"/>
+        <lastname-field v-model="user.last_name"/>
+        <email-field v-model="user.email"/>
+        <password-field v-model="user.password"/>
+        <div class="btn-wrapper">
+          <button :disabled="isSignupButtonDisabled" @click="signUpButtonPressed" type="submit" class="btn">Зарегистрироваться</button>
+        </div>
+      </form>
+      <div style="color: red;font-size: 30px;">{{ error }}</div>
     </div>
   </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  import axios from 'axios';
-  import { url } from "../../MyConstants.vue";
-  
-  definePageMeta({
-    middleware: 'auth'
-  });
+</template>
 
-  const userData = ref({
-    username: '',
-    password: '',
-    first_name: '',
-    last_name: '',
-    email: ''
-  });
-  
-  const register_url = `${url}/auth/register`;
-  const error = ref('');
-  
-  const register = async () => {
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { url } from "../../MyConstants.vue";
+import UsernameField from '../../components/usernameField.vue';
+import FirstnameField from '../../components/firstnameField.vue';
+import LastnameField from '../../components/lastnameField.vue';
+import EmailField from '../../components/emailField.vue';
+import PasswordField from '../../components/passwordField.vue';
+
+import useFormValidation from '~/modules/useFormValidation';
+import useSubmitButtonState from '~/modules/useSubmitButtonState'
+
+
+definePageMeta({
+  middleware: 'auth'
+});
+
+const user = reactive({
+  username: '',
+  email: '',
+  first_name: '',
+  last_name: '',
+  password: ''
+});
+
+const { errors } = useFormValidation();
+const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
+
+let error = ref('');
+
+const register_url = `${url}/auth/register`;
+
+const signUpButtonPressed = async () => {
     try {
       error.value = ''; // Clear previous error
-      const response = await axios.post(register_url, userData.value);
+      const response = await axios.post(register_url, user);
       // console.log('Response data:', response.data);
       // Redirect to login or other page after successful registration
       location.reload()
@@ -47,68 +63,116 @@
       console.error('Error:', err);
     }
   };
-  </script>
-  
-  <style scoped>
-  .register-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 81vh;
-    background-color: #d8cef1;
-  }
-  
-  .register-form {
-    background-color: #462887;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(221, 22, 239, 0.5);
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .register-form h2 {
-    margin-bottom: 1rem;
-  }
-  
-  .register-form input {
-    width: 100%;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .register-form input:hover {
-    box-shadow: 0 0 10px 7px rgba(221, 22, 239, 0.5);
-  }
 
-  
-  .register-form input:focus {
-    box-shadow: 0 0 10px 7px rgba(221, 22, 239, 1);
+</script>
+
+<style scoped>
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  background-color: #191919;
+  padding-top: 20px;
+}
+
+.hr {
+    width: 90%;
+    height: 5px;
+    background-color: #fff;
+    margin-bottom: 40px;
+    padding: 2px;
+    clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
+}
+
+.login-form {
+  background-color: transparent;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 21px;
+}
+
+.login-form button {
+  cursor: pointer;
+}
+
+.login-form h2 {
+  margin-bottom: 1rem;
+}
+
+.search {
+    width: 560px;
+    height: 76px;
+    padding: 15px 40px 15px 35px;
+    box-sizing: border-box;
+    border: 0px;
+    border-radius: 50px;
+    background-color: #D9D9D9;
+    font-size: 1.1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search::placeholder {
+    font-size: 25px;
+}
+
+.search:focus { 
+    box-shadow: 0 0 8px rgba(70, 40, 135, 0.5);
+    border-color: #462887;
     outline: none;
-  }
+}
 
-  .register-form button {
-    padding: 0.5rem 1rem;
-    background-color: #c5b02b;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .register-form button:hover {
-    background-color: #80700e;
-  }
-  
-  .error {
-    color: red;
-    margin-top: 1rem;
-  }
-  </style>
-  
+.btn-wrapper {
+  width: 560px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-wrapper button {
+  width: 330px;
+  height: 70px;
+  background-color: #909090;
+  color: #fff;
+  font-size: 32px;
+  border-radius: 50px;
+  border: none;
+}
+
+.btn-wrapper button:hover {
+  background-color: #191919;
+}
+
+.btn {
+  height: 70px;
+  background-color: #909090;
+  color: #fff;
+  font-size: 32px;
+  border-radius: 50px;
+  border: none;
+}
+
+.btn:hover {
+  background-color: #191919;
+  border: 3px solid yellow;
+}
+
+.btn-logout {
+  color: #fff;
+  background-color: transparent;
+  border: none;
+  font-size: 33px;
+}
+
+.btn-logout:hover {
+  color: #747474;
+}
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}
+</style>

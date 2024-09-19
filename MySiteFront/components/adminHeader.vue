@@ -10,7 +10,6 @@
         <!-- <div v-else @click="logout" class="el">Выйти</div> -->
       </div>
     </div>
-    <hr>
   </template>
   
   <script setup>

@@ -94,11 +94,19 @@ get_articles_with_authors(currentPage.value);
   margin-top: 20px;
 }
 
+.pagination-controls span {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+}
+
 .pagination-controls button {
   padding: 10px 20px;
   margin: 0 10px;
   background-color: #462887;
-  color: white;
+  color: black;
+  font-size: 14px;
+  font-weight: bold;
   border: none;
   border-radius: 4px;
   cursor: pointer;
