@@ -82,9 +82,13 @@ get_articles_with_authors(currentPage.value);
 }
 
 .articles-list {
-  display: grid;
-  flex-wrap: wrap;
-  gap: 16px;
+  border: 1px solid red;
+  width: 130vh;
+  height: 130VH;
+  display: flex;
+  justify-content: space-around;
+  /* flex-wrap: wrap; */
+  /* gap: 16px; */
 }
 
 .pagination-controls {

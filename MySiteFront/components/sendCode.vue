@@ -1,23 +1,18 @@
 <template>
-    <div>
-      <myheader></myheader>
       <div class="login-container">
-        <div class="hr"></div>
-        <form v-if="!userEmail" @submit.prevent class="login-form" action="">
-          <email-field v-model="email"/>
+        <form v-if="!emailProp" @submit.prevent class="login-form" action="">
+          <username-field  v-model="code.usercode"/>
           <div class="btn-wrapper">
-            <button @click="recoverButtonPressed" type="submit" class="btn">Отправить</button>            
-            <!-- :disabled="isSignupButtonDisabled" -->
+            <button @click="sendButtonPressed" type="submit" class="btn">Ввести код</button>
           </div>
         </form>
-        <send-code v-if="userEmail" :userEmail="userEmail" />
+        <new-password v-if="emailProp" :emailProp="emailProp"/>
         <div style="color: red;font-size: 30px;">{{ error }}</div>
       </div>
-    </div>
   </template>
   
   <script setup>
-  import { computed, reactive, ref } from 'vue';
+  import { reactive, ref } from 'vue';
   import axios from 'axios';
   import { url } from "../../MyConstants.vue";
   import UsernameField from '../../components/usernameField.vue';
@@ -29,50 +24,46 @@
   import useFormValidation from '~/modules/useFormValidation';
   import useSubmitButtonState from '~/modules/useSubmitButtonState'
 
-  import sendCode from '../../components/sendCode.vue'
   import newPassword from '../../components/newPassword.vue'
 
   
+  const props = defineProps({
+    userEmail: {
+        type: String,
+        required: true
+    }
+  })
   
-  definePageMeta({
-    middleware: 'auth'
+  console.log('PROPS', props.userEmail);
+
+  const code = reactive({
+    userEmail: props.userEmail,
+    usercode: ''
   });
-  
-  
-  const email = ref('');
-  const userEmail = ref(null);
-  
+
+  const emailProp = ref(null);
+
   const { errors } = useFormValidation();
-  const { isSignupButtonDisabled } = useSubmitButtonState(email, errors);
+  const { isSignupButtonDisabled } = useSubmitButtonState(code.usercode, errors);
   
   let error = ref('');
-  const recover_url = `${url}/options/reset-password`;
-  
-  const recoverButtonPressed = async () => {
-    userEmail.value = email.value;
+  const sendCode_url = `${url}/options/check-code`;
 
+  const sendButtonPressed = async () => {
+    emailProp.value = code.userEmail;
     try {
-      console.log(typeof(userEmail.value));
       error.value = '';
-      // const response = await axios.post(recover_url, email.value);
-      const response = await axios.post(recover_url, 'qqq', {
-        headers: {
-          'Content-Type': 'application/json'
-        }});
+      const response = await axios.post(sendCode_url, code.value);
       console.log(response.data);
       // const router = useRouter();
       // await router.push('/');
       // location.reload();
     } catch (err) {
       error.value = 'Login failed. Please check your credentials and try again.';
-      console.error('Error:', err);
+      console.error('Error:', error);
     }
   };
-  
-  // const userEmailFunc = computed(() => {
-  //   return userEmail
-  // })
-  
+
   </script>
   
   <style scoped>

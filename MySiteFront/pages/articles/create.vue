@@ -2,19 +2,23 @@
     <div>
         <myheader></myheader>
         <div class="create-container">
+        <div class="hr"></div>
             <div class="create-form">    
-                <form @submit.prevent="handleSubmit">
-                    <div>
+                <form class="form" @submit.prevent="handleSubmit">
+                    <label class="input-file">
                         <input id="file" name="file" type="file" @change="handleFileChange" />
+                        <span>Здесь поле выбора файла</span>
+                      </label>
+                    <div>
+                        <input class="search" v-model="title" name="title" type="text" placeholder="Название статьи" />
                     </div>
                     <div>
-                        <input v-model="title" name="title" type="text" placeholder="Название статьи" />
+                        <input class="search" v-model="introText" name="introText" type="text" placeholder="Завлекающий текст"/>
                     </div>
-                    <div>
-                        <input v-model="introText" name="introText" type="text" placeholder="Завлекающий текст"/>
+                    <div class="btn-wrapper">
+                      <button class="btn" type="submit">Отправить</button>
                     </div>
-                    <button type="submit">Отправить</button>
-                </form>
+                  </form>
             </div>
         </div>
     </div>
@@ -68,21 +72,30 @@ const handleSubmit = async () => {
 };
 </script>
 
-<style>
+<style scoped>
 .create-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 81vh;
-  background-color: #d8cef1;
+  justify-content: flex-start;
+  height: 100vh;
+  background-color: #191919;
+  padding-top: 20px;
+}
+
+.hr {
+    width: 90%;
+    height: 5px;
+    background-color: #fff;
+    margin-bottom: 40px;
+    /* padding: 2px; */
+    clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
 }
 
 .create-form {
-  background-color: #462887;
+  background-color: transparent;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 0 20px rgba(221, 22, 239, 0.5);
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -93,32 +106,98 @@ const handleSubmit = async () => {
   margin-bottom: 1rem;
 }
 
-.create-form input {
-  width: 100%;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 21px;
 }
 
-.create-form input:hover {
-  box-shadow: 0 0 10px 7px rgba(221, 22, 239, .5);
+.input-file {
+	position: relative;
+	display: inline-block;
+}
+.input-file span {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	outline: none;
+	text-decoration: none;
+	font-size: 24px;
+	vertical-align: middle;
+	color: rgb(255 255 255);
+	text-align: center;
+	border-radius: 4px;
+	background-color: transparent;
+	line-height: 22px;
+	height: 50px;
+	padding: 10px 20px;
+	box-sizing: border-box;
+	border: none;
+	margin: 0;
+	transition: background-color 0.2s;
+}
+.input-file input[type=file] {
+	position: absolute;
+	z-index: -1;
+	opacity: 0;
+	display: block;
+	width: 0;
+	height: 0;
+}
+ 
+/* Focus */
+.input-file input[type=file]:focus + span {
+	box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+ 
+/* Hover/active */
+.input-file:hover span {
+	background-color: #D9D9D9;
+  color: #191919;
+}
+.input-file:active span {
+	background-color: #D9D9D9;
+  color: #191919;
+}
+ 
+/* Disabled */
+.input-file input[type=file]:disabled + span {
+	background-color: #eee;
 }
 
-.create-form input:focus {
-  box-shadow: 0 0 10px 10px rgba(221, 22, 239, 1);
-  outline: none;
+.search {
+    width: 560px;
+    height: 76px;
+    padding: 15px 40px 15px 35px;
+    box-sizing: border-box;
+    border: 0px;
+    border-radius: 50px;
+    background-color: #D9D9D9;
+    font-size: 24px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.create-form button {
-  padding: 0.5rem 1rem;
-  background-color: #c5b02b;
-  color: white;
+.search::placeholder {
+    font-size: 24px;
+}
+
+.btn {
+  width: 273px;
+  height: 70px;
+  background-color: #909090;
+  color: #fff;
+  font-size: 32px;
+  border-radius: 50px;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
+
+.btn-wrapper {
+  width: 560px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+}
+
 
 .create-form button:hover {
   background-color: #80700e;

@@ -3,21 +3,31 @@
       <myheader></myheader>
       <div class="login-container">
         <div class="hr"></div>
-        <form v-if="!userEmail" @submit.prevent class="login-form" action="">
+        <form @submit.prevent class="login-form" action="">
           <email-field v-model="email"/>
           <div class="btn-wrapper">
-            <button @click="recoverButtonPressed" type="submit" class="btn">Отправить</button>            
-            <!-- :disabled="isSignupButtonDisabled" -->
+            <button :disabled="isSignupButtonDisabled" @click="recoverButtonPressed" type="submit" class="btn">Отправить</button>            
           </div>
         </form>
-        <send-code v-if="userEmail" :userEmail="userEmail" />
+        <form @submit.prevent class="login-form" action="">
+          <username-field v-model="code.usercode"/>
+          <div class="btn-wrapper">
+            <button :disabled="isSignupButtonDisabled" @click="sendButtonPressed" type="submit" class="btn">Ввести код</button>
+          </div>
+        </form>
+        <form @submit.prevent class="login-form" action="">
+          <password-field v-model="newPassword.newPassword"/>
+          <div class="btn-wrapper">
+            <button :disabled="isSignupButtonDisabled" @click="newPassButtonPressed" type="submit" class="btn">Новый пароль</button>
+          </div>
+        </form>
         <div style="color: red;font-size: 30px;">{{ error }}</div>
       </div>
     </div>
   </template>
   
   <script setup>
-  import { computed, reactive, ref } from 'vue';
+  import { reactive, ref } from 'vue';
   import axios from 'axios';
   import { url } from "../../MyConstants.vue";
   import UsernameField from '../../components/usernameField.vue';
@@ -28,51 +38,79 @@
   
   import useFormValidation from '~/modules/useFormValidation';
   import useSubmitButtonState from '~/modules/useSubmitButtonState'
-
-  import sendCode from '../../components/sendCode.vue'
-  import newPassword from '../../components/newPassword.vue'
-
   
   
   definePageMeta({
     middleware: 'auth'
   });
   
-  
-  const email = ref('');
-  const userEmail = ref(null);
-  
+  const email = ref();
+  const userEmail = '';
+
+  const code = reactive({
+    userEmail: userEmail,
+    usercode: ''
+  });
+
+  const newPassword = reactive({
+    userEmail: userEmail,
+    newPassword: ''
+  });
+
+
   const { errors } = useFormValidation();
   const { isSignupButtonDisabled } = useSubmitButtonState(email, errors);
   
   let error = ref('');
   const recover_url = `${url}/options/reset-password`;
+  const sendCode_url = `${url}/options/check-code`;
+  const newPass_url = `${url}/options/new-password`;
+
+
+
   
   const recoverButtonPressed = async () => {
-    userEmail.value = email.value;
-
     try {
-      console.log(typeof(userEmail.value));
+      userEmail = email.value;
       error.value = '';
-      // const response = await axios.post(recover_url, email.value);
-      const response = await axios.post(recover_url, 'qqq', {
-        headers: {
-          'Content-Type': 'application/json'
-        }});
+      const response = await axios.post(recover_url, email);
       console.log(response.data);
       // const router = useRouter();
       // await router.push('/');
       // location.reload();
     } catch (err) {
       error.value = 'Login failed. Please check your credentials and try again.';
-      console.error('Error:', err);
+      console.error('Error:', error);
     }
   };
-  
-  // const userEmailFunc = computed(() => {
-  //   return userEmail
-  // })
-  
+
+  const sendButtonPressed = async () => {
+    try {
+      error.value = '';
+      const response = await axios.post(sendCode_url, code.value);
+      console.log(response.data);
+      // const router = useRouter();
+      // await router.push('/');
+      // location.reload();
+    } catch (err) {
+      error.value = 'Login failed. Please check your credentials and try again.';
+      console.error('Error:', error);
+    }
+  };
+
+  const newPassButtonPressed = async () => {
+    try {
+      error.value = '';
+      const response = await axios.post(newPass_url, newPassword.value);
+      console.log(response.data);
+      const router = useRouter();
+      await router.push('/auth/login');
+      location.reload();
+    } catch (err) {
+      error.value = 'Login failed. Please check your credentials and try again.';
+      console.error('Error:', error);
+    }
+  };
   </script>
   
   <style scoped>

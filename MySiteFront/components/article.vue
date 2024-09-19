@@ -1,18 +1,22 @@
 <template>
     <div class="outer-article-card">
     <div class="article-card">
+      <div class="-">
+        <div class="author-title">{{ props.title }}</div>
+      </div>
       <div class="author-info">
         <!-- <img :src="avatar" alt="Avatar" class="avatar" /> -->
         <div class="author-name">{{ user.first_name }} {{ user.last_name }}</div>
       </div>
-      <div class="date">{{ date }}</div>
       <div class="count_views">
-        <div>
+        <div class="eye-card">
         <span class="eye">👁</span>
-        {{ count_views }}
+        <span>{{ count_views }}</span>
         </div>
       </div>
-      <div class="title"><NuxtLink :to="`/articles/${slug}`" class="title-link">{{ title }}</NuxtLink></div>
+      <div style="font-size: 16px;">
+        date
+      </div>
       <div><NuxtLink :to="`/articles/${slug}`" class="content content_">{{ intro_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
     </div>
     </div>
@@ -40,28 +44,40 @@ const props = defineProps<{
 
 </script>
 
+
 <style scoped>
+
 .outer-article-card {
+  border: 1px solid green;
   height: 100%;
-  background-color: #d8cef1;
+  background-color: transparent;
   display: flex;
   flex-wrap: wrap;
 }
 
+.author-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
 .article-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin: 20px; 
   /* height: 100%; */
   
-  background-color: rgba(240, 240, 240, 0.5);
-  border-radius: 10px;
+  background-color: #d9d9d9;
+  border-radius: 5px;
   padding: 16px;
-  margin: 20px;
-  width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* margin: 20px; */
+  width: 340px;
+  height: 200px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
 }
 
 .article-card:hover {
-  box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 12px 12px 12px rgba(199, 199, 199, 0.2);
   transform: translateZ(10px);
   transition: box-shadow 0.5s ease, color 0.9s ease, transform 0.9s ease; /* Указываем свойства, для которых применяем переход */
   transition-delay: 0.1s; /* Указываем задержку перед началом перехода */
@@ -80,12 +96,8 @@ const props = defineProps<{
   margin-right: 8px;
 }
 
-.author-name {
-  font-weight: bold;
-}
-
 .date {
-  color: gray;
+  color: black;
   font-size: 12px;
   margin-bottom: 8px;
 }
@@ -96,7 +108,18 @@ const props = defineProps<{
 
 .eye {
   display: inline-block;
-   font-size: 42px;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  padding-bottom: 15px;
+}
+
+.eye-card {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  height: 15px;
 }
 
 .title {
@@ -113,7 +136,7 @@ const props = defineProps<{
 }
 
 .content {
-  font-size: 22px;
+  font-size: 14px;
   margin-bottom: 8px;
   height: 80px;
   overflow: hidden;

@@ -10,9 +10,10 @@ from routes.auth import auth_routes
 from routes.admin import admin_routes
 from routes.options import options_routes
 
-from contextlib import asynccontextmanager
-
 from models.articles.comment_model import CommentModel
+
+
+app = FastAPI()
 
 
 async def init_db():
@@ -20,13 +21,10 @@ async def init_db():
         await conn.run_sync(Base.metadata.create_all)
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+@app.on_event("startup")
+async def on_startup():
     await init_db()
-    yield
 
-
-app = FastAPI(lifespan=lifespan)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 

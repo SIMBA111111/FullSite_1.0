@@ -57,6 +57,8 @@ const signUpButtonPressed = async () => {
       const response = await axios.post(register_url, user);
       // console.log('Response data:', response.data);
       // Redirect to login or other page after successful registration
+      const router = useRouter();
+      await router.push('/');
       location.reload()
     } catch (err) {
       error.value = 'Registration failed. Please check your details and try again.';

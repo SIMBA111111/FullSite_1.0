@@ -110,9 +110,7 @@ async def check_code(db: AsyncSession, email: str, code: str):
 
 async def new_password(db: AsyncSession, new_password: str, email: str):
     try:
-        print(new_password)
         new_hashed_password = await auth_services.is_hashed_password(new_password)
-        print(new_hashed_password)
         await options_crud.change_password(db, new_hashed_password, email)
     except Exception as e:
         error_logger.error(f"Couldn't change your password. Error: {e}")

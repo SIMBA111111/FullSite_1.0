@@ -4,7 +4,7 @@
       <NuxtLink to="/" exact-active-class="active">Название</NuxtLink>
     </div>
     <div class="links">
-      <div v-if="userStore.user.is_admin"><NuxtLink to="/admin/bidList" target="_blank" exact-active-class="active" class="el write">В админку</NuxtLink></div>
+      <div v-if="userStore.user?.is_admin"><NuxtLink to="/admin/bidList" target="_blank" exact-active-class="active" class="el write">В админку</NuxtLink></div>
       <div v-if="authed"><NuxtLink to="/articles/create" exact-active-class="active" class="el write">Написать</NuxtLink></div>
       <div><NuxtLink to="/search" exact-active-class="active" class="el">Поиск</NuxtLink></div>
       <div><NuxtLink to="/articles" exact-active-class="active" class="el">Статьи</NuxtLink></div>
@@ -27,7 +27,7 @@
       </div> -->
       <!-- <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div> -->
       <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Вход</NuxtLink></div>
-      <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти ({{ userStore.user.username }})</NuxtLink></div>
+      <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти ({{ userStore.user?.username }})</NuxtLink></div>
     </div>
   </div>
 </template>
