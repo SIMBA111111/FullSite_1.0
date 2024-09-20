@@ -19,3 +19,5 @@ class SAuthorsList(BaseModel):
     last_name: str
     email: str | None = None
     username: str
+    views_count: int | None = None
+
