@@ -1,7 +1,11 @@
 import asyncio
 import os
+import smtplib
+from dotenv import load_dotenv
 
-from smtplib import SMTP
+# from smtplib import SMTP
+import smtplib as smtp
+from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from fastapi import HTTPException
@@ -12,6 +16,8 @@ from crud.options import options_crud
 from models.options.code_model import CodeModel
 from services.auth import auth_services
 
+load_dotenv()
+
 
 async def send_feedback(sender: str, message: str):
     try:
@@ -20,28 +26,28 @@ async def send_feedback(sender: str, message: str):
         EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "qqhs ptld aivs lwrl")
         EMAIL_RECIPIENT = os.getenv("EMAIL_RECIPIENT", "naaro2930@gmail.com")
 
-        server = SMTP(host=EMAIL_HOST, port=EMAIL_PORT)
-        server.connect(host=EMAIL_HOST, port=EMAIL_PORT)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.login(user=sender, password=EMAIL_HOST_PASSWORD)
+        # server = SMTP(host=EMAIL_HOST, port=EMAIL_PORT)
+        # server.connect(host=EMAIL_HOST, port=EMAIL_PORT)
+        # server.ehlo()
+        # server.starttls()
+        # server.ehlo()
+        # server.login(user=sender, password=EMAIL_HOST_PASSWORD)
 
         msg = MIMEText(message)
         msg['subject'] = 'Обратная связь моего сайта'
         msg['From'] = sender
         msg['To'] = EMAIL_RECIPIENT
 
-        server.sendmail(sender, EMAIL_RECIPIENT, msg.as_string())
+        # server.sendmail(sender, EMAIL_RECIPIENT, msg.as_string())
 
-        server.quit()
+        # server.quit()
     except Exception as e:
         error_logger.error(f"Could was not possible to send feedback. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Could was not possible to send feedback. Error: {e}"})
 
 
 async def delete_code(db: AsyncSession, code: CodeModel):
-    await asyncio.sleep(60 * 5)
+    await asyncio.sleep(60)
     try:
         await options_crud.delete_code(db, code)
     except Exception as e:
@@ -66,26 +72,66 @@ async def send_reset_code(db: AsyncSession, email: str):
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't create the code. Error: {e}"})
 
     try:
-        EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-        EMAIL_PORT = os.getenv("EMAIL_PORT", "587")
-        EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "qqhs ptld aivs lwrl")
-        EMAIL_RECIPIENT = os.getenv("EMAIL_RECIPIENT", "naaro2930@gmail.com")
+        sender_mail = os.getenv("EMAIL_RECIPIENT")
+        sender_password = os.getenv("EMAIL_HOST_PASSWORD")
 
-        server = SMTP(host=EMAIL_HOST, port=EMAIL_PORT)
-        server.connect(host=EMAIL_HOST, port=EMAIL_PORT)
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        server.login(user=email, password=EMAIL_HOST_PASSWORD)
+        mailsender = smtplib.SMTP(os.getenv("EMAIL_HOST"), int(os.getenv("EMAIL_PORT")))
 
-        mail_html = f"<h1>Код для восстановления паролья:</h1> <p style='background: red'>{code_obj.code}</p>"
+        mailsender.starttls()
 
-        msg = MIMEText(mail_html, "html")
-        msg['subject'] = 'Код восстановления пароля'
-        msg['From'] = email
-        msg['To'] = EMAIL_RECIPIENT
+        mailsender.login(sender_mail, sender_password)
 
-        server.sendmail(email, EMAIL_RECIPIENT, msg.as_string())
+        mail_subject = 'Код восстановления пароля'
+        mail_body_text = "Здравствуйте,\n\nВот ваш код восстановления пароля: " + str(code_obj.code)
+
+        mail_body_html = f"""
+        <html>
+          <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+            <div style="max-width: 600px; margin: 0 auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
+
+              <h2 style="color: #333; text-align: center;">Код для восстановления пароля</h2>
+
+              <p style="font-size: 16px; color: #555;">
+                Здравствуйте,
+              </p>
+
+              <p style="font-size: 16px; color: #555;">
+                Вы запросили восстановление пароля. Используйте следующий код для восстановления доступа к вашему аккаунту:
+              </p>
+
+              <div style="text-align: center; margin: 20px 0;">
+                <p style="font-size: 24px; color: #fff; background-color: #007BFF; padding: 10px 20px; border-radius: 5px; display: inline-block;">
+                  {code_obj.code}
+                </p>
+              </div>
+
+              <p style="font-size: 16px; color: #555;">
+                Если вы не запрашивали восстановление пароля, просто проигнорируйте это письмо.
+              </p>
+
+              <p style="font-size: 16px; color: #555;">
+                С уважением,<br>
+                Команда поддержки
+              </p>
+
+              <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+              <p style="font-size: 12px; color: #888; text-align: center;">
+                Это письмо было отправлено автоматически. Пожалуйста, не отвечайте на него.
+              </p>
+            </div>
+          </body>
+        </html>
+        """
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = mail_subject
+        msg['From'] = sender_mail
+        msg['To'] = email
+
+        msg.attach(MIMEText(mail_body_text, 'plain', 'utf-8'))
+        msg.attach(MIMEText(mail_body_html, 'html', 'utf-8'))
+
+        mailsender.sendmail(sender_mail, email, msg.as_string())
+        mailsender.quit()
     except Exception as e:
         error_logger.error(f"Couldn't send code to the email. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't send code to the email. Error: {e}"})
