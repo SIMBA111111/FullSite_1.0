@@ -1,7 +1,7 @@
 <template>
       <div class="login-container">
         <form v-if="!emailProp" @submit.prevent class="login-form" action="">
-          <username-field  v-model="code.usercode"/>
+          <username-field  v-model="code.code"/>
           <div class="btn-wrapper">
             <button @click="sendButtonPressed" type="submit" class="btn">Ввести код</button>
           </div>
@@ -37,8 +37,8 @@
   console.log('PROPS', props.userEmail);
 
   const code = reactive({
-    userEmail: props.userEmail,
-    usercode: ''
+    email: props.userEmail,
+    code: ''
   });
 
   const emailProp = ref(null);
@@ -48,12 +48,14 @@
   
   let error = ref('');
   const sendCode_url = `${url}/options/check-code`;
-
+ 
   const sendButtonPressed = async () => {
-    emailProp.value = code.userEmail;
+    emailProp.value = code.email;
     try {
+      
+      console.log(code);     
       error.value = '';
-      const response = await axios.post(sendCode_url, code.value);
+      const response = await axios.post(sendCode_url, code);
       console.log(response.data);
       // const router = useRouter();
       // await router.push('/');

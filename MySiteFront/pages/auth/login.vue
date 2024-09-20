@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import axios from 'axios';
 import { url } from "../../MyConstants.vue";
 import UsernameField from '../../components/usernameField.vue';
@@ -52,6 +52,21 @@ const user = reactive({
   password: ''
 });
 
+const resetData = reactive({
+  username: "",
+  email: ""
+});
+
+const codeData = reactive({
+  code: "",
+  username: "",
+  email: ""
+});
+
+const new_pwd = reactive({
+  new_password: "",
+  email: ""
+});
 
 const { errors } = useFormValidation();
 const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
@@ -66,7 +81,8 @@ const login_url = `${url}/auth/login`;
 const logUpButtonPressed = async () => {
   try {
     error.value = '';
-
+    console.log("user.value - ", user);
+    
     const response = await axios.post(login_url, user);
     console.log(response.data);
 
@@ -86,11 +102,7 @@ const logUpButtonPressed = async () => {
 
 const reset_password = async () => {
   try {
-    // const resetData = {
-    //   "username": "admin",
-    //   "email": "naaro2930@gmail.com"
-    // }
-    const response = await axios.post(reset_password_url, resetData.value);
+    const response = await axios.post(reset_password_url, resetData);
     // const access_token = useCookie('access_token');
     // access_token.value = response.data.access_token;
     console.log(response);
@@ -105,9 +117,10 @@ const reset_password = async () => {
 };
 
 
+
 const check_code = async () => {
   try {
-    const response = await axios.post(check_code_url, codeData.value);
+    const response = await axios.post(check_code_url, codeData);
     // const access_token = useCookie('access_token');
     // access_token.value = response.data.access_token;
     console.log(response);
@@ -124,7 +137,7 @@ const check_code = async () => {
 
 const new_pwd_func = async () => {
   try {
-    const response = await axios.post(new_pwd_url, new_pwd.value);
+    const response = await axios.post(new_pwd_url, new_pwd);
     // const access_token = useCookie('access_token');
     // access_token.value = response.data.access_token;
     console.log(response);
