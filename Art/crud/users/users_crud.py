@@ -15,11 +15,11 @@ from schemas.users.users_schemas import SUserBase
 
 
 async def get_all_authors(db: AsyncSession):
-    result = await db.execute(select(UserModel, func.count(ArticleModel.id).label('article_count'))
+    result = await db.execute(
+        select(UserModel, func.sum(ArticleModel.count_views).label('views_count'))
         .join(ArticleModel, UserModel.id == ArticleModel.user_id)
         .group_by(UserModel.id)
-        .order_by(func.count(ArticleModel.id).desc())
+        .order_by(func.sum(ArticleModel.count_views).desc())
     )
-
-    users_ordered_by_article_count = result.fetchall()
+    users_ordered_by_article_count = result.all()
     return users_ordered_by_article_count
