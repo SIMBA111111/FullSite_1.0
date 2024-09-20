@@ -2,16 +2,6 @@ import logging
 import os
 from logging.handlers import RotatingFileHandler
 
-# current_dir = os.path.dirname(__file__)
-# parent_dir = os.path.dirname(current_dir)
-# info_log_file_path = os.path.join(parent_dir, "info_log.txt")
-# error_log_file_path = os.path.join(parent_dir, "error_log.txt")
-
-# logging.basicConfig(level=logging.INFO,
-#                     filename=log_file_path,
-#                     format="%(asctime)s - %(filename)s - %(funcName)s - %(levelname)s - %(message)s",
-#                     )
-# logging.shutdown()
 
 formatter = logging.Formatter(
     "%(asctime)s - %(filename)s - %(funcName)s - %(levelname)s - %(message)s"
