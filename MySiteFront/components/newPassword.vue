@@ -1,7 +1,7 @@
 <template>
       <div class="login-container">
         <form @submit.prevent class="login-form" action="">
-          <password-field v-model="newPassword.newPassword"/>
+          <password-field v-model="newPassword.new_password"/>
           <div class="btn-wrapper">
             <button @click="newPassButtonPressed" type="submit" class="btn">Новый пароль</button>
           </div>
@@ -33,8 +33,8 @@
   console.log('PROPS-v2', props.emailProp);
 
   const newPassword = reactive({
-    userEmail: props.emailProp,
-    newPassword: ''
+    email: props.emailProp,
+    new_password: ''
   });
 
 
@@ -50,7 +50,7 @@
   const newPassButtonPressed = async () => {
     try {
       error.value = '';
-      const response = await axios.post(newPass_url, newPassword.value);
+      const response = await axios.post(newPass_url, newPassword);
       console.log(response.data);
       const router = useRouter();
       await router.push('/auth/login');

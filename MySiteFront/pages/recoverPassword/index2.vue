@@ -87,7 +87,7 @@
   const sendButtonPressed = async () => {
     try {
       error.value = '';
-      const response = await axios.post(sendCode_url, code.value);
+      const response = await axios.post(sendCode_url, code);
       console.log(response.data);
       // const router = useRouter();
       // await router.push('/');
@@ -101,11 +101,11 @@
   const newPassButtonPressed = async () => {
     try {
       error.value = '';
-      const response = await axios.post(newPass_url, newPassword.value);
+      const response = await axios.post(newPass_url, newPassword);
       console.log(response.data);
-      const router = useRouter();
-      await router.push('/auth/login');
-      location.reload();
+      // const router = useRouter();
+      // await router.push('/auth/login');
+      // location.reload();
     } catch (err) {
       error.value = 'Login failed. Please check your credentials and try again.';
       console.error('Error:', error);

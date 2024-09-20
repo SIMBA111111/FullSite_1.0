@@ -55,7 +55,7 @@
       console.log(typeof(userEmail.value));
       error.value = '';
       // const response = await axios.post(recover_url, email.value);
-      const response = await axios.post(recover_url, 'qqq', {
+      const response = await axios.post(recover_url, userEmail.value, {
         headers: {
           'Content-Type': 'application/json'
         }});
