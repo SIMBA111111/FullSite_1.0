@@ -66,10 +66,10 @@ async def send_reset_code(db: AsyncSession, email: str):
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't create the code. Error: {e}"})
 
     try:
-        EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-        EMAIL_PORT = os.getenv("EMAIL_PORT", "587")
-        EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "qqhs ptld aivs lwrl")
-        EMAIL_RECIPIENT = os.getenv("EMAIL_RECIPIENT", "naaro2930@gmail.com")
+        EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.yandex.ru")
+        EMAIL_PORT = os.getenv("EMAIL_PORT", "465")
+        EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "990qqa00qac^ZX")
+        EMAIL_RECIPIENT = os.getenv("EMAIL_RECIPIENT", "na2aroffnikita@yandex.ru")
 
         server = SMTP(host=EMAIL_HOST, port=EMAIL_PORT)
         server.connect(host=EMAIL_HOST, port=EMAIL_PORT)
@@ -84,7 +84,7 @@ async def send_reset_code(db: AsyncSession, email: str):
         msg['subject'] = 'Код восстановления пароля'
         msg['From'] = email
         msg['To'] = EMAIL_RECIPIENT
-
+        print(email)
         server.sendmail(email, EMAIL_RECIPIENT, msg.as_string())
     except Exception as e:
         error_logger.error(f"Couldn't send code to the email. Error: {e}")
