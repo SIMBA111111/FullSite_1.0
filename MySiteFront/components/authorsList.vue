@@ -11,6 +11,7 @@
         :email="author.email">
         </Author>
     </div>
+    <button @click="f"></button>
   </div>
   </template>
 
@@ -31,6 +32,7 @@ const get_authors = () => {
     .then(response => {
       console.log('Response data:', response.data);
       authors.value = response.data;
+      console.log('res Au', authors);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -39,19 +41,41 @@ const get_authors = () => {
 
 get_authors()
 console.log("authors", - authors);
+
+
+
+const articles = reactive([]);
+
+const s = () => {
+  authors
+}
+
+
+const f = async () => {
+  const { data } = await axios.get(`${url}/articles/get-all-articles?page=1`)
+  articles.value = data;
+  for(let art of articles.value) {
+    let name
+    console.log(art.name);
+  }
+  console.log('gdff' , articles.value[0]);
+  console.log('gdss' , authors.value);
+}
+
+
+
+
 </script>
 
 <style scoped>
 
 
-.author-list-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-} 
+
 
 .authors-list {
   display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   flex-wrap: wrap;
   gap: 16px;
 }

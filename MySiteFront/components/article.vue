@@ -1,12 +1,11 @@
 <template>
-    <div class="outer-article-card">
     <div class="article-card">
       <div class="-">
         <div class="author-title">{{ props.title }}</div>
       </div>
       <div class="author-info">
         <!-- <img :src="avatar" alt="Avatar" class="avatar" /> -->
-        <div class="author-name">{{ user.first_name }} {{ user.last_name }}</div>
+        <div class="author-name">{{ props.user.first_name }} {{ props.user.last_name }}</div>
       </div>
       <div class="count_views">
         <div class="eye-card">
@@ -18,7 +17,6 @@
         date
       </div>
       <div><NuxtLink :to="`/articles/${slug}`" class="content content_">{{ intro_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
-    </div>
     </div>
   </template>
 
@@ -42,21 +40,16 @@ const props = defineProps<{
   title: string;
 }>();
 
+console.log(props.date);
+
+
 </script>
 
 
 <style scoped>
 
-.outer-article-card {
-  border: 1px solid green;
-  height: 100%;
-  background-color: transparent;
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .author-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
 }
 

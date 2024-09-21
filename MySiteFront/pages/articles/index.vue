@@ -9,9 +9,12 @@
 </template>
   
 <script>
+import axios from 'axios';
+
 definePageMeta({
   middleware: 'auth'
 });
+
 </script>
 
 <style scoped>
