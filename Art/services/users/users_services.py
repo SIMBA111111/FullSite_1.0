@@ -66,6 +66,7 @@ async def get_author(db: AsyncSession, username: SUsername):
 
 
 async def user_or_anonym(current_user: UserModel | AnonymousUser):
+    data = ""
     if isinstance(current_user, AnonymousUser):
         data = {
             "username": current_user.username,
