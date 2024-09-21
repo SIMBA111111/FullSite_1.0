@@ -54,8 +54,8 @@ async def get_all_articles(db: AsyncSession, page: int):
                 ArticleModel.disable == False
             )
         )
-        .offset((page - 1) * 2)
-        .limit(2)
+        .offset((page - 1) * 6)
+        .limit(6)
     )
     return result.all()
     # return result.scalars().all()
