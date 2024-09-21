@@ -1,3 +1,5 @@
+from pydantic import ConfigDict
+
 from ..base_schemas import BaseModel, Base
 
 
@@ -10,8 +12,10 @@ class BidListResponseModel(BaseModel):
     bid_approved: bool
     intro_text: str
 
-    class Config:
+    model_config = ConfigDict(
         arbitrary_types_allowed = True
+    )
+
 
 
 
