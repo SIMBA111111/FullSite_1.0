@@ -16,77 +16,222 @@
       />
     </div>
 
-    <div class="pagination-controls">
-      <button @click="prevPage" :disabled="currentPage === 1">Предыдущая</button>
-      <span>Страница {{ currentPage }}</span>
-      <button @click="nextPage" :disabled="!hasMorePages">Следующая</button>
+    <!-- <pagination/> -->
+
+    <div class="pagination-controls-2">
+      <button
+        @click="getLastPage"
+        :disabled="nowPageVariable == 1"
+        class="arrow left"
+      ></button>
+      <div @click="getLastPage" v-show="lastPageVariable" class="num">
+        {{ lastPageVariable }}
+      </div>
+      <div class="num">{{ nowPageVariable }}</div>
+      <div @click="getNextPage" v-show="hasMorePages" class="num">
+        {{ nextPageVariable }}
+      </div>
+      <button
+        @click="getNextPage"
+        :disabled="!hasMorePages"
+        class="arrow right"
+      ></button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import article from './article.vue';
+//   import { ref, defineProps } from 'vue';
+//   import { url } from "../MyConstants.vue";
+//   import article from './article.vue';
+//   import axios from 'axios';
+
+//   import pagination from './pagination.vue'
+
+//  const props = defineProps({
+//   items: {
+//     type: Array
+//   }
+//  })
+
+//  console.log('props art', props.items.value);
+
+import { ref, defineProps, watch } from "vue";
+import Article from "./article.vue";
 import { url } from "../MyConstants.vue";
-import axios from 'axios';
+import axios from "axios";
 
-const currentPage = ref(1);
+const props = defineProps({
+  urlLink: {
+    type: String,
+    required: true,
+  },
+  query: {
+    type: String,
+  },
+});
+
+console.log("queries", props.queries);
+console.log("url", props.urlLink);
+console.log("Arr", props.items);
+
 const articles = ref([]);
-const hasMorePages = ref(true);
+const hasMorePages = ref(false);
 
-const get_articles_with_authors_url = (page) => `${url}/articles/get-all-articles?page=${page}`;
+const get_articles_with_authors_url = (page) => `${props.urlLink}${page}`;
+const get_articles_with_authors_url_next = (pageNext) =>
+  `${props.urlLink}${pageNext}`;
 
-const get_articles_with_authors = async (page) => {
+const get_articles_with_authors = async (page, pageNext) => {
   try {
-    const response = await axios.get(get_articles_with_authors_url(page), {
+    const { data } = await axios(get_articles_with_authors_url(page), {
       headers: {
-        "Authorization": useCookie("access_token").value
-      }
+        Authorization: useCookie("access_token").value,
+      },
     });
+    const { data: dataNext } = await axios(
+      get_articles_with_authors_url_next(pageNext),
+      {
+        headers: {
+          Authorization: useCookie("access_token").value,
+        },
+      }
+    );
 
-    console.log('Response data:', response.data);
+    console.log("Res dataNext", dataNext);
+    console.log("Response dataaaa:", data);
 
-    if (response.data.length === 0) {
+    if (data.length < 6) {
       hasMorePages.value = false;
     } else {
       hasMorePages.value = true;
-      articles.value = response.data;
     }
+
+    if (!dataNext.length) {
+      hasMorePages.value = false;
+    }
+
+    articles.value = data;
+    console.log("articles", articles.value);
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
 };
 
-const nextPage = () => {
-  if (hasMorePages.value) {
-    currentPage.value += 1;
-    get_articles_with_authors(currentPage.value);
+const lastPageVariable = ref("");
+const nowPageVariable = ref("1");
+const nextPageVariable = ref("2");
+
+const getLastPage = () => {
+  lastPageVariable.value--;
+  nowPageVariable.value--;
+  nextPageVariable.value--;
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
+  get_search_articles_with_authors(
+    nowPageVariable.value,
+    nextPageVariable.value,
+    props.query
+  );
+};
+
+const getNextPage = () => {
+  lastPageVariable.value++;
+  nowPageVariable.value++;
+  nextPageVariable.value++;
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
+  get_search_articles_with_authors(
+    nowPageVariable.value,
+    nextPageVariable.value,
+    props.query
+  );
+};
+
+get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
+
+// --------------------------------------------------
+
+const get_search_articles_with_authors_url = (page, query) =>
+  `${url}/articles/request-articles?article_title=${query}&page=${page}`;
+const get_search_articles_with_authors_url_next = (pageNext, query) =>
+  `${url}/articles/request-articles?article_title=${query}&page=${pageNext}`;
+
+const get_search_articles_with_authors = async (page, pageNext, query) => {
+  try {
+    const { data } = await axios(
+      get_search_articles_with_authors_url(page, query),
+      {
+        headers: {
+          Authorization: useCookie("access_token").value,
+        },
+      }
+    );
+    const { data: dataNext } = await axios(
+      get_search_articles_with_authors_url_next(pageNext, query),
+      {
+        headers: {
+          Authorization: useCookie("access_token").value,
+        },
+      }
+    );
+
+    console.log("Res dataNext", dataNext);
+    console.log("Response dataaaa:", data);
+
+    if (data.length < 6) {
+      hasMorePages.value = false;
+    } else {
+      hasMorePages.value = true;
+    }
+
+    if (!dataNext.length) {
+      hasMorePages.value = false;
+    }
+
+    if (!props.query) {
+      articles.value.length = 0;
+    } else {
+      articles.value = data;
+    }
+
+    console.log("articles", articles.value);
+  } catch (error) {
+    console.error("Error:", error);
   }
 };
 
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value -= 1;
-    get_articles_with_authors(currentPage.value);
-  }
-};
-
-get_articles_with_authors(currentPage.value);
+watch(
+  () => props.query,
+  () =>
+    get_search_articles_with_authors(
+      nowPageVariable.value,
+      nextPageVariable.value,
+      props.query
+    )
+);
 </script>
 
 <style scoped>
 .articles-list-container {
+  /* border: 1px solid green; */
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
 }
 
 .articles-list {
-  border: 1px solid red;
-  width: 130vh;
-  height: 130VH;
-  display: flex;
-  justify-content: space-around;
+  /* border: 1px solid red; */
+  /* width: 130vh;
+  height: 130VH; */
+  display: grid;
+  grid-template-columns: repeat(2, 380px);
+  /* grid-template-columns: 380px, 380px; */
+
+  /* grid-template-rows: 246px 245px; */
+  grid-template-rows: repeat(3, 245px);
+  gap: 10px;
+  /* display: flex;
+  justify-content: space-around; */
   /* flex-wrap: wrap; */
   /* gap: 16px; */
 }
@@ -124,5 +269,57 @@ get_articles_with_authors(currentPage.value);
 
 .pagination-controls button:hover:not(:disabled) {
   background-color: #3a1a6b;
+}
+
+.pagination-controls-2 {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  gap: 8px;
+  position: absolute;
+  bottom: 10%;
+  left: 36%;
+}
+
+.arrow {
+  width: 100px;
+  height: 20px;
+  background-color: #9d9d9d;
+}
+
+.arrow:disabled {
+  background-color: #191919;
+  border: none;
+}
+
+.arrow:disabled:hover {
+  background-color: #191919;
+}
+
+.arrow:hover {
+  background-color: #ffffff;
+  scale: 1.1;
+}
+
+.left {
+  clip-path: polygon(100% 0%, 100% 0%, 0% 60%, 100% 100%);
+}
+
+.right {
+  clip-path: polygon(0% 0%, 0% 0%, 100% 60%, 0% 100%);
+}
+
+.num {
+  font-size: 29px;
+  padding: 2px;
+  color: #9d9d9d;
+}
+
+.num:hover {
+  color: #fff;
+}
+
+.num:nth-child(3n) {
+  font-size: 39px;
 }
 </style>

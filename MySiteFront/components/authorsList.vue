@@ -8,19 +8,27 @@
         :username="author.username"
         :last_name="author.last_name"
         :first_name="author.first_name"
-        :email="author.email">
-        </Author>
+        :email="author.email"
+        :views_count="author.views_count"
+        />
+
+        <!-- <Author
+        v-for="author in authors" 
+        :key="author.email"
+        :authorObj="authorO"
+        /> -->
     </div>
+    <!-- <button @click="f"></button> -->
   </div>
   </template>
 
 <script setup>
-import { ref } from 'vue';
-import article from './article.vue';
+import { ref, reactive } from 'vue';
+import Author from './author.vue';
 import {url} from "../MyConstants.vue";
 import axios from 'axios';
 
-const authors = ref();
+const authors = ref([]);
 
 const get_authors_url = `${url}/users/get-all-authors`
 
@@ -31,6 +39,7 @@ const get_authors = () => {
     .then(response => {
       console.log('Response data:', response.data);
       authors.value = response.data;
+      console.log('res Au', authors);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -38,22 +47,32 @@ const get_authors = () => {
 }
 
 get_authors()
-console.log("authors", - authors);
+console.log("authors", authors);
+
+
+
+
+
+
+
+
+
+
 </script>
 
 <style scoped>
 
 
-.author-list-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-} 
+
 
 .authors-list {
   display: grid;
-  flex-wrap: wrap;
-  gap: 16px;
+  grid-template-columns: repeat(2, 380px);
+  /* grid-template-columns: 380px, 380px; */
+
+  /* grid-template-rows: 246px 245px; */
+  grid-template-rows: repeat(3, 245px);
+  gap: 10px;
 }
 
 

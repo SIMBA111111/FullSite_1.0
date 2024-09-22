@@ -99,59 +99,6 @@ const logUpButtonPressed = async () => {
   }
 };
 
-
-const reset_password = async () => {
-  try {
-    const response = await axios.post(reset_password_url, resetData);
-    // const access_token = useCookie('access_token');
-    // access_token.value = response.data.access_token;
-    console.log(response);
-    
-    // const router = useRouter();
-    // await router.push('/');
-    // location.reload();
-  } catch (err) {
-    error.value = 'Login failed. Please check your credentials and try again.';
-    console.error('Error:', err);
-  }
-};
-
-
-
-const check_code = async () => {
-  try {
-    const response = await axios.post(check_code_url, codeData);
-    // const access_token = useCookie('access_token');
-    // access_token.value = response.data.access_token;
-    console.log(response);
-    
-    // const router = useRouter();
-    // await router.push('/');
-    // location.reload();
-  } catch (err) {
-    error.value = 'Login failed. Please check your credentials and try again.';
-    console.error('Error:', err);
-  }
-};
-
-
-const new_pwd_func = async () => {
-  try {
-    const response = await axios.post(new_pwd_url, new_pwd);
-    // const access_token = useCookie('access_token');
-    // access_token.value = response.data.access_token;
-    console.log(response);
-    
-    // const router = useRouter();
-    // await router.push('/');
-    // location.reload();
-  } catch (err) {
-    error.value = 'Login failed. Please check your credentials and try again.';
-    console.error('Error:', err);
-  }
-};
-
-
 </script>
 
 <style scoped>

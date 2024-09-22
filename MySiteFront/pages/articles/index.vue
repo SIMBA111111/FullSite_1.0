@@ -3,15 +3,21 @@
         <myheader></myheader>
         <div class="main-container">
           <div class="hr"></div>
-          <articlesList/>
+          <articlesList :url-link="urlLink"/>
         </div>
     </div>
 </template>
   
-<script>
+<script setup>
+import { url } from "../MyConstants.vue";
+import articlesList from "../../components/articlesList.vue";
+
 definePageMeta({
   middleware: 'auth'
 });
+
+const urlLink = `${url}/articles/get-all-articles?page=`;
+
 </script>
 
 <style scoped>

@@ -1,12 +1,10 @@
 <template>
-    <div class="outer-article-card">
     <div class="article-card">
       <div class="-">
         <div class="author-title">{{ props.title }}</div>
       </div>
       <div class="author-info">
-        <!-- <img :src="avatar" alt="Avatar" class="avatar" /> -->
-        <div class="author-name">{{ user.first_name }} {{ user.last_name }}</div>
+        <div class="author-name">{{ props.user?.first_name }} {{ props.user?.last_name }}</div>
       </div>
       <div class="count_views">
         <div class="eye-card">
@@ -19,10 +17,37 @@
       </div>
       <div><NuxtLink :to="`/articles/${slug}`" class="content content_">{{ intro_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
     </div>
-    </div>
   </template>
 
-<script setup lang="ts">
+<script setup>
+
+import { defineProps } from 'vue';
+
+ const props = defineProps({
+  user: {
+    type: Object
+  },
+  name: {
+    type: String
+  },
+  title: {
+    type: String
+  },
+  intro_text: {
+    type: String
+  },
+  slug: {
+    type: String
+  },
+  count_views: {
+    type: Number
+  }
+ })
+
+ console.log('props art', props);
+</script>
+
+<!-- <script setup lang="ts">
 import { computed } from 'vue';
 
 interface ArticleAuthor {
@@ -42,21 +67,13 @@ const props = defineProps<{
   title: string;
 }>();
 
-</script>
-
+console.log(props.date);
+</script> -->
 
 <style scoped>
 
-.outer-article-card {
-  border: 1px solid green;
-  height: 100%;
-  background-color: transparent;
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .author-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
 }
 

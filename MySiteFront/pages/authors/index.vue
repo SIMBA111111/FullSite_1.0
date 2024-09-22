@@ -3,13 +3,23 @@
       <myheader></myheader>   
       <div class="vac">
         <div class="hr"></div>
-        <p>Авторы</p>
-        <p>SOON</p>
+        <authors-list/>
       </div>
   </div>
 </template>
 
 <script>
+import authorList from '../../components/authorsList.vue'
+// import {url} from "../MyConstants.vue";
+
+
+// const res = reactive([]);
+
+// onMounted (()=>{
+//   res = axios(`${url}/authors/get-all-authors`)
+//   console.log('res', res);
+// })
+
 definePageMeta({
 middleware: 'auth'
 });
