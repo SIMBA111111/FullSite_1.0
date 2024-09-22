@@ -11,7 +11,7 @@
       <div><NuxtLink to="/authors" exact-active-class="active" class="el">Авторы</NuxtLink></div>
       <!-- <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Услуги</NuxtLink></div> -->
       <div><NuxtLink @mouseover="f" @mouseout="f1" exact-active-class="active" class="el">Услуги</NuxtLink></div>
-      <div @mouseover="f" @mouseout="f1" class="option">
+      <div v-if="showOption" @mouseover="f" @mouseout="f1" class="option">
         <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
         <div><NuxtLink to="/feedback" exact-active-class="active" class="el">Обратная связь</NuxtLink></div>
         <div><NuxtLink to="/mentoring" exact-active-class="active" class="el">Менторство</NuxtLink></div>
@@ -38,6 +38,7 @@ import { ref, watch } from 'vue';
 import { useCookie, useRouter } from '#app';
 import { url } from "../MyConstants.vue";
 import { useUserStore } from '~/store/user';
+import { set } from '~/node_modules/nuxt/dist/app/compat/capi';
 
 const exit = ref('');
 
@@ -49,14 +50,26 @@ const mouseOutExit = () => {
   exit.value = '';
 } 
 
+const showOption = ref(false);
+
+let timer = null;
+
+const startTimeout = () => {
+  timer = setTimeout(() => {
+    showOption.value = false;
+  }, 100);
+};
 
 
 const f = () => {
-  document.querySelector('.option').style = 'opacity: 1;';
+  // document.querySelector('.option').style = 'opacity: 1;';
+  showOption.value = true;
+  clearTimeout(timer);
 }
 
 const f1 = () => {
-  document.querySelector('.option').style = 'opacity: 0;';
+  startTimeout()
+  // document.querySelector('.option').style = 'opacity: 0;';
 }
 
 const authed = ref(false);
@@ -103,7 +116,7 @@ watch(authed, (newValue) => {});
 }
 
 .option{
-  opacity: 0;
+  opacity: 1;
 }
 
 .select {
@@ -238,7 +251,10 @@ watch(authed, (newValue) => {});
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: translateZ(10px);
   border-radius: 50%;
-  background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
+  background: radial-gradient(#686868 15%, transparent 70%);
+
+  /* box-shadow: inset #686868 0px 0px 60px -12px; */
+  /* background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%); */
 }
 
 .links a:active {
@@ -246,7 +262,11 @@ watch(authed, (newValue) => {});
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transform: translateZ(5px);
   border-radius: 50%;
-  background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
+  background: radial-gradient(#686868 15%, transparent 70%);
+
+  /* box-shadow: inset #686868 0px 0px 60px -12px; */
+
+  /* background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%); */
 }
 
 /* Стиль для активной ссылки */
@@ -255,7 +275,15 @@ watch(authed, (newValue) => {});
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   transform: translateZ(10px);
   border-radius: 50%;
-background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
+  background: radial-gradient(#686868 15%, transparent 70%);
+
+
+  /* background: #686868; */
+
+  /* box-shadow: h-offset v-offset blur #191919; */
+  /* box-shadow: inset #191919 0px 0px 70px -20px; */
+
+/* background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%); */
 }
 
 </style>
