@@ -1,3 +1,3 @@
 <script>
-export const url = "http://127.0.0.1:80/api/v1"
+export const url = "http://127.0.0.1:8000/api/v1"
 </script>

@@ -33,12 +33,18 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
     "http://localhost:3000",
+    "http://localhost",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1",
+    "http://frontend:3000",
+    "http://frontend",
+
 ]
 
 app.add_middleware(
     CORSMiddleware,
     # allow_origins=origins,  # You can specify domains here, e.g., ["http://localhost:3000"]
-    allow_origins=["*"],  # You can specify domains here, e.g., ["http://localhost:3000"]
+    allow_origins=origins,  # You can specify domains here, e.g., ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods, e.g., GET, POST, etc.
     allow_headers=["*"],  # Allows all headers
