@@ -1,12 +1,12 @@
 <template>
       <div class="login-container">
-        <form v-if="!emailProp" @submit.prevent class="login-form" action="">
-          <username-field  v-model="code.code"/>
+        <form v-if="!succes" @submit.prevent class="login-form" action="">
+          <code-field  v-model="code.code"/>
           <div class="btn-wrapper">
             <button @click="sendButtonPressed" type="submit" class="btn">Ввести код</button>
           </div>
         </form>
-        <new-password v-if="emailProp" :emailProp="emailProp"/>
+        <new-password v-if="succes" :emailProp="emailProp"/>
         <div style="color: red;font-size: 30px;">{{ error }}</div>
       </div>
   </template>
@@ -20,6 +20,7 @@
   import LastnameField from '../../components/lastnameField.vue';
   import EmailField from '../../components/emailField.vue';
   import PasswordField from '../../components/passwordField.vue';
+  import codeField from '../components/codeField.vue'
   
   import useFormValidation from '~/modules/useFormValidation';
   import useSubmitButtonState from '~/modules/useSubmitButtonState'
@@ -42,6 +43,8 @@
   });
 
   const emailProp = ref(null);
+  const succes = ref(false);
+
 
   const { errors } = useFormValidation();
   const { isSignupButtonDisabled } = useSubmitButtonState(code.usercode, errors);
@@ -56,7 +59,10 @@
       console.log(code);     
       error.value = '';
       const response = await axios.post(sendCode_url, code);
-      console.log(response.data);
+      console.log('res code', response);
+      if (response.status == 200) {
+        succes.value = true;
+      }
       // const router = useRouter();
       // await router.push('/');
       // location.reload();
