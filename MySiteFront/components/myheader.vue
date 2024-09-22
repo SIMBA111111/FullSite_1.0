@@ -12,7 +12,7 @@
       <!-- <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Услуги</NuxtLink></div> -->
       <div><NuxtLink @mouseover="f" @mouseout="f1" exact-active-class="active" class="el">Услуги</NuxtLink></div>
       <div @mouseover="f" @mouseout="f1" class="option">
-        <div @mouseover="f" @mouseout="f1"><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
+        <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
         <div><NuxtLink to="/feedback" exact-active-class="active" class="el">Обратная связь</NuxtLink></div>
         <div><NuxtLink to="/mentoring" exact-active-class="active" class="el">Менторство</NuxtLink></div>
       </div>
@@ -27,7 +27,7 @@
       </div> -->
       <!-- <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div> -->
       <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Вход</NuxtLink></div>
-      <div v-else @click="logout"><NuxtLink to="/" exact-active-class="active" class="el">Выйти ({{ userStore.user?.username }})</NuxtLink></div>
+      <div v-else @click="logout" @mouseover="mouseOverExit" @mouseout="mouseOutExit"><NuxtLink to="/" exact-active-class="active" class="el d">{{ exit || userStore.user?.username }}</NuxtLink></div>
     </div>
   </div>
 </template>
@@ -39,12 +39,24 @@ import { useCookie, useRouter } from '#app';
 import { url } from "../MyConstants.vue";
 import { useUserStore } from '~/store/user';
 
+const exit = ref('');
+
+const mouseOverExit = () => {
+  exit.value = 'Выйти';
+} 
+
+const mouseOutExit = () => {
+  exit.value = '';
+} 
+
+
+
 const f = () => {
-  document.querySelector('.option').style = 'opacity: 1;'
+  document.querySelector('.option').style = 'opacity: 1;';
 }
 
 const f1 = () => {
-  document.querySelector('.option').style = 'opacity: 0;'
+  document.querySelector('.option').style = 'opacity: 0;';
 }
 
 const authed = ref(false);
@@ -131,7 +143,7 @@ watch(authed, (newValue) => {});
   align-items: center;
   position: absolute;
   top: 100%;
-  right: 9%;
+  right: 8%;
 }
 
 /* .option {
@@ -245,4 +257,5 @@ watch(authed, (newValue) => {});
   border-radius: 50%;
 background: linear-gradient(to right, transparent 1%, #686868 15% 85%,  transparent 99%);
 }
+
 </style>

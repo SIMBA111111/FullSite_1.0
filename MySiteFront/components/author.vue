@@ -5,10 +5,10 @@
         <!-- <img :src="avatar" alt="Avatar" class="avatar" /> -->
         <div class="author-name">{{ first_name }} {{ last_name }}</div>
       </div>
-      <div class="date"> date</div>
+      <div class="date">пишет с date</div>
       <div class="eye-card">
         <span class="eye">👁</span>
-        <span> count_views</span>
+        <span> {{ views_count }}</span>
       </div>
       <!-- <div><NuxtLink :to="`/authors/${username}`" class="title ">{{ username }}</NuxtLink></div> -->
       <!-- <div><NuxtLink to="/" class="content content_">{{ main_text }}...<NuxtLink to="/" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div> -->
@@ -16,7 +16,36 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
+import { defineProps } from 'vue';
+
+// const props = defineProps({
+//   authorObj: {
+//    type: Object
+//  }
+// })
+
+const props = defineProps({
+ id: {
+   type: Number
+ },
+ last_name: {
+   type: String
+ },
+ first_name: {
+   type: String
+ },
+ email: {
+   type: String
+ },
+ views_count: {
+   type: Number
+ }
+})
+
+</script>
+
+<!-- <script setup lang="ts">
 import { computed } from 'vue';
 
 interface Author {
@@ -33,20 +62,19 @@ const props = defineProps<{
   username: string
 }>();
 
-</script>
+</script> -->
 
 <style scoped>
 
 
 
 .author-card {
-  margin: 20px; 
+  /* margin: 20px;  */
   /* height: 100%; */
   
   background-color: rgb(210, 210, 210);
   border-radius: 10px;
   padding: 16px;
-  margin: 20px;
   /* width: 180px; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -77,7 +105,7 @@ const props = defineProps<{
 }
 
 .date {
-  color: gray;
+  color: rgb(0, 0, 0);
   font-size: 24px;
   margin-bottom: 8px;
 }
