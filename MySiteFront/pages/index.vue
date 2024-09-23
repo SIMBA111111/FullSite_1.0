@@ -166,6 +166,11 @@ export default {
 </script>
 
 <style scoped>
+.html{
+  padding: 0px;
+  margin: 0px;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
