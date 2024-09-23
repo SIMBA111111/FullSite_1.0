@@ -44,11 +44,10 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=origins,  # You can specify domains here, e.g., ["http://localhost:3000"]
-    allow_origins=origins,  # You can specify domains here, e.g., ["http://localhost:3000"]
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods, e.g., GET, POST, etc.
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(article_routes.router,
