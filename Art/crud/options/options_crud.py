@@ -30,11 +30,11 @@ async def delete_code(db: AsyncSession, code_obj: CodeModel):
     await db.commit()
 
 
-async def check_code_exists(db: AsyncSession, email: str, code: str):
+async def check_code_exists(db: AsyncSession, email: str, code: int):
     result = await db.execute(
         select(CodeModel)
         .filter(
-            CodeModel.code == code,
+            CodeModel.code == int(code),
             CodeModel.email == email
         ).exists().select()
     )
