@@ -31,17 +31,20 @@ async def get_all_authors(db: AsyncSession):
     try:
         users_ordered_by_article_count = await users_crud.get_all_authors(db)
     except Exception as e:
+        print()
         error_logger.error(f"Couldn't get all the authors. Error: {e}")
         raise HTTPException(status_code=400, detail={"message": f"Couldn't get all the authors. Error: {e}"})
+    print(users_ordered_by_article_count)
     users_ordered_by_article_count_response = [
         SAuthorsList(
             first_name=author.first_name,
             last_name=author.last_name,
             email=author.email,
             username=author.username,
-            views_count=views_count
+            views_count=views_count,
+            first_article_date=first_article_date
         )
-        for author, views_count in users_ordered_by_article_count
+        for author, views_count, first_article_date in users_ordered_by_article_count
     ]
 
     return users_ordered_by_article_count_response
