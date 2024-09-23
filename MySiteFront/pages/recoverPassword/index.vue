@@ -41,6 +41,7 @@
   
   const email = ref('');
   const userEmail = ref(null);
+  const succes = ref(false);
   
   const { errors } = useFormValidation();
   const { isSignupButtonDisabled } = useSubmitButtonState(email, errors);
@@ -55,11 +56,14 @@
       console.log(typeof(userEmail.value));
       error.value = '';
       // const response = await axios.post(recover_url, email.value);
-      const response = await axios.post(recover_url, userEmail.value, {
+      const response = await axios.post(recover_url, email.value, {
         headers: {
           'Content-Type': 'application/json'
         }});
-      console.log(response.data);
+      console.log('recoverpassword', response);
+      if (response.status == 200) {
+        succes.value = true;
+      }
       // const router = useRouter();
       // await router.push('/');
       // location.reload();
