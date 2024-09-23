@@ -13,6 +13,7 @@ from routes.admin import admin_routes
 from routes.options import options_routes
 
 from models.articles.comment_model import CommentModel
+from models.options.code_model import CodeModel
 
 
 async def init_db():
