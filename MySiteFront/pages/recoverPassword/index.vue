@@ -2,7 +2,6 @@
     <div>
       <myheader></myheader>
       <div class="login-container">
-        <div class="hr"></div>
         <form v-if="!userEmail" @submit.prevent class="login-form" action="">
           <email-field v-model="email"/>
           <div class="btn-wrapper">

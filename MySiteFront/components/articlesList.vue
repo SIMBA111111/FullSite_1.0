@@ -14,29 +14,19 @@
         :slug="article.slug"
         :count_views="article.count_views"
       />
+
     </div>
 
     <!-- <pagination/> -->
 
     <div class="pagination-controls-2">
-      <button
-        @click="getLastPage"
-        :disabled="nowPageVariable == 1"
-        class="arrow left"
-      ></button>
-      <div @click="getLastPage" v-show="lastPageVariable" class="num">
-        {{ lastPageVariable }}
-      </div>
-      <div class="num">{{ nowPageVariable }}</div>
-      <div @click="getNextPage" v-show="hasMorePages" class="num">
-        {{ nextPageVariable }}
-      </div>
-      <button
-        @click="getNextPage"
-        :disabled="!hasMorePages"
-        class="arrow right"
-      ></button>
+      <button @click="getLastPage" :disabled="nowPageVariable == 1" class="arrow left"></button>
+      <div @click="getLastPage" v-show="lastPageVariable" class="num"> {{ lastPageVariable }} </div>
+      <div class="num"> {{nowPageVariable}} </div>
+      <div @click="getNextPage" v-show="hasMorePages" class="num"> {{nextPageVariable}} </div>
+      <button @click="getNextPage" :disabled="!hasMorePages" class="arrow right"></button>
     </div>
+    
   </div>
 </template>
 
@@ -48,6 +38,7 @@
 
 //   import pagination from './pagination.vue'
 
+
 //  const props = defineProps({
 //   items: {
 //     type: Array
@@ -56,51 +47,55 @@
 
 //  console.log('props art', props.items.value);
 
-import { ref, defineProps, watch } from "vue";
-import Article from "./article.vue";
+
+
+
+import { ref, defineProps, watch } from 'vue';
+import Article from './article.vue';
 import { url } from "../MyConstants.vue";
-import axios from "axios";
+import axios from 'axios';
 
 const props = defineProps({
   urlLink: {
     type: String,
-    required: true,
+    required: true
   },
   query: {
-    type: String,
-  },
+    type: String
+  }
 });
 
-console.log("queries", props.queries);
-console.log("url", props.urlLink);
-console.log("Arr", props.items);
+
+console.log('queries', props.queries);
+console.log('url', props.urlLink);
+console.log('Arr', props.items);
 
 const articles = ref([]);
 const hasMorePages = ref(false);
 
 const get_articles_with_authors_url = (page) => `${props.urlLink}${page}`;
-const get_articles_with_authors_url_next = (pageNext) =>
-  `${props.urlLink}${pageNext}`;
+const get_articles_with_authors_url_next = (pageNext) => `${props.urlLink}${pageNext}`;
+
 
 const get_articles_with_authors = async (page, pageNext) => {
   try {
+    if (!props.urlLink) {
+      return
+    }
     const { data } = await axios(get_articles_with_authors_url(page), {
       headers: {
-        Authorization: useCookie("access_token").value,
-      },
-    });
-    const { data: dataNext } = await axios(
-      get_articles_with_authors_url_next(pageNext),
-      {
-        headers: {
-          Authorization: useCookie("access_token").value,
-        },
+        "Authorization": useCookie("access_token").value
       }
-    );
+    });
+    const { data : dataNext } = await axios(get_articles_with_authors_url_next(pageNext), {
+      headers: {
+        "Authorization": useCookie("access_token").value
+      }
+    });
 
-    console.log("Res dataNext", dataNext);
-    console.log("Response dataaaa:", data);
-
+    console.log('Res dataNext', dataNext);
+    console.log('Response dataaaa:', data);
+  
     if (data.length < 6) {
       hasMorePages.value = false;
     } else {
@@ -112,71 +107,61 @@ const get_articles_with_authors = async (page, pageNext) => {
     }
 
     articles.value = data;
-    console.log("articles", articles.value);
+    console.log('articles', articles.value);
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
   }
 };
 
-const lastPageVariable = ref("");
-const nowPageVariable = ref("1");
-const nextPageVariable = ref("2");
+const lastPageVariable = ref('');
+const nowPageVariable = ref('1');
+const nextPageVariable = ref('2');
+
 
 const getLastPage = () => {
-  lastPageVariable.value--;
-  nowPageVariable.value--;
-  nextPageVariable.value--;
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
-  get_search_articles_with_authors(
-    nowPageVariable.value,
-    nextPageVariable.value,
-    props.query
-  );
-};
+  lastPageVariable.value--
+  nowPageVariable.value--
+  nextPageVariable.value--
+  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query)
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value)
+}
 
 const getNextPage = () => {
-  lastPageVariable.value++;
-  nowPageVariable.value++;
-  nextPageVariable.value++;
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
-  get_search_articles_with_authors(
-    nowPageVariable.value,
-    nextPageVariable.value,
-    props.query
-  );
-};
+  lastPageVariable.value++
+  nowPageVariable.value++
+  nextPageVariable.value++
+  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query)
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value)
+}
 
-get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
+
+
+
+
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
+
 
 // --------------------------------------------------
 
-const get_search_articles_with_authors_url = (page, query) =>
-  `${url}/articles/request-articles?article_title=${query}&page=${page}`;
-const get_search_articles_with_authors_url_next = (pageNext, query) =>
-  `${url}/articles/request-articles?article_title=${query}&page=${pageNext}`;
+const get_search_articles_with_authors_url = (page, query) => `${url}/articles/request-articles?article_title=${query}&page=${page}`;
+const get_search_articles_with_authors_url_next = (pageNext, query) => `${url}/articles/request-articles?article_title=${query}&page=${pageNext}`;
 
 const get_search_articles_with_authors = async (page, pageNext, query) => {
   try {
-    const { data } = await axios(
-      get_search_articles_with_authors_url(page, query),
-      {
-        headers: {
-          Authorization: useCookie("access_token").value,
-        },
+    const { data } = await axios(get_search_articles_with_authors_url(page, query), {
+      headers: {
+        "Authorization": useCookie("access_token").value
       }
-    );
-    const { data: dataNext } = await axios(
-      get_search_articles_with_authors_url_next(pageNext, query),
-      {
-        headers: {
-          Authorization: useCookie("access_token").value,
-        },
+    });
+    const { data : dataNext } = await axios(get_search_articles_with_authors_url_next(pageNext, query), {
+      headers: {
+        "Authorization": useCookie("access_token").value
       }
-    );
+    });
 
-    console.log("Res dataNext", dataNext);
-    console.log("Response dataaaa:", data);
-
+    console.log('Res dataNext', dataNext);
+    console.log('Response dataaaa:', data);
+  
     if (data.length < 6) {
       hasMorePages.value = false;
     } else {
@@ -188,26 +173,22 @@ const get_search_articles_with_authors = async (page, pageNext, query) => {
     }
 
     if (!props.query) {
-      articles.value.length = 0;
+      articles.value.length = 0
     } else {
       articles.value = data;
     }
 
-    console.log("articles", articles.value);
+    console.log('articles', articles.value);
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
   }
 };
 
-watch(
-  () => props.query,
-  () =>
-    get_search_articles_with_authors(
-      nowPageVariable.value,
-      nextPageVariable.value,
-      props.query
-    )
-);
+
+
+
+
+watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query))
 </script>
 
 <style scoped>
@@ -281,7 +262,7 @@ watch(
   left: 36%;
 }
 
-.arrow {
+.arrow{
   width: 100px;
   height: 20px;
   background-color: #9d9d9d;
@@ -322,4 +303,5 @@ watch(
 .num:nth-child(3n) {
   font-size: 39px;
 }
+
 </style>

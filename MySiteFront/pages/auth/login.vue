@@ -2,7 +2,6 @@
   <div>
     <myheader></myheader>
     <div class="login-container">
-      <div class="hr"></div>
       <form @submit.prevent class="login-form" action="">
         <username-field v-model="user.username"/>
         <password-field v-model="user.password"/>

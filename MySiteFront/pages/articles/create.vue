@@ -6,8 +6,8 @@
             <div class="create-form">    
                 <form class="form" @submit.prevent="handleSubmit">
                     <label class="input-file">
-                        <input id="file" name="file" type="file" @change="handleFileChange" />
-                        <span>Здесь поле выбора файла</span>
+                        <input ref="file" id="file" name="file" type="file" @change="handleFileChange" />
+                        <span> {{ fileName || 'Здесь поле выбора файла' }}</span>
                       </label>
                     <div>
                         <input class="search" v-model="title" name="title" type="text" placeholder="Название статьи" />
@@ -33,12 +33,19 @@ definePageMeta({
   middleware: 'auth'
 });
 
-const file = ref(null);
+
+const fileName = ref('');
 const title = ref('');
 const introText = ref('');
 
 const handleFileChange = (event) => {
-    file.value = event.target.files[0];
+    const file = event.target.files[0];
+
+    if (file) {
+    fileName.value = file.name; // Устанавливаем имя выбранного файла
+  } else {
+    fileName.value = ''; // Очищаем, если файл не выбран
+  }
 };
 
 const handleSubmit = async () => {
@@ -130,7 +137,7 @@ const handleSubmit = async () => {
 	background-color: transparent;
 	line-height: 22px;
 	height: 50px;
-	padding: 10px 20px;
+	padding: 12px 20px 10px;
 	box-sizing: border-box;
 	border: none;
 	margin: 0;

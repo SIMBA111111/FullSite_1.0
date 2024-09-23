@@ -2,7 +2,7 @@
     <div>
       <myheader></myheader>
       <div class="main-container">
-        <div class="hr"></div>
+        <!-- <div class="hr"></div> -->
         <div class="search-container">
           <div class="input-wrapper">
             <input
@@ -18,7 +18,7 @@
               <svg
                 width="35"
                 height="35"
-                viewBox="0 0 16 16"
+                viewBox="0 0 17 15"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -59,6 +59,7 @@
     import axios from "axios";
     import { url } from "../MyConstants.vue";
     import { watch } from "vue";
+
 
     import articlesList from "~/components/articlesList.vue";
 
@@ -113,7 +114,7 @@
 
 .hr {
   width: 90%;
-  height: 5px;
+  height: 4px;
   border-radius: 0%;
   background-color: #fff;
   margin-bottom: 40px;

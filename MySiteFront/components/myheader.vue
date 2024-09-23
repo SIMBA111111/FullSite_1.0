@@ -1,34 +1,37 @@
 <template>
   <div class="header">
-    <div class="first">
-      <NuxtLink to="/" exact-active-class="active">Название</NuxtLink>
-    </div>
-    <div class="links">
-      <div v-if="userStore.user?.is_admin"><NuxtLink to="/admin/bidList" target="_blank" exact-active-class="active" class="el write">В админку</NuxtLink></div>
-      <div v-if="authed"><NuxtLink to="/articles/create" exact-active-class="active" class="el write">Написать</NuxtLink></div>
-      <div><NuxtLink to="/search" exact-active-class="active" class="el">Поиск</NuxtLink></div>
-      <div><NuxtLink to="/articles" exact-active-class="active" class="el">Статьи</NuxtLink></div>
-      <div><NuxtLink to="/authors" exact-active-class="active" class="el">Авторы</NuxtLink></div>
-      <!-- <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Услуги</NuxtLink></div> -->
-      <div><NuxtLink @mouseover="f" @mouseout="f1" exact-active-class="active" class="el">Услуги</NuxtLink></div>
-      <div v-if="showOption" @mouseover="f" @mouseout="f1" class="option">
-        <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
-        <div><NuxtLink to="/feedback" exact-active-class="active" class="el">Обратная связь</NuxtLink></div>
-        <div><NuxtLink to="/mentoring" exact-active-class="active" class="el">Менторство</NuxtLink></div>
+    <div class="container">
+      <div class="first">
+        <NuxtLink to="/" exact-active-class="active">Название</NuxtLink>
       </div>
-      
-      <!-- <div>
-        <select class="select el" name="vac" id="">
-          <option class="option" selected value=""><NuxtLink>serves</NuxtLink></option>
-          <option class="option" value=""><NuxtLink>vac</NuxtLink></option>
-          <option class="option" value=""><NuxtLink>back</NuxtLink></option>
-          <option class="option" value=""><NuxtLink>ment</NuxtLink></option>
-        </select>
-      </div> -->
-      <!-- <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div> -->
-      <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Вход</NuxtLink></div>
-      <div v-else @click="logout" @mouseover="mouseOverExit" @mouseout="mouseOutExit"><NuxtLink to="/" exact-active-class="active" class="el d">{{ exit || userStore.user?.username }}</NuxtLink></div>
+      <div class="links">
+        <div v-if="userStore.user?.is_admin"><NuxtLink to="/admin/bidList" target="_blank" exact-active-class="active" class="el write">В админку</NuxtLink></div>
+        <div v-if="authed"><NuxtLink to="/articles/create" exact-active-class="active" class="el write">Написать</NuxtLink></div>
+        <div><NuxtLink to="/search" exact-active-class="active" class="el">Поиск</NuxtLink></div>
+        <div><NuxtLink to="/articles" exact-active-class="active" class="el">Статьи</NuxtLink></div>
+        <div><NuxtLink to="/authors" exact-active-class="active" class="el">Авторы</NuxtLink></div>
+        <!-- <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Услуги</NuxtLink></div> -->
+        <div><NuxtLink @mouseover="f" @mouseout="f1" exact-active-class="active" class="el">Услуги</NuxtLink></div>
+        <div v-if="showOption" @mouseover="f" @mouseout="f1" class="option">
+          <div><NuxtLink to="/vacancies" exact-active-class="active" class="el">Вакансии</NuxtLink></div>
+          <div><NuxtLink to="/feedback" exact-active-class="active" class="el">Обратная связь</NuxtLink></div>
+          <div><NuxtLink to="/mentoring" exact-active-class="active" class="el">Менторство</NuxtLink></div>
+        </div>
+        
+        <!-- <div>
+          <select class="select el" name="vac" id="">
+            <option class="option" selected value=""><NuxtLink>serves</NuxtLink></option>
+            <option class="option" value=""><NuxtLink>vac</NuxtLink></option>
+            <option class="option" value=""><NuxtLink>back</NuxtLink></option>
+            <option class="option" value=""><NuxtLink>ment</NuxtLink></option>
+          </select>
+        </div> -->
+        <!-- <div v-if="!authed"><NuxtLink to="/auth/register" exact-active-class="active" class="el">Регистрация</NuxtLink></div> -->
+        <div v-if="!authed"><NuxtLink to="/auth/login" exact-active-class="active" class="el">Вход</NuxtLink></div>
+        <div v-else @click="logout" @mouseover="mouseOverExit" @mouseout="mouseOutExit"><NuxtLink to="/" exact-active-class="active" class="el d">{{ exit || userStore.user?.username }}</NuxtLink></div>
+      </div>
     </div>
+    <div class="hr"></div>
   </div>
 </template>
 
@@ -115,6 +118,22 @@ watch(authed, (newValue) => {});
   box-sizing: border-box;
 }
 
+.hr {
+  width: 90%;
+  height: 4px;
+  border-radius: 0%;
+  background-color: #fff;
+  margin-bottom: 15px;
+  clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
+}
+
+.container {
+  width: 100%;
+  /* border: 1px solid green; */
+  display: flex;
+  justify-content: space-between;
+}
+
 .option{
   opacity: 1;
 }
@@ -175,7 +194,9 @@ watch(authed, (newValue) => {});
 } */
 
 .header {
+  /* border: 1px solid red; */
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 0px 70px;

@@ -2,7 +2,6 @@
   <div>
     <myheader></myheader>
     <div class="vac">
-      <div class="hr"></div>
       <div class="container">
         <svg
           style="color: blue; width: 200px; height: 200px;"
