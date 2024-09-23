@@ -1,8 +1,9 @@
 <template>
     <div>
         <myheader></myheader>
-        
-        <div id="article"></div>
+        <div class="article-container">
+           <div id="article"></div>
+        </div>
     </div>
 </template>
 
@@ -44,22 +45,30 @@ onMounted(() => {
 </script>
 
 <style>
+.article-container {
+    background-color: #191919;
+}
+#article {
+    margin: 0% 20%;
+}
+
 p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px 0px;
     font-size: 18px;
+    color: #f0f0f0;
 }
 
 .code{
     display: block;
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #444242;
+    color: #000000;
     border-left: 4px solid #cccccc;
     padding: 15px;
-    margin: 20px 0;
+    margin: 0px 0;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1em;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
-
 </style>
