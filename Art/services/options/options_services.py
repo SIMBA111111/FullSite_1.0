@@ -145,7 +145,7 @@ async def send_reset_code(db: AsyncSession, email: str):
                             )
 
 
-async def check_code(db: AsyncSession, email: str, code: str):
+async def check_code(db: AsyncSession, email: str, code: int):
     try:
         code_exist = await options_crud.check_code_exists(db, email, code)
     except Exception as e:

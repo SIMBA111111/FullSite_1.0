@@ -298,8 +298,8 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 -- Data for Name: AnonymousUser; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public."AnonymousUser" (username, created_at, updated_at) FROM stdin;
-AnonymousUser	2023-09-02T17:31:25.857666	2023-09-02 17:31:25.857666+00
+COPY public."AnonymousUser" (username, id, created_at, updated_at) FROM stdin;
+AnonymousUser	1	2023-09-02T17:31:25.857666	2023-09-02 17:31:25.857666+00
 \.
 
 
@@ -340,7 +340,7 @@ COPY public.comment (content, user_id, article_id, id, created_at, updated_at) F
 --
 
 COPY public."user" (first_name, last_name, email, password, username, is_admin_user, id, created_at, updated_at) FROM stdin;
-Админ	Админов	naaro2930@gmail.com	$2b$12$T/FuUQZl6ui3c1Hbj0SzaOTEHLlbQqtKkiTtZRusTg5WWDt0A7QI6	admin	t	1	2024-09-23 10:34:13.599014+00	2024-09-23 10:34:13.599014+00
+Админ	Админович	naaro2930@gmail.com	$2b$12$3XdXSNyLFlRryEP0d7my5uztS0ZKiH0S9O.6ym8OmS6DlP56wXtWm	admin	t	1	2024-09-23 13:25:05.617797+00	2024-09-23 13:25:05.617797+00
 \.
 
 
@@ -355,7 +355,7 @@ SELECT pg_catalog.setval('public."AnonymousUser_id_seq"', 1, false);
 -- Name: Token_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public."Token_id_seq"', 1, true);
+SELECT pg_catalog.setval('public."Token_id_seq"', 1, false);
 
 
 --
