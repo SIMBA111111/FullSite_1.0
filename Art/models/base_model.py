@@ -7,7 +7,7 @@ from config.database import Base
 class BaseModel(Base):
     __abstract__ = True
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, index=True)
     created_at: Mapped[str] = mapped_column(default=func.now())
     updated_at: Mapped[str] = mapped_column(
         TIMESTAMP(timezone=True),
