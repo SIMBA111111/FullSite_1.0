@@ -2,7 +2,6 @@
     <div>
         <myheader></myheader>
         <div class="main-container">
-          <div class="hr"></div>
           <articlesList :url-link="urlLink"/>
         </div>
     </div>

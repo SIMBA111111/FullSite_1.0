@@ -81,7 +81,7 @@ console.log(props.date);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 20px; 
+  margin: 0px; 
   /* height: 100%; */
   
   background-color: #d9d9d9;

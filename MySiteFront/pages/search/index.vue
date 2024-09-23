@@ -2,7 +2,7 @@
     <div>
       <myheader></myheader>
       <div class="main-container">
-        <div class="hr"></div>
+        <!-- <div class="hr"></div> -->
         <div class="search-container">
           <div class="input-wrapper">
             <input
@@ -60,6 +60,7 @@
     import { url } from "../MyConstants.vue";
     import { watch } from "vue";
 
+
     import articlesList from "~/components/articlesList.vue";
 
   definePageMeta({ 
@@ -113,7 +114,7 @@
 
 .hr {
   width: 90%;
-  height: 5px;
+  height: 4px;
   border-radius: 0%;
   background-color: #fff;
   margin-bottom: 40px;

@@ -2,7 +2,6 @@
   <div>
     <myheader></myheader>
     <div class="main-container">
-      <div class="hr"></div>
       <div class="search-container">
         <div class="input-wrapper">
           <input

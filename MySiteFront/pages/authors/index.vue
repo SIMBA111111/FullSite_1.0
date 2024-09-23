@@ -2,7 +2,6 @@
   <div>
       <myheader></myheader>   
       <div class="vac">
-        <div class="hr"></div>
         <authors-list/>
       </div>
   </div>

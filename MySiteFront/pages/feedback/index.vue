@@ -2,7 +2,6 @@
   <div>
     <myheader></myheader>
     <div class="vac">
-      <div class="hr"></div>
       <div class="container">
         <svg
           style="color: blue; width: 200px; height: 200px"
@@ -48,38 +47,38 @@ definePageMeta({
   middleware: "auth",
 });
 
-const user = reactive({
-  email: "",
-  message: "",
-});
+// const user = reactive({
+//   email: "",
+//   message: "",
+// });
 
-const { errors } = useFormValidation();
-const feedback_url = `${url}/options/feedback`;
-let seccessfully = ref("");
+// const { errors } = useFormValidation();
+// const feedback_url = `${url}/options/feedback`;
+// let seccessfully = ref("");
 
-const feedbackButtonPressed = async () => {
-  try {
-    seccessfully.value = "";
-    console.log("user.value - ", user);
+// const feedbackButtonPressed = async () => {
+//   try {
+//     seccessfully.value = "";
+//     console.log("user.value - ", user);
 
-    const response = await axios.post(feedback_url, user);
-    console.log(response.data);
+//     const response = await axios.post(feedback_url, user);
+//     console.log(response.data);
 
-    const access_token = useCookie("access_token");
-    access_token.value = response.data.access_token;
-    console.log(response);
-    // user.email = '';
-    // user.message = '';
-    seccessfully.value = "Сообщенине отослано";
+//     const access_token = useCookie("access_token");
+//     access_token.value = response.data.access_token;
+//     console.log(response);
+//     // user.email = '';
+//     // user.message = '';
+//     seccessfully.value = "Сообщенине отослано";
 
-    // const router = useRouter();
-    // await router.push('/');
-    location.reload();
-  } catch (err) {
-    // error.value = 'Login failed. Please check your credentials and try again.';
-    console.error("Error:", error);
-  }
-};
+//     // const router = useRouter();
+//     // await router.push('/');
+//     location.reload();
+//   } catch (err) {
+//     // error.value = 'Login failed. Please check your credentials and try again.';
+//     console.error("Error:", error);
+//   }
+// };
 </script>
 
 <style scoped>
