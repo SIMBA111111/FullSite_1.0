@@ -10,6 +10,7 @@
         :first_name="author.first_name"
         :email="author.email"
         :views_count="author.views_count"
+        :first_article_date="author.first_article_date"
         />
 
         <!-- <Author

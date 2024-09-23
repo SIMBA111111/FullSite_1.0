@@ -7,7 +7,7 @@
       <AdminHeader></AdminHeader>
       <notificationDiv v-if="notificationFlag != null" :notificationFlag="notificationFlag" ></notificationDiv>
       <h1 class="heading">Заявки</h1>
-      <template v-if="bidList[0].length">
+      <template v-if="bidList[0]?.length">
         <div v-for="bid in bidList[0]" :key="bid.id" class="bid-card">
           <div class="bid-info">
             <!-- <div class="bid-title">{{ bid.title }}</div> -->
