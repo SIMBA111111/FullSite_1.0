@@ -39,6 +39,8 @@ origins = [
     "http://127.0.0.1",
     "http://frontend:3000",
     "http://frontend",
+    "http://45.91.238.104",
+    "https://45.91.238.104",
 
 ]
 
