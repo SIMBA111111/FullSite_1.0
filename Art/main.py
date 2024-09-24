@@ -41,6 +41,7 @@ origins = [
     "http://frontend",
     "http://45.91.238.104",
     "https://45.91.238.104",
+    "https://24articles.ru",
 
 ]
 
