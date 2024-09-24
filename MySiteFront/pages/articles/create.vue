@@ -82,7 +82,7 @@ const handleSubmit = async () => {
                 'Authorization': useCookie('access_token').value
             }
         });
-        if (response.status == 200) {
+        if (response.status == 201) {
           title.value = '';
           introText.value = '';
           fileName.value = '';
