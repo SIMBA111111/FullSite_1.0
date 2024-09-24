@@ -13,15 +13,15 @@
       </form>
       <div style="color: red;font-size: 30px;">{{ error }}</div>
     </div>
-    <!-- <notification
+    <notification
       v-if="notificationMessage"
       :notificationMessage="notificationMessage"
-    /> -->
+    />
   </div>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import axios from 'axios';
 import { url } from "../../MyConstants.vue";
 import UsernameField from '../../components/usernameField.vue';
@@ -32,7 +32,8 @@ import PasswordField from '../../components/passwordField.vue';
 import Notification from '../../components/notification.vue';
 
 import useFormValidation from '~/modules/useFormValidation';
-import useSubmitButtonState from '~/modules/useSubmitButtonState'
+import useSubmitButtonState from '~/modules/useSubmitButtonState';
+import { notificationStoreMessage } from '../../modules/notificationStore';
 
 
 definePageMeta({
@@ -64,6 +65,13 @@ const new_pwd = reactive({
   email: ""
 });
 
+onMounted(() => {
+  if (notificationStoreMessage.value) {
+    notificationMessage.value  = notificationStoreMessage;
+    setTimeout(() => notificationMessage.value = '', 3000)
+  }
+})
+
 const { errors } = useFormValidation();
 const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
 
@@ -86,12 +94,8 @@ const logUpButtonPressed = async () => {
     access_token.value = response.data.access_token;
     console.log(response);
     if (response.status == 200) {
-
-      notificationMessage.value = 'Вы вошли'
-      setTimeout(() => {
-        notificationMessage.value = '';
-        // location.reload();
-      }, 3000)
+      notificationStoreMessage.value = 'Вы вошли';
+      setTimeout(() => notificationStoreMessage.value = '', 3000)
     }
     
     const router = useRouter();

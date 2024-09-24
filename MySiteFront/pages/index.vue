@@ -64,11 +64,17 @@
         </div>
       </div>
     </div>
+    <notification
+      v-if="notificationMessage"
+      :notificationMessage="notificationMessage"
+    />
   </div>
 </template>
 
 <script>
 import { url } from "../MyConstants.vue";
+import { notificationStoreMessage } from '../../modules/notificationStore';
+
 
 
 
@@ -80,6 +86,8 @@ export default {
       suggestions: [],
       selectedIndex: -1,
       shouldShowSuggestions: false,
+      notificationMessage: ''
+
     };
   },
   methods: {
@@ -162,6 +170,12 @@ export default {
   mounted() {
     this.$refs.searchInput.focus();
     window.addEventListener("keydown", this.handleKeyDown);
+
+  if (notificationStoreMessage.value) {
+    this.notificationMessage  = notificationStoreMessage;
+    setTimeout(() => this.notificationMessage = '', 3000)
+  }
+
     
     definePageMeta({
       middleware: 'auth'

@@ -28,7 +28,9 @@ import EmailField from '../../components/emailField.vue';
 import PasswordField from '../../components/passwordField.vue';
 
 import useFormValidation from '~/modules/useFormValidation';
-import useSubmitButtonState from '~/modules/useSubmitButtonState'
+import useSubmitButtonState from '~/modules/useSubmitButtonState';
+import { notificationStoreMessage } from '../../modules/notificationStore';
+
 
 
 definePageMeta({
@@ -55,6 +57,8 @@ const signUpButtonPressed = async () => {
       error.value = ''; // Clear previous error
       const response = await axios.post(register_url, user);
       if (response.status == 200) {
+        notificationStoreMessage.value = 'Вы зарегистрированы';
+        setTimeout(() => notificationStoreMessage.value = '', 3000)
         const router = useRouter();
         await router.push('/auth/login');
       }
