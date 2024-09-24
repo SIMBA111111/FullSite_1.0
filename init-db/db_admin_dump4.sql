@@ -105,6 +105,7 @@ CREATE TABLE public.article (
     count_views integer NOT NULL,
     title character varying NOT NULL,
     user_id integer NOT NULL,
+    disable boolean NOT NULL,
     id integer NOT NULL,
     created_at character varying NOT NULL,
     updated_at timestamp with time zone NOT NULL
@@ -133,6 +134,43 @@ ALTER SEQUENCE public.article_id_seq OWNER TO admin;
 --
 
 ALTER SEQUENCE public.article_id_seq OWNED BY public.article.id;
+
+
+--
+-- Name: code; Type: TABLE; Schema: public; Owner: admin
+--
+
+CREATE TABLE public.code (
+    code integer NOT NULL,
+    email character varying NOT NULL,
+    id integer NOT NULL,
+    created_at character varying NOT NULL,
+    updated_at timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.code OWNER TO admin;
+
+--
+-- Name: code_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+--
+
+CREATE SEQUENCE public.code_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.code_id_seq OWNER TO admin;
+
+--
+-- Name: code_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+--
+
+ALTER SEQUENCE public.code_id_seq OWNED BY public.code.id;
 
 
 --
@@ -236,6 +274,13 @@ ALTER TABLE ONLY public.article ALTER COLUMN id SET DEFAULT nextval('public.arti
 
 
 --
+-- Name: code id; Type: DEFAULT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.code ALTER COLUMN id SET DEFAULT nextval('public.code_id_seq'::regclass);
+
+
+--
 -- Name: comment id; Type: DEFAULT; Schema: public; Owner: admin
 --
 
@@ -254,7 +299,7 @@ ALTER TABLE ONLY public."user" ALTER COLUMN id SET DEFAULT nextval('public.user_
 --
 
 COPY public."AnonymousUser" (username, id, created_at, updated_at) FROM stdin;
-AnonymousUser	1	2021-09-02T17:31:25.857666	2021-09-02 17:31:25.857666+00
+AnonymousUser	1	2023-09-02T17:31:25.857666	2023-09-02 17:31:25.857666+00
 \.
 
 
@@ -270,8 +315,15 @@ COPY public."Token" (hash, expiration, id, created_at, updated_at) FROM stdin;
 -- Data for Name: article; Type: TABLE DATA; Schema: public; Owner: admin
 --
 
-COPY public.article (name, slug, intro_text, bid_approved, count_views, title, user_id, id, created_at, updated_at) FROM stdin;
-1_asinhronnost'_ch1.docx	1_asinhronnost'_ch1.docx-65005506	тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст тестовый завлекающий текст	t	0	асинхронность часть 1	1	1	2024-09-01 14:01:16.019613+00	2024-09-01 14:01:22.868841+00
+COPY public.article (name, slug, intro_text, bid_approved, count_views, title, user_id, disable, id, created_at, updated_at) FROM stdin;
+\.
+
+
+--
+-- Data for Name: code; Type: TABLE DATA; Schema: public; Owner: admin
+--
+
+COPY public.code (code, email, id, created_at, updated_at) FROM stdin;
 \.
 
 
@@ -288,7 +340,7 @@ COPY public.comment (content, user_id, article_id, id, created_at, updated_at) F
 --
 
 COPY public."user" (first_name, last_name, email, password, username, is_admin_user, id, created_at, updated_at) FROM stdin;
-admin	admin	admin	$2b$12$9pELbR95VpU6v5/aUCVJiebqOv0deSPrfsyzx02EwRcMKVYpfKgry	admin	t	1	2024-09-01 14:00:06.538824+00	2024-09-01 14:00:06.538824+00
+Админ	Админович	naaro2930@gmail.com	$2b$12$3XdXSNyLFlRryEP0d7my5uztS0ZKiH0S9O.6ym8OmS6DlP56wXtWm	admin	t	1	2024-09-23 13:25:05.617797+00	2024-09-23 13:25:05.617797+00
 \.
 
 
@@ -303,14 +355,21 @@ SELECT pg_catalog.setval('public."AnonymousUser_id_seq"', 1, false);
 -- Name: Token_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public."Token_id_seq"', 1, true);
+SELECT pg_catalog.setval('public."Token_id_seq"', 1, false);
 
 
 --
 -- Name: article_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
 --
 
-SELECT pg_catalog.setval('public.article_id_seq', 1, true);
+SELECT pg_catalog.setval('public.article_id_seq', 1, false);
+
+
+--
+-- Name: code_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+--
+
+SELECT pg_catalog.setval('public.code_id_seq', 1, false);
 
 
 --
@@ -373,6 +432,22 @@ ALTER TABLE ONLY public.article
 
 ALTER TABLE ONLY public.article
     ADD CONSTRAINT article_slug_key UNIQUE (slug);
+
+
+--
+-- Name: code code_code_key; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.code
+    ADD CONSTRAINT code_code_key UNIQUE (code);
+
+
+--
+-- Name: code code_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+--
+
+ALTER TABLE ONLY public.code
+    ADD CONSTRAINT code_pkey PRIMARY KEY (id);
 
 
 --
@@ -440,6 +515,13 @@ CREATE INDEX ix_article_name ON public.article USING btree (name);
 --
 
 CREATE INDEX ix_article_title ON public.article USING btree (title);
+
+
+--
+-- Name: ix_code_id; Type: INDEX; Schema: public; Owner: admin
+--
+
+CREATE INDEX ix_code_id ON public.code USING btree (id);
 
 
 --

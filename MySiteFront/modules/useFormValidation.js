@@ -13,7 +13,7 @@ export default function useFormValidation() {
         errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : isEmail(fieldName, fieldValue)
     }
     const validatePasswordField = (fieldName, fieldValue) => {
-        errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : minLength(fieldName, fieldValue, 6);
+        errors[fieldName] = !fieldValue ? isEmpty(fieldName, fieldValue) : minLength(fieldName, fieldValue, 5);
     }
     return { errors, validateNameField, validateEmailField, validatePasswordField }
 }

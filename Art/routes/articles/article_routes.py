@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Body, Depends
+from fastapi import APIRouter, UploadFile, File, Body, Depends, Form
 from fastapi.responses import JSONResponse, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,9 +20,9 @@ router = APIRouter()
 
 
 @router.post("/create", summary="Create new article")
-async def create_article(file: UploadFile = File(),
-                         title: str = Body(),
-                         intro_text: str = Body(),
+async def create_article(file_data: UploadFile = File(...),
+                         title: str = Form(...),
+                         intro_text: str = Form(...),
                          db: AsyncSession = Depends(get_db),
                          current_user: UserModel = Depends(get_current_user),
                          ):
@@ -31,9 +31,9 @@ async def create_article(file: UploadFile = File(),
 
     article_last = await articles_services.get_last_article(db)
 
-    filename = await articles_services.translate_ru_in_en(file)
+    filename = await articles_services.translate_ru_in_en(file_data)
     new_article_name = await articles_services.create_new_article_name(article_last, filename)
-    await articles_services.write_file(new_article_name, file)
+    await articles_services.write_file(new_article_name, file_data)
     await articles_crud.create_article(db, new_article_name, intro_text, current_user, title)
 
     response = JSONResponse(status_code=201, content={"Success": "Article created"})

@@ -20,4 +20,5 @@ class SAuthorsList(BaseModel):
     email: str | None = None
     username: str
     views_count: int | None = None
+    first_article_date: str | None = None
 

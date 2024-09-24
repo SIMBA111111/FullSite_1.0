@@ -13,6 +13,7 @@ from routes.admin import admin_routes
 from routes.options import options_routes
 
 from models.articles.comment_model import CommentModel
+from models.options.code_model import CodeModel
 
 
 async def init_db():
@@ -33,15 +34,22 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
     "http://localhost:3000",
+    "http://localhost",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1",
+    "http://frontend:3000",
+    "http://frontend",
+    "http://45.91.238.104",
+    "https://45.91.238.104",
+
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=origins,  # You can specify domains here, e.g., ["http://localhost:3000"]
-    allow_origins=["*"],  # You can specify domains here, e.g., ["http://localhost:3000"]
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods, e.g., GET, POST, etc.
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(article_routes.router,

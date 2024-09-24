@@ -43,32 +43,39 @@ definePageMeta({
 const fileName = ref('');
 const title = ref('');
 const introText = ref('');
+
+const fileData = ref(null);
 const notificationMessage = ref('');
 const error = ref('');
 
-const handleFileChange = (event) => {
-    const file = event.target.files[0];
 
-    if (file) {
-    fileName.value = file.name; // Устанавливаем имя выбранного файла
-  } else {
-    fileName.value = ''; // Очищаем, если файл не выбран
-  }
+const handleFileChange = (event) => {
+    const selectedFile = event.target.files[0]; // Получаем выбранный файл
+    console.log("selectedFile - ", selectedFile);
+    
+    if (selectedFile) {
+        fileName.value = selectedFile.name; // Устанавливаем имя выбранного файла
+        fileData.value = selectedFile; // Сохраняем файл в переменной
+    } else {
+        fileName.value = ''; // Очищаем, если файл не выбран
+        fileData.value = null; // Очищаем переменную с файлом
+    }
 };
 
 const handleSubmit = async () => {
-    error.value = '';
-    if (!file.value) {
+
+    if (!fileData.value) {
         alert('Пожалуйста, выберите файл.');
         return;
     }
 
     const formData = new FormData();
-    formData.append('file', file.value);
+    formData.append('file_data', fileData.value);
     formData.append('title', title.value);
     formData.append('intro_text', introText.value);
 
     try {
+        console.log("fileData - ", fileData.value);
         const response = await axios.post(`${url}/articles/create`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',

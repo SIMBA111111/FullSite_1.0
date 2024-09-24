@@ -1,23 +1,51 @@
-# Используем более лёгкий базовый образ
-FROM node:18-alpine
+# Шаг 1: Базовый образ для сборки приложения
+FROM node:20.17-alpine AS builder
 
-# Устанавливаем рабочую директорию
+# Рабочая директория
 WORKDIR /app
 
-# Копируем только package.json и package-lock.json для установки зависимостей
+# Копируем package.json и package-lock.json
 COPY package*.json ./
 
-# Устанавливаем зависимости, используя чистую установку, чтобы избежать кеширования dev-зависимостей в production
-RUN npm ci --only=production
+# Устанавливаем зависимости
+RUN npm install
 
-# Копируем остальные файлы проекта
+# Копируем все файлы проекта
 COPY . .
 
-# Строим проект
+# Собираем Nuxt-приложение
 RUN npm run build
 
-# Открываем порт для приложения
-EXPOSE 3000
+# Шаг 2: Финальный образ для запуска приложения
+FROM node:20.17-alpine
 
-# Запускаем приложение
-CMD ["npm", "run", "dev"]
+# Рабочая директория
+WORKDIR /app
+
+# Копируем собранные файлы из стадии сборки
+COPY --from=builder /app/.output /app/.output
+
+# Запуск продакшн-сервера
+CMD ["node", ".output/server/index.mjs"]
+
+
+
+
+
+
+
+# FROM node:20.17-alpine
+
+# # WORKDIR /app
+
+# COPY package.json package.json
+
+# RUN npm install
+
+# COPY . .
+
+# RUN npm run build
+
+# EXPOSE 3000
+
+# CMD ["npm", "run", "start"]

@@ -39,9 +39,10 @@ async def get_all_authors(db: AsyncSession):
             last_name=author.last_name,
             email=author.email,
             username=author.username,
-            views_count=views_count
+            views_count=views_count,
+            first_article_date=first_article_date
         )
-        for author, views_count in users_ordered_by_article_count
+        for author, views_count, first_article_date in users_ordered_by_article_count
     ]
 
     return users_ordered_by_article_count_response

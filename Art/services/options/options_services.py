@@ -3,8 +3,6 @@ import os
 import smtplib
 from dotenv import load_dotenv
 
-# from smtplib import SMTP
-import smtplib as smtp
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -21,26 +19,7 @@ load_dotenv()
 
 async def send_feedback(sender: str, message: str):
     try:
-        EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
-        EMAIL_PORT = os.getenv("EMAIL_PORT", "587")
-        EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "qqhs ptld aivs lwrl")
-        EMAIL_RECIPIENT = os.getenv("EMAIL_RECIPIENT", "naaro2930@gmail.com")
-
-        # server = SMTP(host=EMAIL_HOST, port=EMAIL_PORT)
-        # server.connect(host=EMAIL_HOST, port=EMAIL_PORT)
-        # server.ehlo()
-        # server.starttls()
-        # server.ehlo()
-        # server.login(user=sender, password=EMAIL_HOST_PASSWORD)
-
-        msg = MIMEText(message)
-        msg['subject'] = 'Обратная связь моего сайта'
-        msg['From'] = sender
-        msg['To'] = EMAIL_RECIPIENT
-
-        # server.sendmail(sender, EMAIL_RECIPIENT, msg.as_string())
-
-        # server.quit()
+        pass
     except Exception as e:
         error_logger.error(f"Could was not possible to send feedback. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Could was not possible to send feedback. Error: {e}"})
@@ -145,7 +124,7 @@ async def send_reset_code(db: AsyncSession, email: str):
                             )
 
 
-async def check_code(db: AsyncSession, email: str, code: str):
+async def check_code(db: AsyncSession, email: str, code: int):
     try:
         code_exist = await options_crud.check_code_exists(db, email, code)
     except Exception as e:
