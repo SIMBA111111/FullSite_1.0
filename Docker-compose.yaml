@@ -8,6 +8,7 @@ services:
   nginx:
     container_name: "nginx"
     image: nginx:stable-alpine3.19-perl
+    restart: unless-stopped
     depends_on:
       - backend
       - frontend
@@ -29,6 +30,7 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
+      HOST: ${HOST}
     env_file:
       - .env
     networks:

@@ -20,6 +20,8 @@ from crud.articles import articles_crud
 from schemas.articles.articles_schemas import SSlug, SArticleListWithAuthors
 from schemas.users.users_schemas import SAuthorsList
 
+host = os.getenv("HOST")
+
 
 async def get_bid_list(db: AsyncSession):
     try:
@@ -74,7 +76,7 @@ async def create_paths_in_src_in_html_files(filename: FileDownloadRequest, html_
         error_logger.error(f"The file could not be opened {html_file_name}. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Error opening the file: {str(e)}"})
 
-    new_img_path = f'http://45.91.238.104:8000/static/articles/{filename.filename[:-5]}/'
+    new_img_path = f'{host}/static/articles/{filename.filename[:-5]}/'
     updated_content = file_content.replace('<img src="', f'<img src="{new_img_path}')
 
     try:
