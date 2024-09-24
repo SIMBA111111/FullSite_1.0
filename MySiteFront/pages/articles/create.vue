@@ -2,7 +2,6 @@
     <div>
         <myheader></myheader>
         <div class="create-container">
-        <div class="hr"></div>
             <div class="create-form">    
                 <form class="form" @submit.prevent="handleSubmit">
                     <label class="input-file">
@@ -21,6 +20,12 @@
                   </form>
             </div>
         </div>
+        <div style="color: red;font-size: 30px;">{{ error }}</div>
+
+        <notification
+          :notificationMessage="notificationMessage"
+          v-if="notificationMessage"
+        />
     </div>
 </template>
 
@@ -28,6 +33,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { url } from '../../MyConstants.vue';
+import notification from '../../components/notification.vue';
 
 definePageMeta({
   middleware: 'auth'
@@ -37,6 +43,8 @@ definePageMeta({
 const fileName = ref('');
 const title = ref('');
 const introText = ref('');
+const notificationMessage = ref('');
+const error = ref('');
 
 const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -49,6 +57,7 @@ const handleFileChange = (event) => {
 };
 
 const handleSubmit = async () => {
+    error.value = '';
     if (!file.value) {
         alert('Пожалуйста, выберите файл.');
         return;
@@ -66,10 +75,18 @@ const handleSubmit = async () => {
                 'Authorization': useCookie('access_token').value
             }
         });
+        if (response.status == 200) {
+          title.value = '';
+          introText.value = '';
+          fileName.value = '';
+          notificationMessage.value = 'Статья добавлена'
+          setTimeout(() => notificationMessage.value = '', 3000)
+        }
         console.log('Ответ сервера:', response.data);
-        alert('Файл успешно отправлен.');
+        // alert('Файл успешно отправлен.');
     } catch (error) {
         console.error('Ошибка при отправке файла:', error);
+        error.value = 'Ошибка при отправке файла';
         // if (error.response && error.response.status == 403) {
         // NotIsAdminUser.value = true;
         // } else {

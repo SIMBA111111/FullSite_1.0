@@ -70,7 +70,10 @@
 <script>
 import { url } from "../MyConstants.vue";
 
+
+
 export default {
+  
   data() {
     return {
       searchQuery: "",
@@ -80,6 +83,7 @@ export default {
     };
   },
   methods: {
+    
     onInput() {
       if (this.searchQuery.length > 2) {
         this.fetchSuggestions(this.searchQuery);
@@ -158,6 +162,10 @@ export default {
   mounted() {
     this.$refs.searchInput.focus();
     window.addEventListener("keydown", this.handleKeyDown);
+    
+    definePageMeta({
+      middleware: 'auth'
+    });
   },
   beforeDestroy() {
     window.removeEventListener("keydown", this.handleKeyDown);
