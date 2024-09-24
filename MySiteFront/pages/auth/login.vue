@@ -2,7 +2,7 @@
   <div>
     <myheader></myheader>
     <div class="login-container">
-      <form @submit.prevent class="login-form" action="">
+      <form ref="form" @submit.prevent class="login-form" action="">
         <username-field v-model="user.username"/>
         <password-field v-model="user.password"/>
         <div class="btn-wrapper">
@@ -13,18 +13,10 @@
       </form>
       <div style="color: red;font-size: 30px;">{{ error }}</div>
     </div>
-    <input v-model="resetData.username" type="code" placeholder="username" />
-    <input v-model="resetData.email" type="email" placeholder="email" />
-    <button @click="reset_password">Восстановить пароль</button>
-    <br>
-    <input v-model="codeData.code" type="code" placeholder="код" />
-    <input v-model="codeData.username" type="username" placeholder="username" />
-    <input v-model="codeData.email" type="email" placeholder="email" />
-    <button @click="check_code">проверить код</button>
-    <br>
-    <input v-model="new_pwd.new_password" type="code" placeholder="новый пароль" />
-    <input v-model="new_pwd.email" type="code" placeholder="email" />
-    <button @click="new_pwd_func">заменить пароль</button>
+    <!-- <notification
+      v-if="notificationMessage"
+      :notificationMessage="notificationMessage"
+    /> -->
   </div>
 </template>
 
@@ -37,6 +29,7 @@ import FirstnameField from '../../components/firstnameField.vue';
 import LastnameField from '../../components/lastnameField.vue';
 import EmailField from '../../components/emailField.vue';
 import PasswordField from '../../components/passwordField.vue';
+import Notification from '../../components/notification.vue';
 
 import useFormValidation from '~/modules/useFormValidation';
 import useSubmitButtonState from '~/modules/useSubmitButtonState'
@@ -50,6 +43,10 @@ const user = reactive({
   username: '',
   password: ''
 });
+
+const succes = ref();
+
+const notificationMessage = ref('');
 
 const resetData = reactive({
   username: "",
@@ -88,10 +85,18 @@ const logUpButtonPressed = async () => {
     const access_token = useCookie('access_token');
     access_token.value = response.data.access_token;
     console.log(response);
+    if (response.status == 200) {
+
+      notificationMessage.value = 'Вы вошли'
+      setTimeout(() => {
+        notificationMessage.value = '';
+        // location.reload();
+      }, 3000)
+    }
     
     const router = useRouter();
     await router.push('/');
-    location.reload();
+    // location.reload();
   } catch (err) {
     error.value = 'Login failed. Please check your credentials and try again.';
     console.error('Error:', error);

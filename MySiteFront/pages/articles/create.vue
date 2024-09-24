@@ -20,6 +20,12 @@
                   </form>
             </div>
         </div>
+        <div style="color: red;font-size: 30px;">{{ error }}</div>
+
+        <notification
+          :notificationMessage="notificationMessage"
+          v-if="notificationMessage"
+        />
     </div>
 </template>
 
@@ -27,6 +33,7 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { url } from '../../MyConstants.vue';
+import notification from '../../components/notification.vue';
 
 definePageMeta({
   middleware: 'auth'
@@ -36,7 +43,11 @@ definePageMeta({
 const fileName = ref('');
 const title = ref('');
 const introText = ref('');
+
 const fileData = ref(null);
+const notificationMessage = ref('');
+const error = ref('');
+
 
 const handleFileChange = (event) => {
     const selectedFile = event.target.files[0]; // Получаем выбранный файл
@@ -52,6 +63,7 @@ const handleFileChange = (event) => {
 };
 
 const handleSubmit = async () => {
+
     if (!fileData.value) {
         alert('Пожалуйста, выберите файл.');
         return;
@@ -70,10 +82,18 @@ const handleSubmit = async () => {
                 'Authorization': useCookie('access_token').value
             }
         });
+        if (response.status == 200) {
+          title.value = '';
+          introText.value = '';
+          fileName.value = '';
+          notificationMessage.value = 'Статья добавлена'
+          setTimeout(() => notificationMessage.value = '', 3000)
+        }
         console.log('Ответ сервера:', response.data);
-        alert('Файл успешно отправлен.');
+        // alert('Файл успешно отправлен.');
     } catch (error) {
         console.error('Ошибка при отправке файла:', error);
+        error.value = 'Ошибка при отправке файла';
         // if (error.response && error.response.status == 403) {
         // NotIsAdminUser.value = true;
         // } else {

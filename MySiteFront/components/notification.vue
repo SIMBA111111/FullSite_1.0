@@ -1,6 +1,6 @@
 <template>
     <div class="notification">
-        <span>{{ spanMessage }}</span>
+        <span>{{ notificationMessage }}</span>
     </div>
 </template>
 
@@ -9,7 +9,7 @@
 import { defineProps } from 'vue'; 
  
 const props = defineProps({
-    spanMessage: {
+  notificationMessage: {
         type: String
     }
 })
@@ -23,8 +23,11 @@ const props = defineProps({
   border: 4px solid green;
   border-radius: 50px;
   padding: 20px;
-  background-color: rgb(117, 251, 117);
-  box-shadow: 0px 0px 30px 1px green;
+  background-color: rgb(92, 199, 92);
+  box-shadow: 0px 0px 25px 1px green;
+  position: absolute;
+  top: 100px;
+  right: 50px;
 }
 
 .notification span {
