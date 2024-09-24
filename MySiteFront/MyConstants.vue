@@ -1,3 +1,3 @@
 <script>
-export const url = " https://45.91.238.104/:8000/api/v1"
+export const url = " https://24articles.ru/:8000/api/v1"
 </script>
