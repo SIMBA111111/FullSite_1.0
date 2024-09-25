@@ -31,21 +31,6 @@
 </template>
 
 <script setup>
-//   import { ref, defineProps } from 'vue';
-//   import { url } from "../MyConstants.vue";
-//   import article from './article.vue';
-//   import axios from 'axios';
-
-//   import pagination from './pagination.vue'
-
-
-//  const props = defineProps({
-//   items: {
-//     type: Array
-//   }
-//  })
-
-
 import { ref, defineProps, watch } from 'vue';
 import Article from './article.vue';
 import { url } from "../MyConstants.vue";
