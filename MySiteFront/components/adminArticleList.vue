@@ -41,8 +41,6 @@ const get_articles_with_authors = async (page) => {
       }
     });
 
-    console.log('Response data:', response.data);
-
     if (response.data.length === 0) {
       hasMorePages.value = false;
     } else {

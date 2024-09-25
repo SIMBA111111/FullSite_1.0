@@ -59,14 +59,13 @@ definePageMeta({
 // const feedbackButtonPressed = async () => {
 //   try {
 //     seccessfully.value = "";
-//     console.log("user.value - ", user);
 
 //     const response = await axios.post(feedback_url, user);
-//     console.log(response.data);
+
 
 //     const access_token = useCookie("access_token");
 //     access_token.value = response.data.access_token;
-//     console.log(response);
+
 //     // user.email = '';
 //     // user.message = '';
 //     seccessfully.value = "Сообщенине отослано";

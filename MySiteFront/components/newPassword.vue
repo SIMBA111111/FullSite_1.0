@@ -29,8 +29,6 @@
         required: true
     }
   })
-  
-  console.log('PROPS-v2', props.emailProp);
 
   const newPassword = reactive({
     email: props.emailProp,
@@ -51,13 +49,12 @@
     try {
       error.value = '';
       const response = await axios.post(newPass_url, newPassword);
-      console.log(response.data);
       const router = useRouter();
       await router.push('/auth/login');
       location.reload();
     } catch (err) {
       error.value = 'Login failed. Please check your credentials and try again.';
-      console.error('Error:', error);
+      console.error('Error:', err);
     }
   };
   </script>

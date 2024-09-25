@@ -79,15 +79,15 @@
   //   try {
   //       const { data } = await axios(`${url}/articles/search-article?query=${searchQuery.query}`)
   //       items.value = data;
-  //       console.log('Items', items.value);
+
   //   } catch (err) {
-  //       console.log(err);
+
   //   }
   // }
 
   const onChangeSearchInput = (event) => {
     searchQuery.query = event.target.value
-    console.log( 'Input', searchQuery.query);
+
   }
 
   const onClearInput = () => {

@@ -33,10 +33,7 @@ const get_articles_with_authors = async (page, pageNext) => {
         "Authorization": useCookie("access_token").value
       }
     });
-
-    console.log('Res dataNext', dataNext);
-    console.log('Response dataaaa:', data);
-  
+    
     if (data.length < 6) {
       hasMorePages.value = false;
     } else {
@@ -48,7 +45,6 @@ const get_articles_with_authors = async (page, pageNext) => {
     }
 
     articles.value = data;
-    console.log('articles', articles);
   } catch (error) {
     console.error('Error:', error);
   }

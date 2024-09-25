@@ -66,7 +66,6 @@ async def get_article(slug: SSlug = Body(),
                       current_user: UserModel = Depends(get_current_user),
                       ):
     info_logger.info(f" - {current_user.username} - START get article")
-
     file_content = await articles_services.get_article(db, slug)
 
     response = JSONResponse(content={"file_content": file_content}, headers=
