@@ -72,3 +72,4 @@ services:
 volumes:
   db_data:
   backend_data:
+  articles_list_data:
