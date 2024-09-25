@@ -69,5 +69,5 @@ services:
 
 volumes:
   db_data:
-  backend_data:
+  static_data:
   articles_list_data:
