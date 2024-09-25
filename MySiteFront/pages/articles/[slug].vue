@@ -19,29 +19,37 @@ useHead({
 })
 
 const slug = useRouter().currentRoute.value.params.slug
-const article_url = `${url}/articles/get-article`;
 
-const response = await axios.post(article_url, {
-    slug: slug,
-}, {
-    headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Authorization': useCookie("access_token").value
+const fetchArticle = async () => {
+    try {
+        const article_url = `${url}/articles/get-article`;
+        const response = await axios.post(article_url, {
+            slug: slug,
+        }, {
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': useCookie("access_token").value,
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+            }
+        });
+
+        const articleData = response.data.file_content;
+
+        const articleDiv = document.getElementById('article');
+        if (articleDiv) {
+            articleDiv.innerHTML = articleData;
+        } else {
+            console.error('Element with id "article" not found');
+        }
+    } catch (error) {
+        console.error('Error fetching article:', error);
     }
-});
-
-
-const articleData = response.data.file_content
+};
 
 onMounted(() => {
-    var articleDiv = document.getElementById('article');
-    if (articleDiv) {
-        articleDiv.innerHTML = articleData;
-    } else {
-        console.error('Element with id "article" not found');
-    }
+    fetchArticle();
 });
-
 </script>
 
 <style>
