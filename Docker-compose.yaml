@@ -30,7 +30,8 @@ services:
       - db
     restart: always
     volumes:
-      - backend_data:/static/
+      - static_data:/static/articles
+      - articles_list_data:/articles_list
     environment:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
@@ -45,8 +46,6 @@ services:
     build: MySiteFront/
     ports:
       - "3000:3000"
-    # privileged: true
-    # mem_limit: 2g
     depends_on:
       - backend
     networks:
