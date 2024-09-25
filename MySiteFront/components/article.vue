@@ -13,7 +13,7 @@
         </div>
       </div>
       <div style="font-size: 16px;">
-        date
+        date - {{ props.date }}
       </div>
       <div><NuxtLink :to="`/articles/${slug}`" class="content content_">{{ intro_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
     </div>
@@ -41,30 +41,17 @@ import { defineProps } from 'vue';
   },
   count_views: {
     type: Number
+  },
+  date: {
+    type: String
   }
  })
+
+console.log("props- ", props);
+console.log("props.date - ", props.date);
+
+
 </script>
-
-<!-- <script setup lang="ts">
-import { computed } from 'vue';
-
-interface ArticleAuthor {
-  id: number;
-  first_name: string;
-  last_name: string;
-}
-
-const props = defineProps<{
-  user: ArticleAuthor;
-  date: string;
-  name: string;
-  text: string;
-  intro_text: string;
-  slug: string;
-  count_views: number;
-  title: string;
-}>();
-</script> -->
 
 <style scoped>
 

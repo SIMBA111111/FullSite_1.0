@@ -103,7 +103,7 @@ async def get_all_articles(db: AsyncSession, page: int):
     try:
         all_articles = await articles_crud.get_all_articles(db, page)
     except Exception as e:
-        logger.error(f"Couldn't get all the articles. Error: {e}")
+        error_logger.error(f"Couldn't get all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get all the articles. Error: {e}"})
 
     try:
@@ -115,6 +115,7 @@ async def get_all_articles(db: AsyncSession, page: int):
                 slug=article.slug,
                 count_views=article.count_views,
                 title=article.title,
+                date=article.created_at,
                 user=SAuthorsList(
                     first_name=first_name,
                     last_name=last_name,
