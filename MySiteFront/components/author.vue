@@ -5,7 +5,7 @@
         <!-- <img :src="avatar" alt="Avatar" class="avatar" /> -->
         <div class="author-name">{{ first_name }} {{ last_name }}</div>
       </div>
-      <div class="date">пишет с {{ formatDate(props.date) }}</div>
+      <div class="date">пишет с {{ formatDate(first_article_date) }}</div>
       <div class="eye-card">
         <span class="eye">👁</span>
         <span> {{ views_count }}</span>
