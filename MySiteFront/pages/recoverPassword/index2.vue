@@ -74,13 +74,12 @@
       userEmail = email.value;
       error.value = '';
       const response = await axios.post(recover_url, email);
-      console.log(response.data);
       // const router = useRouter();
       // await router.push('/');
       // location.reload();
     } catch (err) {
       error.value = 'Login failed. Please check your credentials and try again.';
-      console.error('Error:', error);
+      console.error('Error:', err);
     }
   };
 
@@ -88,7 +87,6 @@
     try {
       error.value = '';
       const response = await axios.post(sendCode_url, code);
-      console.log(response.data);
       // const router = useRouter();
       // await router.push('/');
       // location.reload();
@@ -102,7 +100,6 @@
     try {
       error.value = '';
       const response = await axios.post(newPass_url, newPassword);
-      console.log(response.data);
       // const router = useRouter();
       // await router.push('/auth/login');
       // location.reload();

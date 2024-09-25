@@ -76,7 +76,6 @@ async def get_article(db: AsyncSession, slug: SSlug):
 
     file_ = f"{filename.name[:-5]}.html"
     file_path = os.path.join(os.getcwd(), "static", "articles", filename.name[:-5], file_)
-
     try:
         async with aiofiles.open(file_path, "r", encoding='utf-8') as file:
             file_content = await file.read()

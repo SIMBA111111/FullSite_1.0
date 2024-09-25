@@ -43,8 +43,6 @@ import { defineProps } from 'vue';
     type: Number
   }
  })
-
- console.log('props art', props);
 </script>
 
 <!-- <script setup lang="ts">
@@ -66,8 +64,6 @@ const props = defineProps<{
   count_views: number;
   title: string;
 }>();
-
-console.log(props.date);
 </script> -->
 
 <style scoped>

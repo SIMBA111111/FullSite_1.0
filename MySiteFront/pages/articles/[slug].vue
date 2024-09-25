@@ -11,13 +11,6 @@
 import axios from 'axios';
 import { url } from '../../MyConstants.vue';
 
-useHead({
-  title: 'My App',
-  head: {
-      charset: 'UTF-8'
-    }
-})
-
 const slug = useRouter().currentRoute.value.params.slug
 
 const fetchArticle = async () => {

@@ -38,9 +38,7 @@ const get_authors = () => {
   axios.get(get_authors_url, 
   )
     .then(response => {
-      console.log('Response data:', response.data);
       authors.value = response.data;
-      console.log('res Au', authors);
     })
     .catch(error => {
       console.error('Error:', error);
@@ -48,17 +46,6 @@ const get_authors = () => {
 }
 
 get_authors()
-console.log("authors", authors);
-
-
-
-
-
-
-
-
-
-
 </script>
 
 <style scoped>

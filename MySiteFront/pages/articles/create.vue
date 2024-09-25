@@ -51,7 +51,6 @@ const error = ref('');
 
 const handleFileChange = (event) => {
     const selectedFile = event.target.files[0]; // Получаем выбранный файл
-    console.log("selectedFile - ", selectedFile);
     
     if (selectedFile) {
         fileName.value = selectedFile.name; // Устанавливаем имя выбранного файла
@@ -75,7 +74,6 @@ const handleSubmit = async () => {
     formData.append('intro_text', introText.value);
 
     try {
-        console.log("fileData - ", fileData.value);
         const response = await axios.post(`${url}/articles/create`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -89,7 +87,6 @@ const handleSubmit = async () => {
           notificationMessage.value = 'Статья добавлена'
           setTimeout(() => notificationMessage.value = '', 3000)
         }
-        console.log('Ответ сервера:', response.data);
         // alert('Файл успешно отправлен.');
     } catch (error) {
         console.error('Ошибка при отправке файла:', error);

@@ -71,20 +71,17 @@ let error = ref('');
 const login_url = `${url}/auth/login`;
 
 // const signUpButtonPressed = () => {
-//   console.log(user);
 // }
 
 const logUpButtonPressed = async () => {
   try {
     error.value = '';
-    console.log("user.value - ", user);
-    
+
     const response = await axios.post(login_url, user);
-    console.log(response.data);
 
     const access_token = useCookie('access_token');
     access_token.value = response.data.access_token;
-    console.log(response);
+
     if (response.status == 200) {
 
       notificationMessage.value = 'Вы вошли'
