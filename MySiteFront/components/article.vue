@@ -47,10 +47,6 @@ import { defineProps } from 'vue';
   }
  })
 
-console.log("props- ", props);
-console.log("props.date - ", props.date);
-
-
 </script>
 
 <style scoped>
