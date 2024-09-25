@@ -13,7 +13,7 @@
         </div>
       </div>
       <div style="font-size: 16px;">
-        date - {{ props.date }}
+        {{ formatDate(props.date) }}
       </div>
       <div><NuxtLink :to="`/articles/${slug}`" class="content content_">{{ intro_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
     </div>
@@ -47,6 +47,10 @@ import { defineProps } from 'vue';
   }
  })
 
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' };
+  return new Date(dateString).toLocaleString('ru-RU', options);
+};  
 </script>
 
 <style scoped>
