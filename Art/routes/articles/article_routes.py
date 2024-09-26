@@ -98,4 +98,3 @@ async def request_articles(article_title: str,
 
     info_logger.info(f" - SUCCESS request articles")
     return articles
-
