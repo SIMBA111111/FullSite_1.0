@@ -161,7 +161,6 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 
 <style scoped>
 .articles-list-container {
-  /* border: 1px solid green; */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -169,20 +168,11 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 }
 
 .articles-list {
-  /* border: 1px solid red; */
-  /* width: 130vh;
-  height: 130VH; */
+  height: 80%; 
   display: grid;
   grid-template-columns: repeat(2, 380px);
-  /* grid-template-columns: 380px, 380px; */
-
-  /* grid-template-rows: 246px 245px; */
   grid-template-rows: repeat(3, 245px);
   gap: 10px;
-  /* display: flex;
-  justify-content: space-around; */
-  /* flex-wrap: wrap; */
-  /* gap: 16px; */
 }
 
 .pagination-controls {
@@ -223,11 +213,10 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 .pagination-controls-2 {
   display: flex;
   align-items: center;
-  margin: auto;
+  justify-content: center;
+  margin-top: 20px; /* Отступ сверху, чтобы разделить с списком */
   gap: 8px;
-  position: absolute;
-  bottom: 10%;
-  left: 36%;
+  /* Уберите абсолютное позиционирование */
 }
 
 .arrow{
