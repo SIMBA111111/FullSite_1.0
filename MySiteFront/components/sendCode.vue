@@ -3,7 +3,7 @@
         <form v-if="!succes" @submit.prevent class="login-form" action="">
           <code-field  v-model="code.code"/>
           <div class="btn-wrapper">
-            <button @click="sendButtonPressed" type="submit" class="btn">Ввести код</button>
+            <button :disabled="isSignupButtonDisabled" @click="sendButtonPressed" type="submit" class="btn">Ввести код</button>
           </div>
         </form>
         <new-password v-if="succes" :emailProp="emailProp"/>
@@ -47,7 +47,7 @@
 
 
   const { errors } = useFormValidation();
-  const { isSignupButtonDisabled } = useSubmitButtonState(code.usercode, errors);
+  const { isSignupButtonDisabled } = useSubmitButtonState(code, errors);
   
   let error = ref('');
   const sendCode_url = `${url}/options/check-code`;
@@ -149,25 +149,34 @@
     border-radius: 50px;
     border: none;
   }
-  
-  .btn-wrapper button:hover {
-    background-color: #191919;
-  }
-  
-  .btn {
-    width: 273px;
-    height: 70px;
-    background-color: #909090;
-    color: #fff;
-    font-size: 32px;
-    border-radius: 50px;
-    border: none;
-  }
-  
-  .btn:hover {
-    background-color: #191919;
-    border: 3px solid yellow;
-  }
+  .btn-wrapper button:disabled:hover {
+  background-color: #909090;
+}
+
+.btn {
+  width: 273px;
+  height: 70px;
+  background-color: #909090;
+  color: #fff;
+  font-size: 32px;
+  border-radius: 50px;
+  border: none;
+}
+
+.btn:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
+.btn:disabled:hover {
+  border: none;
+}
+
+
+.btn:hover {
+  background-color: #191919;
+  border: 3px solid yellow;
+}
   
   .btn-sign-up {
     background-color: transparent;

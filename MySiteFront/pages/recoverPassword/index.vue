@@ -50,7 +50,7 @@
   const recover_url = `${url}/options/reset-password`;
   
   const recoverButtonPressed = async () => {
-    userEmail.value = email;
+    userEmail.value = email.email;
 
     try {
       console.log(typeof(userEmail.value));
