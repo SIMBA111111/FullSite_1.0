@@ -3,10 +3,9 @@
       <myheader></myheader>
       <div class="login-container">
         <form v-if="!userEmail" @submit.prevent class="login-form" action="">
-          <email-field v-model="email"/>
+          <email-field v-model="email.email"/>
           <div class="btn-wrapper">
-            <button @click="recoverButtonPressed" type="submit" class="btn">Отправить</button>            
-            <!-- :disabled="isSignupButtonDisabled" -->
+            <button :disabled="isSignupButtonDisabled" @click="recoverButtonPressed" type="submit" class="btn">Отправить</button>            
           </div>
         </form>
         <send-code v-if="userEmail" :userEmail="userEmail" />
@@ -38,7 +37,9 @@
   });
   
   
-  const email = ref('');
+  const email = reactive({
+    email: ''
+  });
   const userEmail = ref(null);
   const succes = ref(false);
   
@@ -49,13 +50,13 @@
   const recover_url = `${url}/options/reset-password`;
   
   const recoverButtonPressed = async () => {
-    userEmail.value = email.value;
+    userEmail.value = email;
 
     try {
       console.log(typeof(userEmail.value));
       error.value = '';
       // const response = await axios.post(recover_url, email.value);
-      const response = await axios.post(recover_url, email.value, {
+      const response = await axios.post(recover_url, email.email, {
         headers: {
           'Content-Type': 'application/json'
         }});
@@ -154,24 +155,35 @@
     border: none;
   }
   
-  .btn-wrapper button:hover {
-    background-color: #191919;
-  }
-  
-  .btn {
-    width: 273px;
-    height: 70px;
-    background-color: #909090;
-    color: #fff;
-    font-size: 32px;
-    border-radius: 50px;
-    border: none;
-  }
-  
-  .btn:hover {
-    background-color: #191919;
-    border: 3px solid yellow;
-  }
+  .btn-wrapper button:disabled:hover {
+  background-color: #909090;
+}
+
+.btn {
+  width: 273px;
+  height: 70px;
+  background-color: #909090;
+  color: #fff;
+  font-size: 32px;
+  border-radius: 50px;
+  border: none;
+}
+
+.btn:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
+.btn:disabled:hover {
+  border: none;
+}
+
+
+.btn:hover {
+  background-color: #191919;
+  border: 3px solid yellow;
+}
+
   
   .btn-sign-up {
     background-color: transparent;

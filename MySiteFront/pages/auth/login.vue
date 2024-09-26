@@ -44,7 +44,7 @@ const user = reactive({
   password: ''
 });
 
-const succes = ref();
+// const succes = ref();
 
 const notificationMessage = ref('');
 
@@ -185,6 +185,10 @@ const logUpButtonPressed = async () => {
   background-color: #191919;
 }
 
+.btn-wrapper button:disabled:hover {
+  background-color: #909090;
+}
+
 .btn {
   width: 273px;
   height: 70px;
@@ -195,14 +199,24 @@ const logUpButtonPressed = async () => {
   border: none;
 }
 
-.btn-rec {
-  text-decoration: none;
-  color: #fff;
+.btn:disabled {
+  opacity: .3;
+  cursor: default;
 }
+
+.btn:disabled:hover {
+  border: none;
+}
+
 
 .btn:hover {
   background-color: #191919;
   border: 3px solid yellow;
+}
+
+.btn-rec {
+  text-decoration: none;
+  color: #fff;
 }
 
 .btn-sign-up {
