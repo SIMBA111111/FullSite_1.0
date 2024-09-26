@@ -49,16 +49,28 @@ onMounted(() => {
 .article-container {
     background-color: #191919;
 }
-#article {
-    margin: 0% 20%;
-}
 
 p {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 10px 0px;
     font-size: 18px;
     color: #f0f0f0;
+    display: flex;
+    align-items: center;
 }
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+
+}
+
+#article {
+    margin: 0% 10%;
+}
+
 
 .code{
     display: block;
