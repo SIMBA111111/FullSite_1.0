@@ -53,17 +53,17 @@ const get_articles_with_authors_url = (page) => `${props.urlLink}${page}`;
 const get_articles_with_authors_url_next = (pageNext) => `${props.urlLink}${pageNext}`;
 
 
-const get_articles_with_authors = async (page, pageNext) => {
+const get_articles_with_authors = (page, pageNext) => {
   try {
     if (!props.urlLink) {
       return
     }
-    const { data } = await axios(get_articles_with_authors_url(page), {
+    const { data } = axios(get_articles_with_authors_url(page), {
       headers: {
         "Authorization": useCookie("access_token").value
       }
     });
-    const { data : dataNext } = await axios(get_articles_with_authors_url_next(pageNext), {
+    const { data : dataNext } = axios(get_articles_with_authors_url_next(pageNext), {
       headers: {
         "Authorization": useCookie("access_token").value
       }
@@ -118,14 +118,14 @@ const getNextPage = () => {
 const get_search_articles_with_authors_url = (page, query) => `${url}/articles/request-articles?article_title=${query}&page=${page}`;
 const get_search_articles_with_authors_url_next = (pageNext, query) => `${url}/articles/request-articles?article_title=${query}&page=${pageNext}`;
 
-const get_search_articles_with_authors = async (page, pageNext, query) => {
+const get_search_articles_with_authors = (page, pageNext, query) => {
   try {
-    const { data } = await axios(get_search_articles_with_authors_url(page, query), {
+    const { data } = axios(get_search_articles_with_authors_url(page, query), {
       headers: {
         "Authorization": useCookie("access_token").value
       }
     });
-    const { data : dataNext } = await axios(get_search_articles_with_authors_url_next(pageNext, query), {
+    const { data : dataNext } = axios(get_search_articles_with_authors_url_next(pageNext, query), {
       headers: {
         "Authorization": useCookie("access_token").value
       }
