@@ -166,6 +166,7 @@ async def get_articles_by_title(article_title: str,
                 intro_text=article.intro_text,
                 slug=article.slug,
                 count_views=article.count_views,
+                date=article.created_at,
                 title=article.title,
                 user=SAuthorsList(
                     first_name=first_name,
