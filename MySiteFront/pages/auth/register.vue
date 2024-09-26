@@ -3,11 +3,12 @@
     <myheader></myheader>
     <div class="login-container">
       <form @submit.prevent class="login-form" action="">
-        <username-field v-model="user.username"/>
-        <firstname-field v-model="user.first_name"/>
-        <lastname-field v-model="user.last_name"/>
-        <email-field v-model="user.email"/>
-        <password-field v-model="user.password"/>
+        <username-field v-model="userStorage.username"/>
+        <firstname-field v-model="userStorage.first_name"/>
+        <lastname-field v-model="userStorage.last_name"/>
+        <email-field v-model="userStorage.email"/>
+        <password-field v-model="userStorage.password"/>
+        <repeatPasswordField v-model="userStorage.repeatPassword" :userPassword="userStorage.password"/>
         <div class="btn-wrapper">
           <button :disabled="isSignupButtonDisabled" @click="signUpButtonPressed" type="submit" class="btn">Зарегистрироваться</button>
         </div>
@@ -18,7 +19,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import axios from 'axios';
 import { url } from "../../MyConstants.vue";
 import UsernameField from '../../components/usernameField.vue';
@@ -26,6 +27,7 @@ import FirstnameField from '../../components/firstnameField.vue';
 import LastnameField from '../../components/lastnameField.vue';
 import EmailField from '../../components/emailField.vue';
 import PasswordField from '../../components/passwordField.vue';
+import repeatPasswordField from '~/components/repeatPasswordField.vue';
 
 import useFormValidation from '~/modules/useFormValidation';
 import useSubmitButtonState from '~/modules/useSubmitButtonState'
@@ -35,22 +37,31 @@ definePageMeta({
   middleware: 'auth'
 });
 
-const user = reactive({
+const userStorage = reactive({
   username: '',
   email: '',
   first_name: '',
   last_name: '',
-  password: ''
+  password: '',
+  repeatPassword: ''
 });
 
+
 const { errors } = useFormValidation();
-const { isSignupButtonDisabled } = useSubmitButtonState(user, errors);
+const { isSignupButtonDisabled } = useSubmitButtonState(userStorage, errors);
 
 let error = ref('');
 
 const register_url = `${url}/auth/register`;
 
 const signUpButtonPressed = async () => {
+  const user = reactive({
+    username: userStorage.username,
+    email: userStorage.email,
+    first_name: userStorage.first_name,
+    last_name: userStorage.last_name,
+    password: userStorage.password
+  })
     try {
       error.value = ''; // Clear previous error
       const response = await axios.post(register_url, user);
@@ -149,7 +160,12 @@ const signUpButtonPressed = async () => {
   background-color: #191919;
 }
 
+.btn-wrapper button:disabled:hover {
+  background-color: #909090;
+}
+
 .btn {
+  width: 273px;
   height: 70px;
   background-color: #909090;
   color: #fff;
@@ -158,9 +174,18 @@ const signUpButtonPressed = async () => {
   border: none;
 }
 
+.btn:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
 .btn:hover {
   background-color: #191919;
   border: 3px solid yellow;
+}
+
+.btn:disabled:hover {
+  border: none;
 }
 
 .btn-logout {

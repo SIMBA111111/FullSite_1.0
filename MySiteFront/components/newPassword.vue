@@ -1,16 +1,17 @@
 <template>
       <div class="login-container">
         <form @submit.prevent class="login-form" action="">
-          <password-field v-model="newPassword.new_password"/>
+          <password-field v-model="newPasswordStorage.password"/>
+          <repeatPasswordField v-model="newPasswordStorage.repeatPassword" :userPassword="newPasswordStorage.password"/>
           <div class="btn-wrapper">
-            <button @click="newPassButtonPressed" type="submit" class="btn">Новый пароль</button>
+            <button :disabled="isSignupButtonDisabled" @click="newPassButtonPressed" type="submit" class="btn">Новый пароль</button>
           </div>
         </form>
         <div style="color: red;font-size: 30px;">{{ error }}</div>
       </div>
   </template>
   
-  <script setup>
+<script setup>
   import { reactive, ref } from 'vue';
   import axios from 'axios';
   import { url } from "../../MyConstants.vue";
@@ -19,6 +20,8 @@
   import LastnameField from '../../components/lastnameField.vue';
   import EmailField from '../../components/emailField.vue';
   import PasswordField from '../../components/passwordField.vue';
+  import repeatPasswordField from '~/components/repeatPasswordField.vue';
+
   
   import useFormValidation from '~/modules/useFormValidation';
   import useSubmitButtonState from '~/modules/useSubmitButtonState'
@@ -30,14 +33,15 @@
     }
   })
 
-  const newPassword = reactive({
+  const newPasswordStorage = reactive({
     email: props.emailProp,
-    new_password: ''
+    password: '',
+    repeatPassword: ''
   });
 
 
   const { errors } = useFormValidation();
-  const { isSignupButtonDisabled } = useSubmitButtonState(newPassword.newPassword, errors);
+  const { isSignupButtonDisabled } = useSubmitButtonState(newPasswordStorage, errors);
   
   let error = ref('');
   const recover_url = `${url}/options/reset-password`;
@@ -46,6 +50,10 @@
 
 
   const newPassButtonPressed = async () => {
+    const newPassword = reactive({
+      new_password: newPasswordStorage.password,
+      email: newPasswordStorage.email
+    })
     try {
       error.value = '';
       const response = await axios.post(newPass_url, newPassword);
@@ -57,9 +65,9 @@
       console.error('Error:', err);
     }
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .login-container {
     display: flex;
     flex-direction: column;
@@ -135,24 +143,34 @@
     border: none;
   }
   
-  .btn-wrapper button:hover {
-    background-color: #191919;
-  }
-  
-  .btn {
-    width: 273px;
-    height: 70px;
-    background-color: #909090;
-    color: #fff;
-    font-size: 32px;
-    border-radius: 50px;
-    border: none;
-  }
-  
-  .btn:hover {
-    background-color: #191919;
-    border: 3px solid yellow;
-  }
+  .btn-wrapper button:disabled:hover {
+  background-color: #909090;
+}
+
+.btn {
+  width: 273px;
+  height: 70px;
+  background-color: #909090;
+  color: #fff;
+  font-size: 32px;
+  border-radius: 50px;
+  border: none;
+}
+
+.btn:disabled {
+  opacity: .3;
+  cursor: default;
+}
+
+.btn:disabled:hover {
+  border: none;
+}
+
+
+.btn:hover {
+  background-color: #191919;
+  border: 3px solid yellow;
+}
   
   .btn-sign-up {
     background-color: transparent;
@@ -174,5 +192,5 @@
     color: red;
     margin-top: 1rem;
   }
-  </style>
+</style>
   
