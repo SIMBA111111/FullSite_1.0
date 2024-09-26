@@ -25,7 +25,7 @@ const urlLink = `${url}/articles/get-all-articles?page=`;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100vh;
+  height: 100%;
   background-color: #191919;
   padding-top: 20px;
 }
