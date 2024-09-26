@@ -46,7 +46,7 @@ const props = defineProps({
  }
 })
 const formatDate = (dateString) => {
-  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
+  const options = { year: 'numeric', month: 'long', day: 'numeric'};
   return new Date(dateString).toLocaleString('ru-RU', options);
 }; 
 </script>
