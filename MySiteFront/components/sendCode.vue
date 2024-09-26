@@ -34,8 +34,6 @@
         required: true
     }
   })
-  
-  console.log('PROPS', props.userEmail);
 
   const code = reactive({
     email: props.userEmail,
@@ -54,12 +52,9 @@
  
   const sendButtonPressed = async () => {
     emailProp.value = code.email;
-    try {
-      
-      console.log(code);     
+    try {  
       error.value = '';
       const response = await axios.post(sendCode_url, code);
-      console.log('res code', response);
       if (response.status == 200) {
         succes.value = true;
       }

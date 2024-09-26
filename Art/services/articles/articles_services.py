@@ -76,7 +76,6 @@ async def get_article(db: AsyncSession, slug: SSlug):
 
     file_ = f"{filename.name[:-5]}.html"
     file_path = os.path.join(os.getcwd(), "static", "articles", filename.name[:-5], file_)
-
     try:
         async with aiofiles.open(file_path, "r", encoding='utf-8') as file:
             file_content = await file.read()
@@ -104,7 +103,7 @@ async def get_all_articles(db: AsyncSession, page: int):
     try:
         all_articles = await articles_crud.get_all_articles(db, page)
     except Exception as e:
-        logger.error(f"Couldn't get all the articles. Error: {e}")
+        error_logger.error(f"Couldn't get all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get all the articles. Error: {e}"})
 
     try:
@@ -116,6 +115,7 @@ async def get_all_articles(db: AsyncSession, page: int):
                 slug=article.slug,
                 count_views=article.count_views,
                 title=article.title,
+                date=article.created_at,
                 user=SAuthorsList(
                     first_name=first_name,
                     last_name=last_name,
@@ -166,6 +166,7 @@ async def get_articles_by_title(article_title: str,
                 intro_text=article.intro_text,
                 slug=article.slug,
                 count_views=article.count_views,
+                date=article.created_at,
                 title=article.title,
                 user=SAuthorsList(
                     first_name=first_name,

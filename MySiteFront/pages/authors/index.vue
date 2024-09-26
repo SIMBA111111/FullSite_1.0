@@ -16,7 +16,6 @@ import authorList from '../../components/authorsList.vue'
 
 // onMounted (()=>{
 //   res = axios(`${url}/authors/get-all-authors`)
-//   console.log('res', res);
 // })
 
 definePageMeta({

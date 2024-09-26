@@ -53,14 +53,12 @@
     userEmail.value = email.email;
 
     try {
-      console.log(typeof(userEmail.value));
       error.value = '';
       // const response = await axios.post(recover_url, email.value);
       const response = await axios.post(recover_url, email.email, {
         headers: {
           'Content-Type': 'application/json'
         }});
-      console.log('recoverpassword', response);
       if (response.status == 200) {
         succes.value = true;
       }

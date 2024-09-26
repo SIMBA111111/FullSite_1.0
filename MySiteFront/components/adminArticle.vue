@@ -46,7 +46,6 @@
         slug: {"slug": slug},
         disable: isActive
       };
-      console.log(data);
       
       const response = await axios.post(disable_url, data,
         {
@@ -55,7 +54,6 @@
             }
         }
       );
-      console.log("Article status updated successfully:", response.data);
     } catch (error) {
       console.error("Error updating article status:", error);
     }

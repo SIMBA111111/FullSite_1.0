@@ -13,7 +13,7 @@
         </div>
       </div>
       <div style="font-size: 16px;">
-        date
+        {{ formatDate(props.date) }}
       </div>
       <div><NuxtLink :to="`/articles/${slug}`" class="content content_">{{ intro_text }}...<NuxtLink :to="`/articles/${slug}`" class="read-more content_">читать полностью</NuxtLink></NuxtLink></div>
     </div>
@@ -41,34 +41,17 @@ import { defineProps } from 'vue';
   },
   count_views: {
     type: Number
+  },
+  date: {
+    type: String
   }
  })
 
- console.log('props art', props);
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
+  return new Date(dateString).toLocaleString('ru-RU', options);
+};  
 </script>
-
-<!-- <script setup lang="ts">
-import { computed } from 'vue';
-
-interface ArticleAuthor {
-  id: number;
-  first_name: string;
-  last_name: string;
-}
-
-const props = defineProps<{
-  user: ArticleAuthor;
-  date: string;
-  name: string;
-  text: string;
-  intro_text: string;
-  slug: string;
-  count_views: number;
-  title: string;
-}>();
-
-console.log(props.date);
-</script> -->
 
 <style scoped>
 

@@ -61,11 +61,7 @@
         console.error("Unexpected error:", error.message);
       }
   }
-  // console.log(notificationFlag.value);
-  // console.log("response.value - ", response);
-  // const bidList = response.value.data;
-  // console.log(bidList[0], 'bidList');
- 
+  
  // скачать статью
   const downloadBid = async (filename) => {
     if (typeof filename.name !== 'string') {

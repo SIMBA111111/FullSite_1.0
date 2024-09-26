@@ -69,7 +69,7 @@ const signUpButtonPressed = async () => {
         const router = useRouter();
         await router.push('/auth/login');
       }
-      // console.log('Response data:', response.data);
+
       // Redirect to login or other page after successful registration
       // location.reload()
     } catch (err) {

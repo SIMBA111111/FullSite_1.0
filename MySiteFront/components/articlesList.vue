@@ -31,25 +31,6 @@
 </template>
 
 <script setup>
-//   import { ref, defineProps } from 'vue';
-//   import { url } from "../MyConstants.vue";
-//   import article from './article.vue';
-//   import axios from 'axios';
-
-//   import pagination from './pagination.vue'
-
-
-//  const props = defineProps({
-//   items: {
-//     type: Array
-//   }
-//  })
-
-//  console.log('props art', props.items.value);
-
-
-
-
 import { ref, defineProps, watch } from 'vue';
 import Article from './article.vue';
 import { url } from "../MyConstants.vue";
@@ -64,11 +45,6 @@ const props = defineProps({
     type: String
   }
 });
-
-
-console.log('queries', props.queries);
-console.log('url', props.urlLink);
-console.log('Arr', props.items);
 
 const articles = ref([]);
 const hasMorePages = ref(false);
@@ -92,9 +68,6 @@ const get_articles_with_authors = async (page, pageNext) => {
         "Authorization": useCookie("access_token").value
       }
     });
-
-    console.log('Res dataNext', dataNext);
-    console.log('Response dataaaa:', data);
   
     if (data.length < 6) {
       hasMorePages.value = false;
@@ -107,7 +80,6 @@ const get_articles_with_authors = async (page, pageNext) => {
     }
 
     articles.value = data;
-    console.log('articles', articles.value);
   } catch (error) {
     console.error('Error:', error);
   }
@@ -158,9 +130,6 @@ const get_search_articles_with_authors = async (page, pageNext, query) => {
         "Authorization": useCookie("access_token").value
       }
     });
-
-    console.log('Res dataNext', dataNext);
-    console.log('Response dataaaa:', data);
   
     if (data.length < 6) {
       hasMorePages.value = false;
@@ -178,7 +147,6 @@ const get_search_articles_with_authors = async (page, pageNext, query) => {
       articles.value = data;
     }
 
-    console.log('articles', articles.value);
   } catch (error) {
     console.error('Error:', error);
   }

@@ -66,7 +66,6 @@ async def get_article(slug: SSlug = Body(),
                       current_user: UserModel = Depends(get_current_user),
                       ):
     info_logger.info(f" - {current_user.username} - START get article")
-
     file_content = await articles_services.get_article(db, slug)
 
     response = JSONResponse(content={"file_content": file_content}, headers=
@@ -89,15 +88,14 @@ async def search_article(query: str,
 
 
 @router.get("/request-articles")
-async def request_articles(response: Response,
-                           article_title: str,
+async def request_articles(article_title: str,
                            page: int = 0,
                            db: AsyncSession = Depends(get_db)
                            ):
     info_logger.info(f" - START request articles")
 
     articles = await articles_services.get_articles_by_title(article_title, db, page)
-    response.set_cookie(key="qqq", value="qqq")
+
     info_logger.info(f" - SUCCESS request articles")
     return articles
 
