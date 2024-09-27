@@ -2,7 +2,7 @@
   <div class="header">
     <div class="container">
       <div class="first">
-        <NuxtLink to="/" exact-active-class="active">24articles</NuxtLink>
+        <NuxtLink to="/" exact-active-class="active"><span class="first_num">24</span>articles</NuxtLink>
       </div>
       <div class="links">
         <div v-if="userStore.user?.is_admin"><NuxtLink to="/admin/bidList" target="_blank" exact-active-class="active" class="el write">В админку</NuxtLink></div>
@@ -116,6 +116,12 @@ watch(authed, (newValue) => {});
 <style scoped>
 *{
   box-sizing: border-box;
+}
+
+.first_num {
+  color: red;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 .hr {
