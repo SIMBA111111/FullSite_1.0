@@ -108,36 +108,22 @@ const handleSubmit = async () => {
   justify-content: flex-start;
   height: 100vh;
   background-color: #191919;
-  padding-top: 20px;
+  padding-top: 2vw;
 }
 
-.hr {
-    width: 90%;
-    height: 5px;
-    background-color: #fff;
-    margin-bottom: 40px;
-    /* padding: 2px; */
-    clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
-}
 
 .create-form {
   background-color: transparent;
-  padding: 2rem;
-  border-radius: 8px;
-  width: 300px;
+  padding: 3vw;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.create-form h2 {
-  margin-bottom: 1rem;
-}
-
 .form {
   display: flex;
   flex-direction: column;
-  gap: 21px;
+  gap: 2vw;
 }
 
 .input-file {
@@ -150,15 +136,15 @@ const handleSubmit = async () => {
 	cursor: pointer;
 	outline: none;
 	text-decoration: none;
-	font-size: 24px;
+	font-size: 2.4vw;
 	vertical-align: middle;
 	color: rgb(255 255 255);
 	text-align: center;
-	border-radius: 4px;
+	border-radius: .3vw;
 	background-color: transparent;
-	line-height: 22px;
-	height: 50px;
-	padding: 12px 20px 10px;
+	line-height: 2vw;
+	height: 4vw;
+	padding: 1vw 1.7vw 1vw;
 	box-sizing: border-box;
 	border: none;
 	margin: 0;
@@ -194,34 +180,32 @@ const handleSubmit = async () => {
 }
 
 .search {
-    width: 560px;
-    height: 76px;
-    padding: 15px 40px 15px 35px;
-    box-sizing: border-box;
-    border: 0px;
-    border-radius: 50px;
-    background-color: #D9D9D9;
-    font-size: 24px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 55.1vw;
+  /* height: 16vh; */
+  padding: 2.2vw 9vw 2.2vw 2.5vw;
+  box-sizing: border-box;
+  border: 0px;
+  border-radius: 5vw;
+  background-color: #9b9b9b;
+  font-size: 2vw;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .search::placeholder {
-    font-size: 24px;
+  font-size: 2vw;
 }
 
 .btn {
-  width: 273px;
-  height: 70px;
+  width: 27vw;
+  height: 7vw;
   background-color: #909090;
   color: #fff;
-  font-size: 32px;
-  border-radius: 50px;
+  font-size: 3.5vw;
+  border-radius: 4vw;
   border: none;
 }
 
 .btn-wrapper {
-  width: 560px;
-  height: 70px;
   display: flex;
   justify-content: center;
 }
