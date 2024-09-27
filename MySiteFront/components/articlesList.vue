@@ -168,11 +168,12 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 }
 
 .articles-list {
-  height: 80%; 
+  height: 100%; 
   display: grid;
   grid-template-columns: repeat(2, 380px);
   grid-template-rows: repeat(3, 245px);
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .pagination-controls {
@@ -211,13 +212,23 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 }
 
 .pagination-controls-2 {
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px; /* Отступ сверху, чтобы разделить с списком */
+  margin-top: 20px;
   gap: 8px;
-  /* Уберите абсолютное позиционирование */
 }
+
+/* .pagination-controls-2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 8px;
+  position: absolute;
+  bottom: 10%;
+} */
 
 .arrow{
   width: 100px;

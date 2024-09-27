@@ -107,7 +107,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: 100vh;
+  height: 100%;
   background-color: #191919;
   padding-top: 20px;
 }
@@ -127,6 +127,7 @@
   width: 100%;
   max-width: 600px;
   position: relative;
+  margin-bottom: 40px;
 }
 
 .input-wrapper {
