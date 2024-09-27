@@ -170,45 +170,14 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 .articles-list {
   height: 100%; 
   display: grid;
-  grid-template-columns: repeat(2, 380px);
-  grid-template-rows: repeat(3, 245px);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.pagination-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination-controls span {
-  color: #fff;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.pagination-controls button {
-  padding: 10px 20px;
-  margin: 0 10px;
-  background-color: #462887;
-  color: black;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.pagination-controls button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.pagination-controls button:hover:not(:disabled) {
-  background-color: #3a1a6b;
+  /* grid-template-columns: repeat(2, 380px); */
+  grid-template-columns: repeat(2, 31.5vw);
+  /* grid-template-rows: repeat(3, 245px); */
+  grid-template-rows: repeat(3, 20.2vw);
+  /* gap: 10px; */
+  gap: .9vw;
+  /* margin-bottom: 20px; */
+  margin-bottom: 1.6vw;
 }
 
 .pagination-controls-2 {
@@ -216,23 +185,17 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  gap: 8px;
+  /* margin-top: 20px; */
+  margin-top: .8vw;
+  /* gap: 8px; */
+  gap: .4vw;
 }
 
-/* .pagination-controls-2 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 8px;
-  position: absolute;
-  bottom: 10%;
-} */
-
 .arrow{
-  width: 100px;
-  height: 20px;
+  /* width: 100px; */
+  width: 4vw;
+  /* height: 20px; */
+  height: .8vw;
   background-color: #9d9d9d;
 }
 
@@ -259,8 +222,10 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 }
 
 .num {
-  font-size: 29px;
-  padding: 2px;
+  /* font-size: 29px; */
+  font-size: 1.3vw;
+  /* padding: 2px; */
+  padding: .1vw;
   color: #9d9d9d;
 }
 
@@ -269,7 +234,25 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 }
 
 .num:nth-child(3n) {
-  font-size: 39px;
+  /* font-size: 39px; */
+  font-size: 1.6vw;
+}
+
+@media (max-width: 425px) {
+
+  .arrow {
+    width: 10vw;
+    height: 3vw;
+  }
+
+  .num {
+    font-size: 5vw;
+  }
+
+  .num:nth-child(3n) {
+  /* font-size: 39px; */
+  font-size: 3vw;
+  }
 }
 
 </style>
