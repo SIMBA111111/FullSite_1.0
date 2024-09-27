@@ -16,8 +16,8 @@
             />
             <button @click="onClearInput" type="button" class="cancel btn">
               <svg
-                width="35"
-                height="35"
+                width="3.6vw"
+                height="3vw"
                 viewBox="0 0 17 15"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -31,8 +31,8 @@
             </button>
             <button type="button" class="search btn">
               <svg
-                width="30"
-                height="30"
+                width="3.6vw"
+                height="2.7vw"
                 viewBox="0 0 16 16"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -110,24 +110,16 @@
   height: 100%;
   background-color: #191919;
   padding-top: 20px;
-}
-
-.hr {
-  width: 90%;
-  height: 4px;
-  border-radius: 0%;
-  background-color: #fff;
-  margin-bottom: 40px;
-  clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
+  padding-top: 3vw;
 }
 
 .search-container {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 600px;
+  max-width: 58.5vw;
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 3vw;
 }
 
 .input-wrapper {
@@ -136,23 +128,23 @@
 }
 
 #search {
-  width: 560px;
-  height: 76px;
-  padding: 15px 40px 15px 35px;
+  width: 55.1vw;
+  /* height: 16vh; */
+  padding: 2.2vw 9vw 2.2vw 2.5vw;
   box-sizing: border-box;
   border: 0px;
-  border-radius: 50px;
+  border-radius: 5vw;
   background-color: #9b9b9b;
-  font-size: 24px;
+  font-size: 2vw;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #search::placeholder {
-  font-size: 25px;
+  font-size: 2vw;
 }
 
 #search:focus {
-  box-shadow: 0 0 8px rgba(70, 40, 135, 0.5);
+  box-shadow: 0 0 0.5vw rgba(70, 40, 135, 0.5);
   border-color: #462887;
   outline: none;
 }
@@ -161,48 +153,28 @@
   position: absolute;
   transform: translateY(-50%);
   background: #d9d9d9;
-  /* padding: 10px 15px; */
   border: none;
-  border-radius: 4px;
+  border-radius: 1vw;
   color: white;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 1vw;
   transition: background 0.3s ease;
 }
 
 .cancel {
-  right: 105px;
-  top: 50%;
+  right: 8.2vw;
+  top: 3.4vw;
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
+  width: 3.5vw;
+  height: 3.5vw;
 }
 
 .search {
-  right: 50px;
-  top: 50%;
+  right: 3.9vw;
+  top: 3.4vw;
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
-}
-
-.cancel-btn:hover {
-  background: #80700e;
-}
-
-.search-btn {
-  padding: 15px 25px;
-  margin-left: 10px;
-  background-color: #462887;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.search-btn:hover {
-  background-color: #3a1a6b;
+  width: 3.5vw;
+  height: 3.5vw;;
 }
 
 #suggestions {
