@@ -46,30 +46,31 @@ const props = defineProps({
   }
 });
 
+const sort_by = "most viewed"
 const articles = ref([]);
 const hasMorePages = ref(false);
 
-const get_articles_with_authors_url = (page) => `${props.urlLink}${page}`;
-const get_articles_with_authors_url_next = (pageNext) => `${props.urlLink}${pageNext}`;
+const get_articles_with_authors_url = (page, sort_by) => `${props.urlLink}${page}&sort_by=${sort_by}`;
+const get_articles_with_authors_url_next = (pageNext, sort_by) => `${props.urlLink}${pageNext}&sort_by=${sort_by}`;
 
 
-const get_articles_with_authors = async (page, pageNext) => {
+const get_articles_with_authors = async (page, pageNext, sort_by) => {
   try {
     if (!props.urlLink) {
       return
     }
-    const { data } = await axios(get_articles_with_authors_url(page), {
+    const { data } = await axios(get_articles_with_authors_url(page, sort_by), {
       headers: {
         "Authorization": useCookie("access_token").value
       }
     });
-    const { data : dataNext } = await axios(get_articles_with_authors_url_next(pageNext), {
+    const { data : dataNext } = await axios(get_articles_with_authors_url_next(pageNext, sort_by), {
       headers: {
         "Authorization": useCookie("access_token").value
       }
     });
   
-    if (data.length < 6) {
+    if (data.length <= 6) {
       hasMorePages.value = false;
     } else {
       hasMorePages.value = true;
@@ -94,23 +95,23 @@ const getLastPage = () => {
   lastPageVariable.value--
   nowPageVariable.value--
   nextPageVariable.value--
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value)
+  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by)
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by)
 }
 
 const getNextPage = () => {
   lastPageVariable.value++
   nowPageVariable.value++
   nextPageVariable.value++
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value)
+  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by)
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by)
 }
 
 
 
 
 
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value);
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by);
 
 
 // --------------------------------------------------
@@ -161,6 +162,7 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 
 <style scoped>
 .articles-list-container {
+  /* border: 1px solid green; */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -168,11 +170,20 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 }
 
 .articles-list {
-  height: 80%; 
+  /* border: 1px solid red; */
+  /* width: 130vh;
+  height: 130VH; */
   display: grid;
   grid-template-columns: repeat(2, 380px);
+  /* grid-template-columns: 380px, 380px; */
+
+  /* grid-template-rows: 246px 245px; */
   grid-template-rows: repeat(3, 245px);
   gap: 10px;
+  /* display: flex;
+  justify-content: space-around; */
+  /* flex-wrap: wrap; */
+  /* gap: 16px; */
 }
 
 .pagination-controls {
@@ -213,10 +224,11 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 .pagination-controls-2 {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 20px; /* Отступ сверху, чтобы разделить с списком */
+  margin: auto;
   gap: 8px;
-  /* Уберите абсолютное позиционирование */
+  position: absolute;
+  bottom: 10%;
+  left: 36%;
 }
 
 .arrow{
