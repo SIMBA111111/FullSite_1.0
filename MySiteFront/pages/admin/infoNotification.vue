@@ -20,15 +20,16 @@
 <style scoped>
 
 div {
-    border: 1px solid lightgray;
-    border-radius: 10px;
-    width: 130px;
-    height: 50px;
+    border: .3vw solid lightgray;
+    border-radius: 2.5vw;
+    width: 10vw;
+    height: 5vw;
     display: flex;
     align-content: center;
     justify-content: center;
     position: absolute;
-    right: 30px;
+    top: 6vw;
+    right: 2vw;
 }
 
 .no {
@@ -41,7 +42,7 @@ div {
 }
 
 p {
-    font-size: 14px;
+    font-size: 1vw;
     color: black;
     margin: auto;
 }

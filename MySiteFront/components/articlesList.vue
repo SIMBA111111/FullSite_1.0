@@ -29,7 +29,6 @@
       </div>
     </div>
 
-    <!-- Пагинация должна быть сразу после блока со статьями -->
     <div class="pagination-controls-2">
       <button @click="getLastPage" :disabled="nowPageVariable == 1" class="arrow left"></button>
       <div @click="getLastPage" v-show="lastPageVariable" class="num"> {{ lastPageVariable }} </div>
@@ -220,10 +219,13 @@ const isSearchPage = computed(() => {
 }
 
 .articles-list {
+
   height: 80%;
   display: grid;
-  grid-template-columns: repeat(2, 380px);
-  grid-template-rows: repeat(3, 245px);
+  grid-template-columns: repeat(2, 31.5vw);
+  grid-template-rows: repeat(3, 20.2vw);
+  gap: .9vw;
+  margin-bottom: 1.6vw;
 }
 
 .custom-select {
@@ -365,6 +367,7 @@ const isSearchPage = computed(() => {
 
 .pagination-controls button:hover:not(:disabled) {
   background-color: #3a1a6b;
+
 }
 
 /* .pagination-controls-2 {
@@ -381,15 +384,21 @@ const isSearchPage = computed(() => {
 } */
 
 .pagination-controls-2 {
+  height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; /* Центрируем элементы */
-  margin-top: 20px; /* Отступ сверху, чтобы разделить с блоком статей */
+
+justify-content: center;
+  margin-top: .8vw;
+  gap: .4vw;
 }
 
 .arrow {
-  width: 100px;
-  height: 20px;
+  /* width: 100px; */
+  width: 4vw;
+  /* height: 20px; */
+  height: .8vw;
+
   background-color: #9d9d9d;
 }
 
@@ -416,8 +425,10 @@ const isSearchPage = computed(() => {
 }
 
 .num {
-  font-size: 29px;
-  padding: 2px;
+  /* font-size: 29px; */
+  font-size: 1.3vw;
+  /* padding: 2px; */
+  padding: .1vw;
   color: #9d9d9d;
 }
 
@@ -426,7 +437,25 @@ const isSearchPage = computed(() => {
 }
 
 .num:nth-child(3n) {
-  font-size: 39px;
+  /* font-size: 39px; */
+  font-size: 1.6vw;
+}
+
+@media (max-width: 425px) {
+
+  .arrow {
+    width: 10vw;
+    height: 3vw;
+  }
+
+  .num {
+    font-size: 5vw;
+  }
+
+  .num:nth-child(3n) {
+  /* font-size: 39px; */
+  font-size: 3vw;
+  }
 }
 
 .sort-select {

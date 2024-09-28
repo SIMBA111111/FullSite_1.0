@@ -12,14 +12,8 @@
         :views_count="author.views_count"
         :first_article_date="author.first_article_date"
         />
-
-        <!-- <Author
-        v-for="author in authors" 
-        :key="author.email"
-        :authorObj="authorO"
-        /> -->
     </div>
-    <!-- <button @click="f"></button> -->
+
   </div>
   </template>
 
@@ -50,17 +44,21 @@ get_authors()
 
 <style scoped>
 
-
+.author-list-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+}
 
 
 .authors-list {
+  height: 100%; 
   display: grid;
-  grid-template-columns: repeat(2, 380px);
-  /* grid-template-columns: 380px, 380px; */
-
-  /* grid-template-rows: 246px 245px; */
-  grid-template-rows: repeat(3, 245px);
-  gap: 10px;
+  grid-template-columns: repeat(2, 31.5vw);
+  grid-template-rows: repeat(3, 20.2vw);
+  gap: .9vw;
+  margin-bottom: 1.6vw;
 }
 
 

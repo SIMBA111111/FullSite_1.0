@@ -47,22 +47,17 @@ async def create_article(file_data: UploadFile = File(...),
             )
 async def get_all_articles(response: Response,
                            page: int = 0,
-                           sort_by: str = None,
                            db: AsyncSession = Depends(get_db),
                            current_user: UserModel = Depends(get_current_user),
                            ):
     info_logger.info(f" - {current_user.username} - START get all articles")
 
     all_articles = await articles_services.get_all_articles(db, page)
-    if sort_by:
-        sorted_all_articles = await articles_services.sort_articles(all_articles, sort_by)
-        info_logger.info(f" - {current_user.username} - SUCCESS get all articles")
-        return sorted_all_articles
-    else:
-        # response = JSONResponse(content={"items": all_articles})
-        info_logger.info(f" - {current_user.username} - SUCCESS get all articles")
-        return all_articles
-        # return response
+
+    # response = JSONResponse(content={"items": all_articles})
+    info_logger.info(f" - {current_user.username} - SUCCESS get all articles")
+    # return response
+    return all_articles
 
 
 @router.post("/get-article", summary="Get article")
@@ -100,5 +95,6 @@ async def request_articles(article_title: str,
     info_logger.info(f" - START request articles")
 
     articles = await articles_services.get_articles_by_title(article_title, db, page)
+
     info_logger.info(f" - SUCCESS request articles")
     return articles
