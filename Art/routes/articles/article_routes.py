@@ -52,18 +52,10 @@ async def get_all_articles(response: Response,
                            current_user: UserModel = Depends(get_current_user),
                            ):
     info_logger.info(f" - {current_user.username} - START get all articles")
-
-    all_articles = await articles_services.get_all_articles(db, page)
-    if sort_by:
-        sorted_all_articles = await articles_services.sort_articles(all_articles, sort_by)
-        info_logger.info(f" - {current_user.username} - SUCCESS get all articles")
-        return sorted_all_articles
-    else:
-        # response = JSONResponse(content={"items": all_articles})
-        info_logger.info(f" - {current_user.username} - SUCCESS get all articles")
-        return all_articles
-        # return response
-
+    all_articles = await articles_services.get_all_articles(db, page, sort_by)
+    info_logger.info(f" - {current_user.username} - SUCCESS get all articles")
+    return all_articles
+    
 
 @router.post("/get-article", summary="Get article")
 async def get_article(slug: SSlug = Body(),
