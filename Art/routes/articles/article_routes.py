@@ -100,6 +100,5 @@ async def request_articles(article_title: str,
     info_logger.info(f" - START request articles")
 
     articles = await articles_services.get_articles_by_title(article_title, db, page)
-
     info_logger.info(f" - SUCCESS request articles")
     return articles

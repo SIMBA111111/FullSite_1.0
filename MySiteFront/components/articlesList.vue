@@ -1,24 +1,35 @@
 <template>
   <div class="articles-list-container">
-    <div class="articles-list">
-      <Article
-        v-for="article in articles"
-        :key="article.id"
-        :user="article.user"
-        :avatar="article.avatar"
-        :date="article.date"
-        :name="article.name"
-        :title="article.title"
-        :text="article.text"
-        :intro_text="article.intro_text"
-        :slug="article.slug"
-        :count_views="article.count_views"
-      />
+    
+    <div class="articles-sort-container">
+      <div class="articles-list">
+        <Article
+          v-for="article in articles"
+          :key="article.id"
+          :user="article.user"
+          :avatar="article.avatar"
+          :date="article.date"
+          :name="article.name"
+          :title="article.title"
+          :text="article.text"
+          :intro_text="article.intro_text"
+          :slug="article.slug"
+          :count_views="article.count_views"
+        />
+      </div>
 
+      <div v-if="!isSearchPage" class="custom-select" @click="toggleDropdown" @focusout="isOpen = false" tabindex="0">
+        <div class="selected">{{ sortLabel }}</div>
+        <div class="arrow-down"></div>
+        <ul :class="{ 'options': true, 'show': isOpen }" @focusout="isOpen = false">
+          <li @click="selectSort('newest')">Новые</li>
+          <li @click="selectSort('oldest')">Старые</li>
+          <li @click="selectSort('most viewed')">Популярные</li>
+        </ul>
+      </div>
     </div>
 
-    <!-- <pagination/> -->
-
+    <!-- Пагинация должна быть сразу после блока со статьями -->
     <div class="pagination-controls-2">
       <button @click="getLastPage" :disabled="nowPageVariable == 1" class="arrow left"></button>
       <div @click="getLastPage" v-show="lastPageVariable" class="num"> {{ lastPageVariable }} </div>
@@ -30,11 +41,13 @@
   </div>
 </template>
 
+
 <script setup>
 import { ref, defineProps, watch } from 'vue';
 import Article from './article.vue';
 import { url } from "../MyConstants.vue";
 import axios from 'axios';
+import { RouterLink } from '~/node_modules/vue-router/dist/vue-router';
 
 const props = defineProps({
   urlLink: {
@@ -46,9 +59,10 @@ const props = defineProps({
   }
 });
 
-const sort_by = "most viewed"
+const sort_by = ref("newest")
 const articles = ref([]);
 const hasMorePages = ref(false);
+const sortLabel = ref("Новые");
 
 const get_articles_with_authors_url = (page, sort_by) => `${props.urlLink}${page}&sort_by=${sort_by}`;
 const get_articles_with_authors_url_next = (pageNext, sort_by) => `${props.urlLink}${pageNext}&sort_by=${sort_by}`;
@@ -70,7 +84,7 @@ const get_articles_with_authors = async (page, pageNext, sort_by) => {
       }
     });
   
-    if (data.length <= 6) {
+    if (data.length < 6) {
       hasMorePages.value = false;
     } else {
       hasMorePages.value = true;
@@ -90,21 +104,45 @@ const lastPageVariable = ref('');
 const nowPageVariable = ref('1');
 const nextPageVariable = ref('2');
 
+onMounted(() => {
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value);
+});
+
+const onSortChange = (event) => {
+  sort_by.value = event.target.value;
+  lastPageVariable.value = 0;
+  nowPageVariable.value = 1;
+  nextPageVariable.value = 2;  
+  get_articles_with_authors(nowPageVariable.value, nowPageVariable.value+1, sort_by.value);
+};
+
+const isOpen = ref(false);
+
+const toggleDropdown = () => {
+  isOpen.value = !isOpen.value;
+};
+
+const selectSort = (value) => {
+  sort_by.value = value;
+  isOpen.value = false; // Закрыть дропдаун после выбора
+  sortLabel.value = value === 'newest' ? 'Новые' : value === 'oldest' ? 'Старые' : 'Популярные';
+  onSortChange({ target: { value } }); // Вызов существующей логики сортировки
+};
 
 const getLastPage = () => {
   lastPageVariable.value--
   nowPageVariable.value--
   nextPageVariable.value--
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by)
+  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
 }
 
 const getNextPage = () => {
   lastPageVariable.value++
   nowPageVariable.value++
   nextPageVariable.value++
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by)
+  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
+  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
 }
 
 
@@ -153,38 +191,146 @@ const get_search_articles_with_authors = async (page, pageNext, query) => {
   }
 };
 
-
-
-
-
 watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query))
+
+
+const route = useRoute();
+console.log("route - ", route.path);
+
+const isSearchPage = computed(() => {
+  return route.path === '/search';
+});
+
 </script>
 
 <style scoped>
 .articles-list-container {
-  /* border: 1px solid green; */
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 10%;
   position: relative;
+  margin-top: 20px;
+}
+
+.articles-sort-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  /* margin-bottom: 20px; */
 }
 
 .articles-list {
-  /* border: 1px solid red; */
-  /* width: 130vh;
-  height: 130VH; */
+  height: 80%;
   display: grid;
   grid-template-columns: repeat(2, 380px);
-  /* grid-template-columns: 380px, 380px; */
-
-  /* grid-template-rows: 246px 245px; */
   grid-template-rows: repeat(3, 245px);
-  gap: 10px;
-  /* display: flex;
-  justify-content: space-around; */
-  /* flex-wrap: wrap; */
-  /* gap: 16px; */
 }
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+  width: 150px;
+}
+
+.arrow-down {
+  position: absolute;
+  top: 50%;
+  right: 10px; /* Позиция стрелки по горизонтали */
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid white; /* Цвет стрелки */
+  transform: translateY(-50%); /* Центрирование по вертикали */
+  pointer-events: none; /* Чтобы стрелка не мешала кликам */
+}
+
+.selected {
+  padding: 10px 0px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #462887;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.selected:hover {
+  background-color: #685f5f;
+}
+
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #9d9d9d;
+  border-radius: 4px;
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+}
+
+.options.show {
+  display: block;
+}
+
+.options li {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #000000;
+}
+
+.options li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+  width: 150px;
+}
+
+.selected {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #9d9d9d;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: #9d9d9d;
+  border-radius: 4px;
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+  width: 100%;
+}
+
+.options li {
+  padding: 10px 20px;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
 
 .pagination-controls {
   display: flex;
@@ -221,7 +367,7 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
   background-color: #3a1a6b;
 }
 
-.pagination-controls-2 {
+/* .pagination-controls-2 {
   display: flex;
   align-items: center;
   margin: auto;
@@ -229,9 +375,19 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
   position: absolute;
   bottom: 10%;
   left: 36%;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 8px;
+} */
+
+.pagination-controls-2 {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Центрируем элементы */
+  margin-top: 20px; /* Отступ сверху, чтобы разделить с блоком статей */
 }
 
-.arrow{
+.arrow {
   width: 100px;
   height: 20px;
   background-color: #9d9d9d;
@@ -273,4 +429,7 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
   font-size: 39px;
 }
 
+.sort-select {
+  margin-left: 20px;
+}
 </style>

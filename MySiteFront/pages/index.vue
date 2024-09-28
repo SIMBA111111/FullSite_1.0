@@ -186,7 +186,7 @@ export default {
   justify-content: flex-start;
   height: 100vh;
   background-color: #191919;
-  padding-top: 20px;
+  padding-top: 0px;
 }
 
 .hr {

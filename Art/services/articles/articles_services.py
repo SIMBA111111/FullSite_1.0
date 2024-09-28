@@ -1,5 +1,6 @@
 from enum import Enum
 from time import strptime
+from dateutil import parser
 
 from fastapi import UploadFile, HTTPException
 from sqlalchemy import select
@@ -142,9 +143,9 @@ class SortFields(Enum):
 async def sort_articles(articles: SArticleListWithAuthors, sort_by: str):
     sorted_articles = []
     if sort_by == SortFields.newest.value:
-        sorted_articles = sorted(articles, key=lambda x: strptime(x.date, "%Y-%m-%d %H:%M:%S"), reverse=True)
+        sorted_articles = sorted(articles, key=lambda x: parser.isoparse(x.date), reverse=True)
     elif sort_by == SortFields.oldest.value:
-        sorted_articles = sorted(articles, key=lambda x: strptime(x.date, "%Y-%m-%d %H:%M:%S"))
+        sorted_articles = sorted(articles, key=lambda x: parser.isoparse(x.date))
     elif sort_by == SortFields.most_viewed.value:
         sorted_articles = sorted(articles, key=lambda x: x.count_views, reverse=True)
     return sorted_articles
