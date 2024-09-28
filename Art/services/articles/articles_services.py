@@ -102,9 +102,9 @@ async def get_article(db: AsyncSession, slug: SSlug):
     return file_content
 
 
-async def get_all_articles(db: AsyncSession, page: int):
+async def get_all_articles(db: AsyncSession, page: int, sort_by: str):
     try:
-        all_articles = await articles_crud.get_all_articles(db, page)
+        all_articles = await articles_crud.get_all_articles(db, page, sort_by)
     except Exception as e:
         error_logger.error(f"Couldn't get all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get all the articles. Error: {e}"})
@@ -131,23 +131,6 @@ async def get_all_articles(db: AsyncSession, page: int):
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't serialize all the articles. Error: {e}"})
 
     return articles
-
-
-class SortFields(Enum):
-    newest = "newest"
-    oldest = "oldest"
-    most_viewed = "most viewed"
-
-
-async def sort_articles(articles: SArticleListWithAuthors, sort_by: str):
-    sorted_articles = []
-    if sort_by == SortFields.newest.value:
-        sorted_articles = sorted(articles, key=lambda x: parser.isoparse(x.date), reverse=True)
-    elif sort_by == SortFields.oldest.value:
-        sorted_articles = sorted(articles, key=lambda x: parser.isoparse(x.date))
-    elif sort_by == SortFields.most_viewed.value:
-        sorted_articles = sorted(articles, key=lambda x: x.count_views, reverse=True)
-    return sorted_articles
 
 
 async def get_last_article(db: AsyncSession):
