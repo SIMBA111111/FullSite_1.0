@@ -62,15 +62,12 @@ const sort_by = ref("newest")
 const articles = ref([]);
 const hasMorePages = ref(false);
 const sortLabel = ref("Новые");
-const isLoading = ref(false);
 
 const get_articles_with_authors_url = (page, sort_by) => `${props.urlLink}${page}&sort_by=${sort_by}`;
 const get_articles_with_authors_url_next = (pageNext, sort_by) => `${props.urlLink}${pageNext}&sort_by=${sort_by}`;
 
 
 const get_articles_with_authors = async (page, pageNext, sort_by) => {
-  // if (isLoading.value) return;
-  // isLoading.value = true;
   try {
     if (!props.urlLink) {
       return
@@ -99,27 +96,23 @@ const get_articles_with_authors = async (page, pageNext, sort_by) => {
     articles.value = data;
   } catch (error) {
     console.error('Error:', error);
-  } finally {
-    // isLoading.value = false;
   }
 };
-
-// await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value);
   
 const lastPageVariable = ref('');
 const nowPageVariable = ref('1');
 const nextPageVariable = ref('2');
 
-onMounted(async () => {
+onMounted( async () => {
   await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value);
 });
 
-const onSortChange = (event) => {
+const onSortChange = async (event) => {
   sort_by.value = event.target.value;
   lastPageVariable.value = 0;
   nowPageVariable.value = 1;
   nextPageVariable.value = 2;  
-  get_articles_with_authors(nowPageVariable.value, nowPageVariable.value+1, sort_by.value);
+  await get_articles_with_authors(nowPageVariable.value, nowPageVariable.value+1, sort_by.value);
 };
 
 const isOpen = ref(false);
@@ -128,11 +121,11 @@ const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
 
-const selectSort = (value) => {
+const selectSort = async (value) => {
   sort_by.value = value;
-  isOpen.value = false; // Закрыть дропдаун после выбора
+  isOpen.value = false;
   sortLabel.value = value === 'newest' ? 'Новые' : value === 'oldest' ? 'Старые' : 'Популярные';
-  onSortChange({ target: { value } }); // Вызов существующей логики сортировки
+  await onSortChange({ target: { value } });
 };
 
 const getLastPage = async () => {
@@ -150,13 +143,6 @@ const getNextPage = async () => {
   await get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
   await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
 }
-
-
-
-
-
-  // get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by);
-
 
 // --------------------------------------------------
 
@@ -201,7 +187,6 @@ watch(()=>props.query, async () => await get_search_articles_with_authors(nowPag
 
 
 const route = useRoute();
-console.log("route - ", route.path);
 
 const isSearchPage = computed(() => {
   return route.path === '/search';
