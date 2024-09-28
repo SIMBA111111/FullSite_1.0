@@ -108,8 +108,8 @@ const lastPageVariable = ref('');
 const nowPageVariable = ref('1');
 const nextPageVariable = ref('2');
 
-onMounted(() => {
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value);
+onMounted(async () => {
+  await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value);
 });
 
 const onSortChange = (event) => {
