@@ -313,7 +313,7 @@ watch(authed, (newValue) => {});
     top: 0;
     display: block;
     padding-top: 10vw;
-    background-color: rgba(232, 232, 232, 0.95);
+    background-color: rgba(232, 232, 232, 0.9);
     transition: transform .5s;
   }
 
@@ -336,10 +336,10 @@ watch(authed, (newValue) => {});
   .links a:active {
     color: black;
   }
-  
-    .links a.active {
-      color: black;
-    }
+  .links a.active {
+    color: black;
+  }
+
 
   .links a:hover {
     color: black;
