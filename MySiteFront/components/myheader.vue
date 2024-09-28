@@ -4,7 +4,7 @@
   }'>
     <div class="container">
       <div class="title">
-        <NuxtLink to="/" exact-active-class="active"><span class="title_num">24</span>articles</NuxtLink>
+        <NuxtLink to="/search" exact-active-class="active"><span class="title_num">24</span>articles</NuxtLink>
       </div>
       <button @click="openBurgerMenu" class="header__burger-btn">
         <span></span><span></span><span></span>
