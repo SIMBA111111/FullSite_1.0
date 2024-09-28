@@ -156,13 +156,14 @@ const cancelBid = async (filename) => {
 .admin-container {
   max-width: 90%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 1vw;
   font-family: Arial, sans-serif;
 }
 
 .heading {
+  font-size: 1.5vw;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 1vw;
   color: #333;
 }
 
@@ -171,10 +172,10 @@ const cancelBid = async (filename) => {
   justify-content: space-between;
   align-items: center;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: .4vw;
+  padding: .7vw;
+  margin-bottom: .7vw;
+  box-shadow: 0 .1vw .2vw rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
 }
 
@@ -183,18 +184,20 @@ const cancelBid = async (filename) => {
 }
 
 .bid-title {
-  font-size: 18px;
+  /* font-size: 18px; */
+  font-size: 1vw;
   font-weight: bold;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
+  margin-bottom: 1vw;
 }
 
 .bid-name {
-  font-size: 16px;
-  margin-bottom: 10px;
+  font-size: 1.5vw;
+  margin-bottom: .8vw;
 }
 
 .bid-intro {
-  font-size: 14px;
+  font-size: .8vw;
   color: #555;
 }
 
@@ -205,15 +208,15 @@ const cancelBid = async (filename) => {
 
 .action-button {
   display: inline-block;
-  padding: 8px 12px;
-  font-size: 14px;
+  padding: .4vw 1vw;
+  font-size: 1vw;
   color: #fff;
   background-color: #007bff;
   border: none;
-  border-radius: 4px;
+  border-radius: .2vw;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-bottom: 5px;
+  margin-bottom: .3vw;
   
 }
 
@@ -222,6 +225,6 @@ const cancelBid = async (filename) => {
 }
 
 .action-button + .action-button {
-  margin-top: 5px;
+  margin-top: .3vw;
 }
 </style>
