@@ -144,6 +144,7 @@ const handleSubmit = async () => {
 	background-color: transparent;
 	line-height: 2vw;
 	height: 4vw;
+	/* padding: 12px 20px 10px; */
 	padding: 1vw 1.7vw 1vw;
 	box-sizing: border-box;
 	border: none;

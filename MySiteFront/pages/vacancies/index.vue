@@ -22,20 +22,12 @@ definePageMeta({
     justify-content: flex-start;
     height: 100vh;
     background-color: #191919;
-    padding-top: 20px;
+    padding-top: 1.3vw;
   }
 
-  .hr {
-    width: 90%;
-    height: 5px;
-    border-radius: 0%;
-    background-color: #fff;
-    margin-bottom: 40px;
-    clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
-  }
   p{
     color: #fff;
-    font-size: 100px;
-    margin: 50px 0;
+    font-size: 7vw;
+    margin: 3vw 0;
   }
 </style>
