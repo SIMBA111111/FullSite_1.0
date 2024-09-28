@@ -4,7 +4,7 @@
     <div class="vac">
       <div class="container">
         <svg
-          style="color: blue; width: 200px; height: 200px;"
+          style="color: blue; width: 20vw; height: 18vw"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 496 512"
         >
@@ -13,16 +13,31 @@
             fill="blue"
           ></path>
         </svg>
-        <a class="tg" target="_blank" href="https://web.telegram.org/k/#@SIMBA1111">Telegram</a>
+        <a
+          class="tg"
+          target="_blank"
+          href="https://web.telegram.org/k/#@SIMBA1111"
+          >Telegram</a
+        >
       </div>
     </div>
+
   </div>
 </template>
 
-<script>
+<script setup>
+import emailField from "../../components/emailField.vue";
+import MessageField from "../../components/messageField.vue";
+import useFormValidation from "~/modules/useFormValidation";
+import useSubmitButtonState from "~/modules/useSubmitButtonState";
+import { url } from "../../MyConstants.vue";
+import axios from "axios";
+
 definePageMeta({
   middleware: "auth",
 });
+
+
 </script>
 
 <style scoped>
@@ -33,26 +48,19 @@ definePageMeta({
   justify-content: flex-start;
   height: 100vh;
   background-color: #191919;
-  padding-top: 20px;
+  padding-top: 1.3vw;
 }
 
-.hr {
-  width: 90%;
-  height: 5px;
-  border-radius: 0%;
-  background-color: #fff;
-  margin-bottom: 40px;
-  clip-path: polygon(60% 0%, 60% 0%, 100% 100%, 0% 100%);
-}
+
 
 .container{
   display: flex;
-  gap: 40px;
+  gap: 3vw;
 }
 .tg {
   color: #fff;
-  font-size: 100px;
-  margin: 50px 0;
+  font-size: 7vw;
+  margin: 4.8vw 0;
   text-decoration: none;
 }
 

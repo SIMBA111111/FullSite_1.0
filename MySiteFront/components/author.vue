@@ -51,105 +51,85 @@ const formatDate = (dateString) => {
 }; 
 </script>
 
-<!-- <script setup lang="ts">
-import { computed } from 'vue';
-
-interface Author {
-  id: number;
-  first_name: string;
-  last_name: string;
-}
-
-const props = defineProps<{
-  id: Number;
-  first_name: string;
-  last_name: string;
-  emain: string;
-  username: string
-}>();
-
-</script> -->
 
 <style scoped>
-
-
-
 .author-card {
-  /* margin: 20px;  */
-  /* height: 100%; */
-  
-  background-color: rgb(210, 210, 210);
-  border-radius: 10px;
-  padding: 16px;
-  /* width: 180px; */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: .8vw;
+  margin: 0px; 
+  background-color: #d9d9d9;
+  border-radius: .5vw;
+  padding: 1.2vw;
+  width: 26.5vw;
+  height: 15.6vw;
+  box-shadow: 0 .3vw .6vw rgba(255, 255, 255, .1);
 }
 
 .author-card:hover {
-  box-shadow: 12px 12px 12px rgba(0, 0, 0, 0.2);
-  transform: translateZ(10px);
+  box-shadow: .9vw .9vw .9vw rgba(199, 199, 199, .2);
+  transform: translateZ(1vw);
   transition: box-shadow 0.5s ease, color 0.9s ease, transform 0.9s ease; /* Указываем свойства, для которых применяем переход */
   transition-delay: 0.1s; /* Указываем задержку перед началом перехода */
 }
 
 .author-info {
+  font-size: 2.5vw;
+  font-weight: bold;
   display: flex;
   align-items: center;
   margin-bottom: 8px;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.author-name {
-  font-weight: bold;
-  font-size: 42px;
+  margin-bottom: .7vw;
 }
 
 .date {
-  color: rgb(0, 0, 0);
-  font-size: 24px;
-  margin-bottom: 8px;
+  color: black;
+  font-size: 1.5vw;
+  margin-top: .7vw;
+  margin-bottom: .7vw;
 }
 
 .eye-card {
-  font-size: 28px;
+  font-size: 2vw;
+  display: flex;
+  align-items: center;
+  height: 1.2vw;
 }
 
 .eye {
-  width: 30px;
-  height: 30px;
+  display: inline-block;
+  font-size: 2.4vw;
+  width: 2.3vw;
+  height: 2.3vw;
+  margin-right: .4vw;
+  padding-bottom: 1.2vw;
 }
 
-.title {
-  color: black;
-  text-decoration: none;
-  font-size: 30px;
-  font-weight: bold;
-  margin-bottom: 8px;
+@media (max-width: 425px) {
+
+.article-card {
+  gap: .1vw;
 }
 
-.content {
-  font-size: 22px;
-  margin-bottom: 8px;
-  height: 80px;
-  overflow: hidden;
+.author-info {
+  font-size: 3.5vw;
 }
 
-.content_ {
-  text-decoration: none;
-  color: #555;
+.date {
+  font-size: 2vw;
+  margin-bottom: 3vw;
 }
 
-.read-more {
-  font-size: 18px;
-  color: #403d8b;
-  text-decoration: underline;
-  cursor: pointer;
+.eye-card {
+  font-size: 3vw;
+}
+
+.eye {
+  height: 7.6vw;
+  width: 5vw;
+  font-size: 5vw;
+}
+
 }
 
 </style>

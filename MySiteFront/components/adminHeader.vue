@@ -72,19 +72,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: .6vw 1vw;
     background-color: #fff;
   }
   
   .first {
-    margin-right: 50px; /* Промежуток между первым и вторым элементами */
+    margin-right: 2vw;
   }
   
   .first a {
     text-decoration: none;
     color: #333;
-    font-size: 24px;
-    padding: 10px 20px;
+    font-size: 2.5vw;
+    padding: .6vw 1vw;
     border: 1px solid transparent;
     position: relative;
     display: inline-block;
@@ -99,14 +99,14 @@
   }
   
   .links div {
-    margin: 0 10px;
+    margin: 0.4vw;
   }
   
   .links a {
     text-decoration: none;
     color: #333;
-    font-size: 18px;
-    padding: 10px 20px;
+    font-size: 2vw;
+    padding: .6vw .8vw;
     border: 1px solid transparent;
     position: relative;
     display: inline-block;
@@ -133,21 +133,21 @@
   
   .links a:hover {
     color: #000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: translateZ(10px);
+    box-shadow: 0 .2vw .4vw rgba(0, 0, 0, 0.2);
+    transform: translateZ(1vw);
   }
   
   .links a:active {
     color: #555;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transform: translateZ(5px);
+    box-shadow: 0 .2vw .4vw rgba(0, 0, 0, 0.2);
+    transform: translateZ(.5vw);
   }
   
   /* Стиль для активной ссылки */
   .links a.active {
     color: #000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transform: translateZ(10px);
+    box-shadow: 0 .2vw .4vw rgba(0, 0, 0, 0.2);
+    transform: translateZ(1vw);
   }
   </style>
   

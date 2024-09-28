@@ -79,24 +79,26 @@ get_articles_with_authors(currentPage.value);
 .articles-list {
   display: grid;
   flex-wrap: wrap;
-  gap: 16px;
+  /* gap: 16px; */
+  gap: 2vw;
 }
 
 .pagination-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 4vw;
 }
 
 .pagination-controls button {
-  padding: 10px 20px;
-  margin: 0 10px;
+  padding: 2vw 4vw;
+  margin: 0 2vw;
   background-color: #462887;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: .7vw;
   cursor: pointer;
+  font-size: 2vw;
   transition: background-color 0.3s ease;
 }
 
