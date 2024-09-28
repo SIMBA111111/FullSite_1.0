@@ -62,12 +62,15 @@ const sort_by = ref("newest")
 const articles = ref([]);
 const hasMorePages = ref(false);
 const sortLabel = ref("Новые");
+const isLoading = ref(false);
 
 const get_articles_with_authors_url = (page, sort_by) => `${props.urlLink}${page}&sort_by=${sort_by}`;
 const get_articles_with_authors_url_next = (pageNext, sort_by) => `${props.urlLink}${pageNext}&sort_by=${sort_by}`;
 
 
 const get_articles_with_authors = async (page, pageNext, sort_by) => {
+  // if (isLoading.value) return;
+  // isLoading.value = true;
   try {
     if (!props.urlLink) {
       return
@@ -96,6 +99,8 @@ const get_articles_with_authors = async (page, pageNext, sort_by) => {
     articles.value = data;
   } catch (error) {
     console.error('Error:', error);
+  } finally {
+    // isLoading.value = false;
   }
 };
 
@@ -128,20 +133,20 @@ const selectSort = (value) => {
   onSortChange({ target: { value } }); // Вызов существующей логики сортировки
 };
 
-const getLastPage = () => {
+const getLastPage = async () => {
   lastPageVariable.value--
   nowPageVariable.value--
   nextPageVariable.value--
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
+  await get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
+  await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
 }
 
-const getNextPage = () => {
+const getNextPage = async () => {
   lastPageVariable.value++
   nowPageVariable.value++
   nextPageVariable.value++
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
+  await get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
+  await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
 }
 
 
@@ -190,7 +195,7 @@ const get_search_articles_with_authors = async (page, pageNext, query) => {
   }
 };
 
-watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query))
+watch(()=>props.query, async () => await get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query))
 
 
 const route = useRoute();
