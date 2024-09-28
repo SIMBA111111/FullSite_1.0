@@ -17,8 +17,6 @@
 
     </div>
 
-    <!-- <pagination/> -->
-
     <div class="pagination-controls-2">
       <button @click="getLastPage" :disabled="nowPageVariable == 1" class="arrow left"></button>
       <div @click="getLastPage" v-show="lastPageVariable" class="num"> {{ lastPageVariable }} </div>
@@ -170,13 +168,9 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
 .articles-list {
   height: 100%; 
   display: grid;
-  /* grid-template-columns: repeat(2, 380px); */
   grid-template-columns: repeat(2, 31.5vw);
-  /* grid-template-rows: repeat(3, 245px); */
   grid-template-rows: repeat(3, 20.2vw);
-  /* gap: 10px; */
   gap: .9vw;
-  /* margin-bottom: 20px; */
   margin-bottom: 1.6vw;
 }
 
@@ -185,9 +179,7 @@ watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.va
   display: flex;
   align-items: center;
   justify-content: center;
-  /* margin-top: 20px; */
   margin-top: .8vw;
-  /* gap: 8px; */
   gap: .4vw;
 }
 
