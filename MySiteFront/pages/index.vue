@@ -186,8 +186,10 @@ export default {
   justify-content: flex-start;
   height: 100vh;
   background-color: #191919;
-  padding-top: 1.6vw;
+  padding-top: 0px;
 }
+
+
 
 .search-container {
   display: flex;
