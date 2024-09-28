@@ -20,7 +20,7 @@
                   </form>
             </div>
         </div>
-        <div style="color: red;font-size: 30px;">{{ error }}</div>
+        <div style="color: red;font-size: 2vw;">{{ error }}</div>
 
         <notification
           :notificationMessage="notificationMessage"

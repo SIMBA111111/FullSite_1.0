@@ -165,6 +165,7 @@ const cancelBid = async (filename) => {
   text-align: center;
   margin-bottom: 1vw;
   color: #333;
+  margin-bottom: 4vw;
 }
 
 .bid-card {
