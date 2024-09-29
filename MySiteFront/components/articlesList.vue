@@ -222,9 +222,9 @@ const isSearchPage = computed(() => {
 
   height: 80%;
   display: grid;
-  grid-template-columns: repeat(2, 31.5vw);
-  grid-template-rows: repeat(3, 20.2vw);
-  gap: .9vw;
+  grid-template-columns: repeat(2, 30.5vw);
+  grid-template-rows: repeat(3, 19.2vw);
+  gap: .5vw;
   margin-bottom: 1.6vw;
 }
 
@@ -395,9 +395,9 @@ justify-content: center;
 
 .arrow {
   /* width: 100px; */
-  width: 4vw;
+  width: 9vw;
   /* height: 20px; */
-  height: .8vw;
+  height: 2vw;
 
   background-color: #9d9d9d;
 }
@@ -426,7 +426,7 @@ justify-content: center;
 
 .num {
   /* font-size: 29px; */
-  font-size: 1.3vw;
+  font-size:2vw;
   /* padding: 2px; */
   padding: .1vw;
   color: #9d9d9d;
@@ -438,7 +438,7 @@ justify-content: center;
 
 .num:nth-child(3n) {
   /* font-size: 39px; */
-  font-size: 1.6vw;
+  font-size: 3vw;
 }
 
 @media (max-width: 425px) {
