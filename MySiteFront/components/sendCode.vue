@@ -9,6 +9,10 @@
         <new-password v-if="succes" :emailProp="emailProp"/>
         <div style="color: red;font-size: 30px;">{{ error }}</div>
       </div>
+      <!-- <notification
+          :notificationMessage="notificationMessage"
+          v-if="notificationMessage"
+        /> -->
   </template>
   
   <script setup>
@@ -21,7 +25,8 @@
   import EmailField from '../../components/emailField.vue';
   import PasswordField from '../../components/passwordField.vue';
   import codeField from '../components/codeField.vue'
-  
+  import notification from './notification.vue';
+
   import useFormValidation from '~/modules/useFormValidation';
   import useSubmitButtonState from '~/modules/useSubmitButtonState'
 
@@ -34,6 +39,7 @@
         required: true
     }
   })
+
 
   const code = reactive({
     email: props.userEmail,

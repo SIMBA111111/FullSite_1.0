@@ -100,7 +100,6 @@
 
 
 
-
 <style scoped>
 .main-container {
   display: flex;

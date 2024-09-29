@@ -10,7 +10,8 @@ import { defineProps } from 'vue';
  
 const props = defineProps({
   notificationMessage: {
-        type: String
+        type: String,
+        default: ''
     }
 })
 
@@ -28,6 +29,7 @@ const props = defineProps({
   position: absolute;
   top: 9vw;
   right: 3.5vw;
+  z-index: 100;
 }
 
 .notification span {

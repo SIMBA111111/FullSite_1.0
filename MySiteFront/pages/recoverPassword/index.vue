@@ -8,10 +8,15 @@
             <button :disabled="isSignupButtonDisabled" @click="recoverButtonPressed" type="submit" class="btn">Отправить</button>            
           </div>
         </form>
-        <send-code v-if="userEmail" :userEmail="userEmail" />
+        <send-code v-if="userEmail" :userEmail="userEmail"/>
         <div style="color: red;font-size: 30px;">{{ error }}</div>
       </div>
     </div>
+    <notification
+        :notificationMessage="notificationMessage"
+        v-if="notificationMessage"
+      />
+
   </template>
   
   <script setup>
@@ -26,6 +31,7 @@
   
   import useFormValidation from '~/modules/useFormValidation';
   import useSubmitButtonState from '~/modules/useSubmitButtonState'
+  import notification from '~/components/notification.vue';
 
   import sendCode from '../../components/sendCode.vue'
   import newPassword from '../../components/newPassword.vue'
@@ -36,6 +42,7 @@
     middleware: 'auth'
   });
   
+  const notificationMessage = ref(null);
   
   const email = reactive({
     email: ''
@@ -55,6 +62,8 @@
     try {
       error.value = '';
       // const response = await axios.post(recover_url, email.value);
+      notificationMessage.value = 'Код отправлен на почту';
+      setTimeout(() => notificationMessage.value = null, 3000)
       const response = await axios.post(recover_url, email.email, {
         headers: {
           'Content-Type': 'application/json'
