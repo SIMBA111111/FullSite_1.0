@@ -57,18 +57,18 @@ const formatDate = (dateString) => {
 
 .author-title {
   /* font-size: 28px; */
-  font-size: 2.2vw;
+  font-size: 1.7vw;
   font-weight: bold;
 }
 
 .article-card {
   display: flex;
   flex-direction: column;
-  gap: .8vw;
+  gap: .3vw;
   margin: 0px; 
   background-color: #d9d9d9;
   border-radius: .5vw;
-  padding: 1.2vw;
+  padding: .7vw;
   width: 26.5vw;
   height: 15.6vw;
   box-shadow: 0 .3vw .6vw rgba(255, 255, 255, .1);

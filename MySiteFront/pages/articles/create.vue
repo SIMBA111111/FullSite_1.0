@@ -9,10 +9,10 @@
                         <span> {{ fileName || 'Здесь поле выбора файла' }}</span>
                       </label>
                     <div>
-                        <input class="search" v-model="title" name="title" type="text" placeholder="Название статьи" />
+                        <input class="search" v-model="title" name="title" type="text" placeholder="Название статьи" maxlength="70"/>
                     </div>
                     <div>
-                        <input class="search" v-model="introText" name="introText" type="text" placeholder="Завлекающий текст"/>
+                        <input class="search" v-model="introText" name="introText" type="text" placeholder="Завлекающий текст" maxlength="70"/>
                     </div>
                     <div class="btn-wrapper">
                       <button class="btn" type="submit">Отправить</button>
