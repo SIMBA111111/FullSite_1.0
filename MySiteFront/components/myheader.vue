@@ -254,6 +254,7 @@ watch(authed, (newValue) => {});
   right: 8%;
 
   opacity: 1;
+  z-index: 5;
 }
 
 .option {
