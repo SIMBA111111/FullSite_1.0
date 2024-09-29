@@ -44,8 +44,8 @@ async def create_article(db: AsyncSession, name: str, intro_text: str, author: U
     return db_item
 
 
-async def get_all_articles(db: AsyncSession, page: int):
-    result = await db.execute(
+async def get_all_articles(db: AsyncSession, page: int, sort_by: str):
+    query = (
         select(ArticleModel, UserModel.first_name, UserModel.last_name, UserModel.username)
         .join(ArticleModel.user)
         .filter(
@@ -54,11 +54,20 @@ async def get_all_articles(db: AsyncSession, page: int):
                 ArticleModel.disable == False
             )
         )
-        .offset((page - 1) * 6)
-        .limit(6)
     )
+
+    if sort_by in ['newest', 'oldest', 'most viewed']:
+        if sort_by == 'newest':
+            query = query.order_by(ArticleModel.created_at.desc())
+        elif sort_by == 'oldest':
+            query = query.order_by(ArticleModel.created_at.asc())
+        elif sort_by == 'most viewed':
+            query = query.order_by(ArticleModel.count_views.desc())
+
+    query = query.offset((page - 1) * 6).limit(6)
+
+    result = await db.execute(query)
     return result.all()
-    # return result.scalars().all()
 
 
 async def get_last_article(db: AsyncSession):

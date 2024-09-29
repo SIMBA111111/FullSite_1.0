@@ -10,6 +10,9 @@ from config.log_config import error_logger
 import os
 import aiofiles
 
+from enum import Enum
+from dateutil import parser
+
 from schemas.articles.articles_schemas import SSlug, SArticleListWithAuthors
 
 from crud.articles import articles_crud
@@ -99,9 +102,9 @@ async def get_article(db: AsyncSession, slug: SSlug):
     return file_content
 
 
-async def get_all_articles(db: AsyncSession, page: int):
+async def get_all_articles(db: AsyncSession, page: int, sort_by: str):
     try:
-        all_articles = await articles_crud.get_all_articles(db, page)
+        all_articles = await articles_crud.get_all_articles(db, page, sort_by)
     except Exception as e:
         error_logger.error(f"Couldn't get all the articles. Error: {e}")
         raise HTTPException(status_code=400, detail={"Error": f"Couldn't get all the articles. Error: {e}"})

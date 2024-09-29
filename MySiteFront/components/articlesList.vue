@@ -98,21 +98,21 @@ const get_articles_with_authors = async (page, pageNext, sort_by) => {
     console.error('Error:', error);
   }
 };
-
+  
 const lastPageVariable = ref('');
 const nowPageVariable = ref('1');
 const nextPageVariable = ref('2');
 
-onMounted(() => {
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value);
+onMounted( async () => {
+  await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value);
 });
 
-const onSortChange = (event) => {
+const onSortChange = async (event) => {
   sort_by.value = event.target.value;
   lastPageVariable.value = 0;
   nowPageVariable.value = 1;
   nextPageVariable.value = 2;  
-  get_articles_with_authors(nowPageVariable.value, nowPageVariable.value+1, sort_by.value);
+  await get_articles_with_authors(nowPageVariable.value, nowPageVariable.value+1, sort_by.value);
 };
 
 const isOpen = ref(false);
@@ -121,35 +121,28 @@ const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
 };
 
-const selectSort = (value) => {
+const selectSort = async (value) => {
   sort_by.value = value;
-  isOpen.value = false; // Закрыть дропдаун после выбора
+  isOpen.value = false;
   sortLabel.value = value === 'newest' ? 'Новые' : value === 'oldest' ? 'Старые' : 'Популярные';
-  onSortChange({ target: { value } }); // Вызов существующей логики сортировки
+  await onSortChange({ target: { value } });
 };
 
-const getLastPage = () => {
+const getLastPage = async () => {
   lastPageVariable.value--
   nowPageVariable.value--
   nextPageVariable.value--
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
+  await get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
+  await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
 }
 
-const getNextPage = () => {
+const getNextPage = async () => {
   lastPageVariable.value++
   nowPageVariable.value++
   nextPageVariable.value++
-  get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
+  await get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query, sort_by.value)
+  await get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by.value)
 }
-
-
-
-
-
-  get_articles_with_authors(nowPageVariable.value, nextPageVariable.value, sort_by);
-
 
 // --------------------------------------------------
 
@@ -190,11 +183,10 @@ const get_search_articles_with_authors = async (page, pageNext, query) => {
   }
 };
 
-watch(()=>props.query, () => get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query))
+watch(()=>props.query, async () => await get_search_articles_with_authors(nowPageVariable.value, nextPageVariable.value, props.query))
 
 
 const route = useRoute();
-console.log("route - ", route.path);
 
 const isSearchPage = computed(() => {
   return route.path === '/search';
@@ -219,12 +211,11 @@ const isSearchPage = computed(() => {
 }
 
 .articles-list {
-
   height: 80%;
   display: grid;
   grid-template-columns: repeat(2, 30.5vw);
   grid-template-rows: repeat(3, 19.2vw);
-  gap: .5vw;
+  gap: .1vw;
   margin-bottom: 1.6vw;
 }
 
@@ -426,7 +417,7 @@ justify-content: center;
 
 .num {
   /* font-size: 29px; */
-  font-size:2vw;
+  font-size: 2vw;
   /* padding: 2px; */
   padding: .1vw;
   color: #9d9d9d;
