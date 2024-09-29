@@ -16,7 +16,7 @@
         <a
           class="tg"
           target="_blank"
-          href="https://web.telegram.org/k/#@SIMBA1111"
+          href="https://t.me/SIMBA1111"
           >Telegram</a
         >
       </div>
