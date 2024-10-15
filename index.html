@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="header__container">
+            <nav class="header__navbar">
+                <ul class="header__navbar__list">
+                    <li class="header__navbar__item"><img src="/icons/Search.svg" alt="search"></li>
+                    <li class="header__navbar__item"><a href="#">Casino</a></li>
+                    <li class="header__navbar__item"><a href="#">Shop</a></li>
+                    <li class="header__navbar__item"><a href="#">Promotions</a></li>
+                </ul>
+            </nav>
+            <div class="header__logo">
+                <a href="#"><img class="header__logo-img" src="/icons/Logo.svg" alt="logo"></a> 
+            </div>
+            <div class="header__btns">
+                <button class="btn green btn-cursor">Deposit</button>
+                <button class="btn black btn-cursor"><img src="/icons/Log-In.svg" alt="log-in"> Log in</button>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <div class="main__icons">
+            <img class="main__icon" src="./img/fixed/flag.png" alt="flag">
+            <img class="main__icon" src="./img/fixed/message.png" alt="massage">
+        </div>
+        <div class="main__container">
+            <section class="welcome">
+                <div class="welcome__sign-up">
+                    <h1 class="welcome__title">Sign up and start winning</h1>
+                    <p class="welcome__description">With your social network</p>
+                    <div class="welcome__social">
+                        <a href="#"><img src="./icons/arroba.svg" alt="arroba" class="welcome__socil-icon"></a>
+                        <a href="#"><img src="./icons/odnoklassniki-logo.svg" alt="odnoklassniki-logo" class="welcome__socil-icon"></a>
+                        <a href="#"><img src="./icons/facebook.svg" alt="facebook" class="welcome__socil-icon"></a>
+                        <a href="#"><img src="./icons/vk.svg" alt="vk" class="welcome__socil-icon"></a>
+                        <a href="#"><img src="./icons/google-plus.svg" alt="google-plus" class="welcome__socil-icon"></a>
+                    </div>
+                    <p>or</p>
+                    <form class="welcome__form" action="#">
+                        <input class="welcome__input welcome__input--email" type="email" placeholder="E-mail*">
+                        <br>
+                        <input class="welcome__input welcome__input--password" type="password" placeholder="Password*">
+                        <select class="welcome__input welcome__input--select" name="" id="">
+                            <option value="" disabled selected hidden>Currency*</option>
+                            <option class="placeholder-option" value="">RUB</option>
+                            <option class="placeholder-option" value="">USD</option>
+                            <option class="placeholder-option" value="">EUR</option>
+                        </select>
+                        <br>
+                        <input class="welcome__input welcome__input--code" type="text" placeholder="Promo-code">
+                        <br>
+                        <input type="checkbox"> <label>I agree with <a class="welcome__rules" href="#">Teame and Confidence</a></label>
+                        <br>
+                        <input type="checkbox"> <label>I comfirm that I’m 18 years or older</label>
+                        <br>
+                        <input class="welcome__input btn green btn-form" type="submit" value="Register">
+                        <a class="welcome__account-link" href="#">Here an account?</a>
+                    </form>
+                    <img src="./img/Crystals-1.png" alt="Crystals" class="welcome__crystal welcome__crystal--1">
+                    <img src="./img/Crystals-2.png" alt="Crystals" class="welcome__crystal welcome__crystal--2">
+                </div>
+                <div class="slider">
+                    <div class="slider__container">
+                        <button class="slider__arrow-btn btn-cursor"><img src="./icons/arrow-left.svg" alt="arrow-left"></button>
+                        <button class="slider__arrow-btn btn-cursor"><img src="./icons/arrow-right.svg" alt="arrow-right"></button>
+                        <h2 class="slider__over-title">FIRST BONUSES</h2>
+                        <h1 class="slider__title">WELCOME BONUSPACKAGE</h1>
+                        <div class="slider__line-title"></div>
+                        <div class="slider__under-title"><p class="">200 hours and 100 free spins</p></div>
+                        <button class="slider__btn btn green btn-cursor">Deposit</button>
+                    </div>
+                    <div class="slider__indicators">
+                        <div class="slider__indicator slider__indicator--active"></div>
+                        <div class="slider__indicator"></div>
+                        <div class="slider__indicator"></div>
+                        <div class="slider__indicator"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="menu">
+                <div class="menu__container">
+                    <ul class="menu__list">
+                        <li class="menu__item"><img src="./icons/new.svg" alt="new" class="menu__icon"><div style="width:5px;height: 5px;"></div> <a href="#">New games</a></li>
+                        <li class="menu__item"><img src="./icons/crown.svg" alt="crown" class="menu__icon"><div style="width:5px;height: 5px;"></div> <a href="#">Popular</a></li>
+                        <li class="menu__item"><img src="./icons/computer.svg" alt="computer" class="menu__icon"><div style="width:5px;height: 5px;"></div> <a href="#">Slots</a></li>
+                        <li class="menu__item"><img src="./icons/pulse.svg" alt="pulse" class="menu__icon"><div style="width:5px;height: 5px;"></div> <a href="#">Casino Live</a></li>
+                        <li class="menu__item"><img src="./icons/cube.svg" alt="cube" class="menu__icon"><div style="width:5px;height: 5px;"></div> <a href="#">Table Games</a></li>
+                        <li class="menu__item"><img src="./icons/star.svg" alt="star" class="menu__icon"><div style="width:5px;height: 5px;"></div> <a href="#">Favorites</a></li>
+                        <li class="menu__item"><img src="./icons/timer.svg" alt="timer" class="menu__icon"><div style="width:5px;height: 5px;"></div> <a href="#">Last played</a></li>
+                        
+                        <li class="menu__item"><label style="color: #fff;" > All category
+                            <select class="menu__select" name="" id="">
+                                <option class="menu__option" selected value=""></option>
+                                <option class="menu__option" value="">1</option>
+                                <option class="menu__option" value="">2</option>
+                                <option class="menu__option" value="">3</option>
+                            </select>
+                        </label></li>
+                        <li class="menu__item"><input class="menu__search" type="search" placeholder="Search games or providers"></li>
+                    </ul>
+                </div>
+            </section>
+            <section class="menu" style="top: 555px;">
+                <div class="menu__container">
+                    <div class="menu__buttons">
+                        <button class="menu__button btn-cursor menu__button--active">All providers</button>
+                        <button class="menu__button btn-cursor">NetEnt</button>
+                        <button class="menu__button btn-cursor">Microgaming</button>
+                        <button class="menu__button btn-cursor">Quickspin</button>
+                        <button class="menu__button btn-cursor">PragmaticPlay</button>
+                        <button class="menu__button btn-cursor">BoomingGames</button>
+                        <button class="menu__button btn-cursor">MrSlotty</button>
+                        <button class="menu__button btn-cursor">BoomingGames</button>
+                        <button class="menu__button btn-cursor">BetRadar</button>
+                        <button class="menu__button btn-cursor">PariPlay</button>
+                        <button class="menu__button btn-cursor">BetConstruct</button>
+                        <button class="menu__button btn-cursor">NetEnt</button>
+                    </div>
+                </div>
+            </section>
+            <section class="new-games">
+                <div style="height: 126px;"></div>
+                <div class="new-games__container">
+                    <div class="new-games__header">
+                        <h3 class="new-games__header__title">New games</h3>
+                        <button class="new-games__header__btn btn-cursor">View all (46) <img src="./icons/corner-arrow-right.svg" alt="corner-arrow-right"></button>
+                    </div>
+                    <div class="list-games">
+                        <a href="#" class="list-games__game game-1"><img src="./img/new games/cashvandalwebclip_502.png" alt="cashvandalwebclip"></a>
+                        <a href="#" class="list-games__game game-2"><img src="./img/new games/VSMonsterMad_TNP.png" alt="VSMonsterMad"></a>
+                        <a href="#" class="list-games__game game-3"><img src="./img/new games/junglespirit_not_mobile_sw.png" alt="junglespirit_not_mobile"></a>
+                        <a href="#" class="list-games__game game-4"><img src="./img/new games/fairyhansel_not_mobile_sw.png" alt="fairyhansel_not_mobile"></a>
+                        <a href="#" class="list-games__game game-5 r"><img class="active-game" src="./img/new games/zombie-horde-main-1000-768x461--2.png" alt="/zombie-horde-main"><div class="new-game-f over-div">New game</div>
+                        <button style="width: 126px;" class="btn green over-btn btn-cursor">Play now</button></a>
+                        <a href="#" class="list-games__game game-6"><img src="./img/new games/playboy.png" alt="playboy"></a>
+                        <a href="#" class="list-games__game game-7"><img src="./img/new games/warlords_not_mobile_sw.png" alt="warlords_not_mobile"></a>
+                        <a href="#" class="list-games__game game-8"><img src="./img/new games/fairyred_not_mobile_sw.png" alt="fairyred_not_mobile"></a>
+                        <a href="#" class="list-games__game game-9"><img src="./img/new games/copycats_not_mobile_sw.png" alt="copycats_not_mobile"></a>
+                    </div>
+                </div>
+            </section>
+            <section class="winning-now">
+                <div class="winning-now__container">
+                    <div class="winning-now__title">Winning now</div>
+                    <div class="winning-now__players">
+                        <div class="winning-now__player">
+                            <img src="./img/players/jackhammer2_sw.png" alt="jackhammer2">
+                            <div class="winning-now__player__description">
+                                <p class="winning-now__player__description__name">Ivan-khopin</p>
+                                <a class="winning-now__player__description__game" href="#">100 cats</a>
+                                <p class="winning-now__player__description__win">1020 P</p>
+                            </div>
+                        </div>
+                        <div class="winning-now__player">
+                            <img src="./img/players/eldorado_sw.png" alt="eldorado">
+                            <div class="winning-now__player__description">
+                                <p class="winning-now__player__description__name">Daria</p>
+                                <a class="winning-now__player__description__game" href="#">The story of Alex</a>
+                                <p class="winning-now__player__description__win">3420 P</p>
+                            </div>
+                        </div>
+                        <div class="winning-now__player">
+                            <img src="./img/players/mgs_burglinbob_bonusslot.png" alt="mgs_burglinbob_bonusslot">
+                            <div class="winning-now__player__description">
+                                <p class="winning-now__player__description__name">Ivan-khopin</p>
+                                <a class="winning-now__player__description__game" href="#">100 cats</a>
+                                <p class="winning-now__player__description__win">1020 P</p>
+                            </div>
+                        </div>
+                        <div class="winning-now__player">
+                            <img src="./img/players/spacewars_sw.png" alt="spacewars">
+                            <div class="winning-now__player__description">
+                                <p class="winning-now__player__description__name">Daria</p>
+                                <a class="winning-now__player__description__game" href="#">The story of Alex</a>
+                                <p class="winning-now__player__description__win">3420 P</p>
+                            </div>
+                        </div>
+                        <div class="winning-now__player">
+                            <img src="./img/players/colossalpinatas_sw.png" alt="colossalpinatas">
+                            <div class="winning-now__player__description">
+                                <p class="winning-now__player__description__name">Ivan-khopin</p>
+                                <a class="winning-now__player__description__game" href="#">100 cats</a>
+                                <p class="winning-now__player__description__win">1020 P</p>
+                            </div>
+                        </div>
+                        <div class="winning-now__player">
+                            <img src="./img/players/piggyriches_sw.png" alt="piggyriches">
+                            <div class="winning-now__player__description">
+                                <p class="winning-now__player__description__name">Daria</p>
+                                <a class="winning-now__player__description__game" href="#">The story of Alex</a>
+                                <p class="winning-now__player__description__win">3420 P</p>
+                            </div>
+                        </div>
+                        <div class="winning-now__player">
+                            <img src="./img/players/starburst_sw.png" alt="starburst">
+                            <div class="winning-now__player__description">
+                                <p class="winning-now__player__description__name">Ivan-khopin</p>
+                                <a class="winning-now__player__description__game" href="#">100 cats</a>
+                                <p class="winning-now__player__description__win">1020 P</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="popular">
+                <div style="height: 109px;"></div>
+                <div class="popular__container">
+                    <div class="popular__header">
+                        <h3 class="popular__header__title">Popular</h3>
+                        <button class="popular__header__btn btn-cursor">View all (46) <img src="./icons/corner-arrow-right.svg" alt="icons/corner-arrow-right"></button>
+                    </div>
+                    <div class="popular__list-games">
+                        <a href="#" class="popular__list-games__game game-1"><img src="./img/popular/jackhammer2_sw (1).png" alt="jackhammer2"></a>
+                        <a href="#" class="popular__list-games__game game-2"><img src="./img/popular/eldorado_sw (1).png" alt="eldorado"></a>
+                        <a href="#" class="popular__list-games__game game-3"><img src="./img/popular/mgs_burglinbob_bonusslot (1).png" alt="mgs_burglinbob_bonusslot"></a>
+                        <a href="#" class="popular__list-games__game game-4"><img src="./img/popular/goldfactory.png" alt="goldfactory"></a>
+                        <a href="#" class="popular__list-games__game game-5 r"><img class="popular__active-game" src="./img/popular/background_thors_lightning.png" alt="thors_lightning"><div class="popular__new-game-f over-div">Popular</div>
+                        <button style="width: 126px;" class="btn green over-btn btn-cursor">Play now</button></a>
+                        <a href="#" class="popular__list-games__game game-6"><img src="./img/popular/spacewars_sw (1).png" alt="spacewars"></a>
+                        <a href="#" class="popular__list-games__game game-7"><img src="./img/popular/colossalpinatas_sw (2).png" alt="colossalpinatas"></a>
+                        <a href="#" class="popular__list-games__game game-8"><img src="./img/popular/piggyriches_sw (1).png" alt="piggyriches"></a>
+                        <a href="#" class="popular__list-games__game game-9"><img src="./img/popular/starburst_sw (2).png" alt="starburst"></a>
+                    </div>
+                </div>
+            </section>
+            <section class="recommends">
+                <div class="recommends__container">
+                    <div class="recommends__header">
+                        <h3 class="recommends__header__title">Recommends games</h3>
+                        <button class="recommends__header__btn btn-cursor">View all (46) <img src="./icons/corner-arrow-right.svg" alt="corner-arrow-right"></button>
+                    </div>
+                    <div class="recommends__list-games">
+                        <a href="#" class="recommends__list-games__game game-1 r"><img class="recommends__active-game-mini" src="./img/recommends/jokerpro_not_mobile_sw.png" alt="okerpro_not_mobile"><div class="recommends__new-game-f-mini-p over-div-mini-p">Popular</div></a>
+                        <a href="#" class="recommends__list-games__game game-2 r"><img class="recommends__active-game-mini" src="./img/recommends/kawaii_kitty.png" alt="kawaii_kitty"><div class="recommends__new-game-f-mini-n over-div-mini-n">New</div></a>
+                        <a href="#" class="recommends__list-games__game game-3"><img src="./img/recommends/FruitVSCandy.png" alt="FruitVSCandy"></a>
+                        <a href="#" class="recommends__list-games__game game-4"><img src="./img/recommends/hooksheroes_not_mobile_sw.png" alt="hooksheroes_not_mobile"></a>
+                        <a href="#" class="recommends__list-games__game game-5 r"><img class="recommends__active-game" src="./img/recommends/pink-elephants-logotip-min.png" alt="pink-elephants"><div class="recommends__new-game-f over-div">Recommends</div>
+                        <button style="width: 126px;" class="btn green over-btn btn-cursor">Play now</button></a>
+                        <a href="#" class="recommends__list-games__game game-6 r"><img class="recommends__active-game-mini" src="./img/recommends/JungleJim_ElDorado.png" alt="JungleJim_ElDorado"><div class="recommends__new-game-f-mini-n over-div-mini-n">New</div></a>
+                        <a href="#" class="recommends__list-games__game game-7"><img src="./img/recommends/classic243Desktop.png" alt="classic"></a>
+                        <a href="#" class="recommends__list-games__game game-8 r"><img class="recommends__active-game-mini" src="./img/recommends/PrettyKitty.png" alt="PrettyKitty"><div class="recommends__new-game-f-mini-p over-div-mini-p">Popular</div></a>
+                        <a href="#" class="recommends__list-games__game game-9"><img src="./img/recommends/GameOfThronesWays.png" alt="/GameOfThronesWays"></a>
+                    </div>
+                </div>
+            </section>
+            <section class="the-best">
+                <div class="the-best__container">
+                    <div class="the-best__game"><h4 class="the-best__title">Game of month</h4><div class="the-best__game__card"><p class="the-best__game__card__text">87% of players played the <a href="#" class="the-best__game__card__link">JUNGLE BOOKS</a> all month</p><button class="the-best__game__card__btn btn-cursor">Start playing</button></div></div>
+                    <div class="the-best__info">
+                        <div class="the-best__info__container">
+                            <div class="the-best__info__blok">
+                                <img class="the-best__info__blok__img" src="./img/the-best/cards.png" alt="cards">
+                                <div class="the-best__info__blok__text">
+                                    <p class="the-best__info__blok__text__num">+100</p>
+                                    <p class="the-best__info__blok__text__text">Players every day</p>
+                                </div>
+                            </div>
+                            <div class="the-best__info__blok">
+                                <img class="the-best__info__blok__img" src="./img/the-best/flag.png" alt="">
+                                <div class="the-best__info__blok__text">
+                                    <p class="the-best__info__blok__text__num">30</p>
+                                    <p class="the-best__info__blok__text__text">Providers</p>
+                                </div>
+                            </div>
+                            <div class="the-best__info__blok">
+                                <img class="the-best__info__blok__img" src="./img/the-best/dice.png" alt="dice">
+                                <div class="the-best__info__blok__text">
+                                    <p class="the-best__info__blok__text__num">+500</p>
+                                    <p class="the-best__info__blok__text__text">of over games</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="the-best__players">
+                        <h4 class="the-best__title">Biggest wins</h4>
+                        <div class="the-best__players__top">
+                            <div class="the-best__players__top__line">
+                                <p>Player</p>
+                                <p>Game</p>
+                                <p>Points</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p class="name">SlotPirot12</p>
+                                <p><a href="#">Gozno Quest</a></p>
+                                <p>5 000 &#8364</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p>LussyLu</p>
+                                <p><a href="#">Spinita Grande</a></p>
+                                <p>3 200 &#8364</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p>SunnyLunny</p>
+                                <p><a href="#">Jack Hammer</a></p>
+                                <p>2 300 &#8364</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p>SlotPirot12</p>
+                                <p><a href="#">Gozno Quest</a></p>
+                                <p>1 000 &#8364</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p>LussyLu</p>
+                                <p><a href="#">Spinita Grande</a></p>
+                                <p>750 &#8364</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p>LussyLu</p>
+                                <p><a href="#">Spinita Grande</a></p>
+                                <p>750 &#8364</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p>LussyLu</p>
+                                <p><a href="#">Spinita Grande</a></p>
+                                <p>750 &#8364</p>
+                            </div>
+                            <div class="the-best__players__top__line">
+                                <p>LussyLu</p>
+                                <p><a href="#">Spinita Grande</a></p>
+                                <p>750 &#8364</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="payment">
+                <a href="#"><img class="payment__img" src="./img/payment/neteller.png" alt="neteller"></a>
+                <a href="#"><img class="payment__img" src="./img/payment/skrill.png" alt="skrill"></a>
+                <a href="#"><img class="payment__img" src="./img/payment/cubits.png" alt="cubits"></a>
+                <a href="#"><img class="payment__img" src="./img/payment/mastercard.png" alt="mastercard"></a>
+                <a href="#"><img class="payment__img" src="./img/payment/visa.png" alt="visa"></a>
+                <a href="#"><img class="payment__img" src="./img/payment/qiwi.png" alt="qiwi"></a>
+                <a href="#"><img class="payment__img" src="./img/payment/yandex.png" alt="yandex"></a>
+            </section>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer__sponsors">
+            <div class="footer__sponsors__line-1">
+                <img src="./img/footer/bet-365.svg" alt="bet-365">
+                <img src="./img/footer/ygg.svg" alt="ygg">
+                <img src="./img/footer/microgaming.svg" alt="microgaming">
+                <img src="./img/footer/evolution-gaming.svg" alt="evolution-gaming">
+                <img src="./img/footer/bet-365.svg" alt="bet-365">
+                <img src="./img/footer/pragmaticplay.svg" alt="ragmaticplay">
+                <img src="./img/footer/evolution-gaming.svg" alt="evolution-gaming">
+                <img src="./img/footer/microgaming.svg" alt="microgaming">
+                <img src="./img/footer/evolution-gaming.svg" alt="evolution-gaming">
+                <img src="./img/footer/bet-365.svg" alt="bet-365">
+            </div>
+            <div class="footer__sponsors__line-2">
+                <img src="./img/footer/viv-gaming.svg" alt="viv-gaming">
+                <img src="./img/footer/playson.svg" alt="playson">
+                <img src="./img/footer/pragmaticplay.svg" alt="ragmaticplay">
+                <img src="./img/footer/spotoption.svg" alt="spotoption">
+                <img src="./img/footer/viv-gaming.svg" alt="viv-gaming">
+                <img src="./img/footer/ygg.svg" alt="ygg">
+                <img src="./img/footer/spotoption.svg" alt="spotoption">
+                <img src="./img/footer/pragmaticplay.svg" alt="ragmaticplay">
+                <img src="./img/footer/spotoption.svg" alt="spotoption">
+                <img src="./img/footer/viv-gaming.svg" alt="viv-gaming">
+            </div>
+        </div>
+        <div class="footer__info">
+            <div class="footer__info__img">
+                <a href="#"><img src="./img/footer/logo.svg" alt="logo"></a>
+                <br><br><br>
+                <img src="./img/footer/18.svg" alt="18+">
+            </div>
+            <div class="footer__info__navs">
+                <nav class="footer__info__navs__nav">
+                    <h5 class="footer__info__navs__nav__title">Navigation</h5>
+                    <ul class="footer__info__navs__nav__list">
+                        <li class="footer__info__navs__nav__item"><a href="#">Promotions</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Casino Live</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Casino</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Sportbook</a></li>
+                    </ul>
+                </nav>
+                <nav class="footer__info__navs__nav">
+                    <h5 class="footer__info__navs__nav__title">Categories</h5>
+                    <ul class="footer__info__navs__nav__list">
+                        <li class="footer__info__navs__nav__item"><a href="#">New games</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Popular</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Slots</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Casino live</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Other</a></li>
+                    </ul>
+                </nav>
+                <nav class="footer__info__navs__nav">
+                    <h5 class="footer__info__navs__nav__title">License</h5>
+                    <ul class="footer__info__navs__nav__list">
+                        <li class="footer__info__navs__nav__item"><a href="#">Responsible Game</a></li>
+                        <li class="footer__info__navs__nav__item"><a href="#">Fair Play</a></li>
+                    </ul>
+                </nav>
+                <nav class="footer__info__navs__nav">
+                    <h5 class="footer__info__navs__nav__title">Сontacts</h5>
+                    <ul class="footer__info__navs__nav__list">
+                        <li class="footer__info__navs__nav__item"><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="footer__info__text">
+                <h6 class="footer__info__text__title">To test one’s luck, one don’t even need to leave his or her house</h6>
+                <p class="footer__info__text__description">Today online casinos have ceased to be something unusual, they are pretty much the same organizations as genuine gambling-houses, and their activities are strictly controlled. The online casino WebbySlot is being repeatedly tested for its honesty, and passes such tests successfully!
+                </p>
+            </div>
+        </div>
+        <div class="footer__description">
+            Deuscasino.com is operated by SG International N.V., which is registered in E-Commerce park, Vredenberg, Curacao, having gaming licence No.8048/JAZZ2015-035 and all rights to operate the gaming software. SG International LP is providing payment services as an agent according to the licence agreement concluded between SG International LP and SG International N.V.
+            <br>© Deus Casino. All rights reserved.
+            <br>Developed by <a href="#" class="footer__description__developed-by">Softgamings</a>
+        </div>
+    </footer>
+</body>
+</html>
